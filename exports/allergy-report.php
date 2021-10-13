@@ -106,7 +106,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
   left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
   WHERE r.event_id = $EVENTID AND eetlocatie.field_value = '$building'
   AND ((r.published = 1 AND (r.payment_method = 'os_ideal' 
-  OR r.payment_method = 'os_paypal')) OR (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY diet;";
+  OR r.payment_method = 'os_paypal')) OR (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY replace(replace(v2.field_value,'[',''),']',',');";
   $res = $UPLINK->query($sql);
 
   $all_allergies = '';
@@ -142,7 +142,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
     left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
   WHERE r.event_id = $EVENTID AND eetlocatie.field_value = '$building'
   AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal')) OR 
-  (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY diet desc;";
+  (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY replace(replace(v2.field_value,'[',''),']',',') ;";
   $res = $UPLINK->query($sql);
   while ($row = mysqli_fetch_array($res)) {
     echo "<tr><td>" . $row['name'] . "</td>";
@@ -283,7 +283,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
   left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
   WHERE r.event_id = $EVENTID AND eetlocatie.field_value = '$building'
   AND ((r.published = 1 AND (r.payment_method = 'os_ideal' 
-  OR r.payment_method = 'os_paypal')) OR (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY diet;";
+  OR r.payment_method = 'os_paypal')) OR (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY replace(replace(v2.field_value,'[',''),']',',') ;";
   $res = $UPLINK->query($sql);
 
   $all_allergies = '';
@@ -319,7 +319,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
     left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
   WHERE r.event_id = $EVENTID AND eetlocatie.field_value = '$building'
   AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal')) OR 
-  (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY diet desc;";
+  (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY replace(replace(v2.field_value,'[',''),']',',') desc;";
   $res = $UPLINK->query($sql);
   while ($row = mysqli_fetch_array($res)) {
     echo "<tr><td>" . $row['name'] . "</td>";
