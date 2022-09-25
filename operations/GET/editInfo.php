@@ -26,24 +26,24 @@
                 . '<form action="' . $APP['header'] . '/index.php?viewChar=' . $character['characterID'] . '&editInfo=true" method="post">';
 
               $printresult .=
-                '<div class="formitem">
-                <h3><i class="fas fa-user"></i>&nbsp;Character Name</h3>
-                <input autocomplete="off" type="text" placeholder="Character Name" maxlength="99" name="editchar[character_name]" value="' . EMS_echo($character['character_name']) . '"></input>
-                </div>';
+                '<div class="formitem">'
+                . '<h3><i class="fas fa-user"></i>&nbsp;Character Name</h3>'
+                . '<input autocomplete="off" type="text" placeholder="Character Name" maxlength="99" name="editchar[character_name]" value="' . EMS_echo($character['character_name']) . '"></input>'
+                . '</div>';
 
                 $printresult .=
-                  '<div class="formitem">
-                    <h3><i class="fas fa-users"></i>&nbsp;Faction</h3>
-                    <p class="text-muted">' . ucfirst(EMS_echo($character['faction'])) . '</p>
-                    </div>
-                    <div class="formitem">
-                    <h3><i class="fas fa-key"></i>&nbsp;ICC Number:</h3>
-                    <p class="text-muted">' . EMS_echo($character['ICC_number']) . '</p>
-                    </div>
-                    <div class="formitem">
-                    <h3><i class="far fa-calendar-alt"></i>&nbsp;Birth date</h3>
-                    <input autocomplete="off" type="text" placeholder="..( current IC year: 240NT )" maxlength="24" name="editchar[ic_birthday]" value="' . EMS_echo($character['ic_birthday']) . '"></input>
-                    </div>';
+                  '<div class="formitem">'
+                . '<h3><i class="fas fa-users"></i>&nbsp;Faction</h3>'
+                . '<p class="text-muted">' . ucfirst(EMS_echo($character['faction'])) . '</p>'
+                . '</div>'
+                . '<div class="formitem">'
+                . '<h3><i class="fas fa-key"></i>&nbsp;ICC Number:</h3>'
+                . '<p class="text-muted">' . EMS_echo($character['ICC_number']) . '</p>'
+                . '</div>'
+                . '<div class="formitem">'
+                . '<h3><i class="far fa-calendar-alt"></i>&nbsp;Birth date</h3>'
+                . '<input autocomplete="off" type="text" placeholder="..( current IC year: 240NT )" maxlength="24" name="editchar[ic_birthday]" value="' . EMS_echo($character['ic_birthday']) . '"></input>'
+                . '</div>';
 
               $printresult .=
                 '<div class="formitem">'
