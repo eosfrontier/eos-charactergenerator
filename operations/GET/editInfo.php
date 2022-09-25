@@ -10,7 +10,6 @@
 
               // edit char set? Validate.
               if (isset($_POST['editchar']) && $_POST['editchar'] != "") {
-
                 updateCharacterInfo($_POST['editchar'], $character['characterID']);
                 header("location: {$APP['header']}/index.php?viewChar={$character['characterID']}&editInfo=true&u=1");
                 exit();

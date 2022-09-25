@@ -4,7 +4,7 @@
 
 
       if (isset($_GET['u']) && $_GET['u'] == 1) {
-        $printresult .= "<p class=\"dialog\"><i class=\"fas fa-check green\"></i>&nbsp;Updated succesfully.</p>";
+        $printresult .= "<p class=\"dialog\"><i class=\"fas fa-check green\"></i>&nbsp;Updated successfully.</p>";
       }
 
       // check if characters is valid
@@ -61,7 +61,7 @@
                 . "</a>"
                 . "</div>"
                 . "<div class=\"box33\">"
-                . "</div>" //sluit box33
+                . "</div>" // end box33
                 . "</div>";// end second row
             }
           } else {
