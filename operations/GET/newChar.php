@@ -1,5 +1,4 @@
 <?php
-      // create a new Char.
       $printresult = "<h1>Create a character</h1>" . "<hr/>";
 
       $printresult .= "<p>First, choose your faction.</p>";
