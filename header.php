@@ -1,11 +1,9 @@
 <?php
 if (!isset($APP)) die('No direct access allowed');
 
-
 if (!isset($jid) || $jid == false || $jid == null || $jid == "") {
 
   if (!isset($APP["loginpage"]) || $APP["loginpage"] == "" || $APP["loginpage"] == "/" || $APP["loginpage"] == "#") {
-
     die('You are not logged in, and no valid login page has been set. Please contact Eos IT for more information. [ ERR: 101 ]');
     exit();
   } else {
@@ -42,8 +40,8 @@ exit();
 
   <title>CHARGEN</title>
 
-  <link rel="stylesheet" type="text/css" href="<?= $APP['header'] ?>/_includes/css/reset.css" />
-  <link rel="stylesheet" type="text/css" href="<?= $APP['header'] ?>/_includes/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="./_includes/css/reset.css" />
+  <link rel="stylesheet" type="text/css" href="./_includes/css/style.css" />
 
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -58,5 +56,5 @@ exit();
     <div class="grid">
 
       <div class="logo cell">
-        <img class="responsive" src="<?= $APP['header'] ?>/img/outpost-icc-pm.png" alt="logo" title="ICC logo" />
+        <img class="responsive" src="./img/outpost-icc-pm.png" alt="logo" title="ICC logo" />
       </div>

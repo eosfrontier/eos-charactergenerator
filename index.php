@@ -1,8 +1,8 @@
 <?php
 // globals
-include_once('_includes/config.php');
-include_once('_includes/functions.global.php');
-include_once('header.php');
+include_once('./_includes/config.php');
+include_once('./_includes/functions.global.php');
+include_once('./header.php');
 
 //if there is no active session, start one
 if (!isset($_SESSION)) {
@@ -41,4 +41,4 @@ if (isset($_POST['newchar']) && $_POST['newchar'] != "") {require './operations/
 <div class="wsright cell"></div>
 
 <?php
-include_once('footer.php');
+include_once('./footer.php');
