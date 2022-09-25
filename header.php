@@ -40,8 +40,8 @@ exit();
 
   <title>CHARGEN</title>
 
-  <link rel="stylesheet" type="text/css" href="./_includes/css/reset.css" />
-  <link rel="stylesheet" type="text/css" href="./_includes/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="<?= $APP['header'] ?>/_includes/css/reset.css" />
+  <link rel="stylesheet" type="text/css" href="<?= $APP['header'] ?>/_includes/css/style.css" />
 
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -56,5 +56,5 @@ exit();
     <div class="grid">
 
       <div class="logo cell">
-        <img class="responsive" src="./img/outpost-icc-pm.png" alt="logo" title="ICC logo" />
+        <img class="responsive" src="<?= $APP['header'] ?>/img/outpost-icc-pm.png" alt="logo" title="ICC logo" />
       </div>
