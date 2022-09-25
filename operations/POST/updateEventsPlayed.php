@@ -2,9 +2,9 @@
         $xINPUT = EMS_echo($_POST['updateEventsPlayed']['value']);
         $xINPUT = (int)$xINPUT;
 
-        if ($xINPUT > 50 || $xINPUT < 0) {
-          $xINPUT = 0;
-        }
+if ($xINPUT > 50 || $xINPUT < 0) {
+    $xINPUT = 0;
+}
 
         $sql = "UPDATE `ecc_characters`
             SET `aantal_events` = '" . mysqli_real_escape_string($UPLINK, (int)$xINPUT) . "'

@@ -16,9 +16,9 @@
       $printresult .= '<div class="formitem">
                       <input type="submit" class="button blue" value="Create character"></input>';
 
-      if ($sheetArr['characters'] && count($sheetArr['characters']) > 0) {
-        $printresult .= '&nbsp;<a class="button" href='. $APP['header'] . '/index.php>Back</a>';
-      }
+if ($sheetArr['characters'] && count($sheetArr['characters']) > 0) {
+    $printresult .= '&nbsp;<a class="button" href='. $APP['header'] . '/index.php>Back</a>';
+}
 
       $printresult .= '</div>
         </form>';
