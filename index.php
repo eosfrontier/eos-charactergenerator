@@ -9,46 +9,7 @@ if (!isset($_SESSION)) {
   session_start();
 }
 
-if (isset($_POST['newchar']) && $_POST['newchar'] != "") {
-
-  $_POST['newchar'] = strTolower($_POST['newchar']);
-
-  if (
-    $_POST['newchar'] == "aquila"
-    || $_POST['newchar'] == "dugo"
-    || $_POST['newchar'] == "ekanesh"
-    || $_POST['newchar'] == "pendzal"
-    || $_POST['newchar'] == "sona"
-  ) {
-
-    $psyCharacter = ($_POST['newchar'] == 'ekanesh' ? 'true' : 'false');
-
-    $ICCID = generateICCID($_POST['newchar']);
-
-    $sql = "INSERT INTO `ecc_characters` (`accountID`, `faction`, `status`, `psychic`, `ICC_number`)
-        VALUES (
-          '" . (int)$jid . "',
-          '" . mysqli_real_escape_string($UPLINK, $_POST['newchar']) . "',
-          'in design',
-          '" . mysqli_real_escape_string($UPLINK, $psyCharacter) . "',
-          '" . mysqli_real_escape_string($UPLINK, $ICCID) . "'
-        );";
-    $res = $UPLINK->query($sql) or trigger_error(mysqli_error($UPLINK));
-
-    // after creating a character, check if this is the only character bound to this account.
-    $sql2 = "SELECT `characterID` FROM `ecc_characters` WHERE `accountID` = $jid";
-    $res2 = $UPLINK->query($sql2) or trigger_error(mysqli_error($UPLINK));
-    // redirect to SET_ACTIVE if 1 character exists.
-    if (mysqli_num_rows($res2) == 1) {
-      $character = mysqli_fetch_assoc($res2);
-      header("location: {$APP['header']}/index.php?activate={$character['characterID']}&firstCharacter=true");
-      exit();
-    }
-
-    header("location: {$APP['header']}/index.php");
-    exit();
-  }
-}
+if (isset($_POST['newchar']) && $_POST['newchar'] != "") {require './operations/POST/newChar.php';}
 ?>
 <div class="wsleft cell"></div>
 
@@ -60,10 +21,14 @@ if (isset($_POST['newchar']) && $_POST['newchar'] != "") {
 
     $printresult = "";
 
-    if (isset($_GET['newChar'])) {require './operations/newchar.php';}
-    else if (isset($_GET['activate']) && $_GET['activate'] != "") {require './operations/activate.php';}
-    else if (isset($_GET['viewChar']) && $_GET['viewChar'] != "") {require './operations/viewChar.php';}
-    else {require './operations/listChars.php';}
+    //Trigger the new character screen
+    if (isset($_GET['newChar'])) {require './operations/GET/newChar.php';}
+    //Activate a character
+    else if (isset($_GET['activate']) && $_GET['activate'] != "") {require './operations/GET/activate.php';}
+    //View a character
+    else if (isset($_GET['viewChar']) && $_GET['viewChar'] != "") {require './operations/GET/viewChar.php';}
+    //List your characters
+    else {require './operations/GET/listChars.php';}
 
     echo $printresult;
     unset($printresult);
