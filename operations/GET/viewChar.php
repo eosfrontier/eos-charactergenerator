@@ -49,7 +49,7 @@
                 . '</div></div>'; //end first row
 
               // start second row
-              $printresult .= '</div><div class="row">'
+              $printresult .= '<div class="row">'
                 .'<div class="box33">'
                 . "<a onclick=\"SH_editPlayedForm({$_GET['viewChar']})\">"
                 . '<button type="button" class="button blue no-bg bar" name="button"><i class="fas fa-sort-numeric-up"></i>&nbsp;Events Played</button>'
