@@ -3,13 +3,17 @@
 
 $_POST['newchar'] = strTolower($_POST['newchar']);
 
-if (
-  $_POST['newchar'] == "aquila"
-  || $_POST['newchar'] == "dugo"
-  || $_POST['newchar'] == "ekanesh"
-  || $_POST['newchar'] == "pendzal"
-  || $_POST['newchar'] == "sona"
-) {
+
+$factions = [
+	'aquila',
+	'dugo',
+	'ekanesh',
+	'pendzal',
+	'sona',
+];
+
+if ( in_array( $_POST['newchar'], $factions ) ) {
+
 
   $psyCharacter = ($_POST['newchar'] == 'ekanesh' ? 'true' : 'false');
 
