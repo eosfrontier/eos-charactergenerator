@@ -30,39 +30,38 @@
                 . "<hr/>";
 
               // default: character menu.
-              $printresult .= "<div class=\"row\">";
+              $printresult .= '<div class="row">';
 
-              $printresult .= "<div class=\"box33\">"
+              $printresult .= '<div class="box33">'
                 . "<a href=\"{$APP['header']}/index.php?viewChar={$character['characterID']}&editInfo=true\">"
-                . "<button type=\"button\" class=\"blue bar\" name=\"button\"><i class=\"far fa-id-card\"></i>&nbsp;Edit basic info</button>"
-                . "</a>"
-                . "</div>"
-                . "<div class=\"box33\">"
+                . '<button type="button" class="blue bar" name="button"><i class="far fa-id-card"></i>&nbsp;Edit basic info</button>'
+                . '</a>'
+                . '</div>'
+                . '<div class="box33">'
                 . "<a href=\"{$APP['header']}/stats/skillsV2.php?viewChar={$character['characterID']}\">"
-                . "<button type=\"button\" class=\"blue bar\" name=\"button\"><i class=\"fas fa-book\"></i>&nbsp;Character Skills</button>"
-                . "</a>"
-                . "</div>"
-                . "<div class=\"box33\">"
+                . '<button type="button" class="blue bar" name="button"><i class="fas fa-book"></i>&nbsp;Character Skills</button>'
+                . '</a>'
+                . '</div>'
+                . '<div class="box33">'
                 . "<a class=\"\" href=\"{$APP['header']}/stats/implantsV2.php?viewChar={$_GET['viewChar']}\">"
-                . "<button type=\"button\" class=\"button bar blue\" name=\"button\"><i class=\"fas fa-microchip\"></i>&nbsp;Implants/Symbionts</button>"
-                . "</a>"
-                . "</div>";
+                . '<button type="button" class="button bar blue" name="button"><i class="fas fa-microchip"></i>&nbsp;Implants/Symbionts</button>'
+                . '</a>'
+                . '</div></div>'; //end first row
 
-              // end first row, start second row
-              $printresult .= "</div><div class=\"row\">"
-                ."<div class=\"box33\">"
+              // start second row
+              $printresult .= '</div><div class="row">'
+                .'<div class="box33">'
                 . "<a onclick=\"SH_editPlayedForm({$_GET['viewChar']})\">"
-                . "<button type=\"button\" class=\"button blue no-bg bar\" name=\"button\"><i class=\"fas fa-sort-numeric-up\"></i>&nbsp;Events Played</button>"
-                . "</a>"
-                . "</div>"
-                . "<div class=\"box33\">"
-                . "<a href=\"/bgcheck\" target=\"_blank\">"
-                . "<button type=\"button\" class=\"blue no-bg bar\" name=\"button\"><i class=\"fas fa-list\"></i>&nbsp;Background-check details</button>"
-                . "</a>"
-                . "</div>"
-                . "<div class=\"box33\">"
-                . "</div>" // end box33
-                . "</div>";// end second row
+                . '<button type="button" class="button blue no-bg bar" name="button"><i class="fas fa-sort-numeric-up"></i>&nbsp;Events Played</button>'
+                . '</a>'
+                . '</div>'
+                . '<div class="box33">'
+                . '<a href="/bgcheck" target="_blank">'
+                . '<button type="button" class="blue no-bg bar" name="button"><i class="fas fa-list"></i>&nbsp;Background-check details</button>'
+                . '</a>'
+                . '</div>'
+                . '<div class="box33"></div>'
+                . '</div>';// end second row
             }
           } else {
             // error : account ID  doesn't match the logged in account ID !!
