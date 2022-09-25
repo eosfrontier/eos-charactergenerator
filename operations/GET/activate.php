@@ -4,8 +4,7 @@
           WHERE `accountID` = '" . mysqli_real_escape_string($UPLINK, $jid) . "'";
       $res = $UPLINK->query($sql);
 
-      $sql = "UPDATE `ecc_characters`
-          SET `sheet_status` = 'active'
+      $sql = "UPDATE `ecc_characters`SET `sheet_status` = 'active'
           WHERE `characterID` = '" . mysqli_real_escape_string($UPLINK, (int)$_GET['activate']) . "'
           AND `accountID` = '" . mysqli_real_escape_string($UPLINK, $jid) . "'";
       $res = $UPLINK->query($sql);
