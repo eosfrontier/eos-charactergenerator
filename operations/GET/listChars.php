@@ -1,6 +1,6 @@
 <?php
 if (in_array("30", $jgroups) || in_array("8", $jgroups)) {
-    echo "<a href=\"{$APP['header']}/npcmenu/index.php\">"
+    echo "<a href=\"https://persona.eosfrontier.space">"
     .  "<button class=\"blue bar no-bg\" style=\"min-width: 12rem;\">Go To SL NPC Menu</button>"
     . " </a>";
 }
