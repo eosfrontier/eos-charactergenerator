@@ -102,13 +102,13 @@ echo '<h2>New Card Needed for ' . $row['title'] . '</h2>';
   from jml_eb_registrants r
     join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
     join jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 14)
-    where v2.field_value = 'Speler' AND r.event_id = 20 and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
+    where v2.field_value = 'Speler' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
     (r.published in (0,1) AND r.payment_method = 'os_offline'))) AND card_id is NULL";
   if (isset($NPCCards))
     $sqlpart2 = " UNION SELECT character_name, NULL as email, faction, ICC_number, card_id, characterID from ecc_characters WHERE (characterID in ($NPCCards) AND card_id is NULL)";
   else $sqlpart2 = ' ';
   $sqlpart3 = " ORDER BY faction, character_name";
-
+    
   $sql = $sqlpart1 . $sqlpart2 . $sqlpart3;
   $res = $UPLINK->query($sql);
   echo "<table>";
