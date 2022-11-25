@@ -139,7 +139,11 @@
                     if ($foodlocation == '') {
                         $foodlocation = $building;
                     } else {
+                        if ($foodlocation = 'tweede gebouw') {
+                            $foodlocation = 'Zonnedauw';
+                        } else {
                         $foodlocation = $row['foodlocation'];
+                        }
                     }
                     echo "<tr><td>" . $row['name'] . "</td>";
                     echo "<td><center>" . str_replace('tweede gebouw', 'Zonnedauw', $foodlocation) . "</center></td></tr>";
@@ -152,5 +156,4 @@
 
     </div>
 </body>
-
 </html>
