@@ -139,3 +139,16 @@ function getCharacterIDsforEvent($_EVENTID)
   $aCharacters = $stmt->fetchAll();
   return $aCharacters;
 }
+
+function getCharacterIDsforSpecialEvent($_EVENTID)
+{
+  $stmt=db::$conn->prepare("SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1) as characterID from jml_eb_registrants r
+    join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 101) /*Character Name*/
+    join jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 100) /*Soort Inschrijving*/
+    join ecc_characters c1 on c1.characterID = SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1) /*Character ID*/
+    where v2.field_value = 'Speler' AND r.event_id = $_EVENTID  and characterID <> 257 and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))
+    ORDER BY character_name");
+  $res = $stmt->execute();
+  $aCharacters = $stmt->fetchAll();
+  return $aCharacters;
+}
