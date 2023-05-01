@@ -82,7 +82,7 @@ include_once('../current-players.php');
   $sql = "SELECT title FROM jml_eb_events where id = $SPECIALEVENTID;";
   $res = $UPLINK->query($sql);
   $row = mysqli_fetch_array($res);
-  echo '<h1>Diet/Allergy report for ' . $row['title'] . ' <img src="../img/32033.png"></img></h1>';
+  echo '<h1>Diet/Allergy report for ' . $row['title'] . ' <img src="../../img/32033.png"></img></h1>';
     $sql = "select replace(replace(v2.field_value,'[',''),']',',') as diet
       from joomla.jml_eb_registrants r
       join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
