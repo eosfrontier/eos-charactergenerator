@@ -11,7 +11,7 @@
     .charsheet{
 		width: 19cm;
 		height: 27cm;
-		background:url(../img/32033.png) no-repeat;
+		background:url(../../img/32033.png) no-repeat;
 		background-position: top right;
         background-position: 95% 60px;
 		clear:both;
