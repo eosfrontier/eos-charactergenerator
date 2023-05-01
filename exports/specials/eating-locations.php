@@ -95,36 +95,30 @@ include_once('../current-players.php');
 </head>
 
 <body>
-  <!-- BEGIN BASTION SECTION -->
   <?php
   $sql2 = "SELECT title FROM jml_eb_events where id = $SPECIALEVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);
-  $sql = "select r.id, r.first_name as oc_fn, v3.field_value as oc_tv, 
-  r.last_name as oc_ln, substring_index(v1.field_value,' - ',1) as ic_name, eetlocatie.field_value as eetlocatie_override 
-from joomla.jml_eb_registrants r
-join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
-left join joomla.jml_eb_field_values slaaplocatie on (slaaplocatie.registrant_id = r.id and slaaplocatie.field_id = 36)
-left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
-left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 16)
-left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 14)
-where v4.field_value = 'Speler' AND r.event_id = $SPECIALEVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-(r.published in (0,1) AND r.payment_method = 'os_offline'))
-UNION
-select r.id, ifnull(eetlocatie.field_value,coalesce(figu_slaap.field_value,sl_slaap.field_value)) as building, r.first_name as oc_fn, v3.field_value as oc_tv, 
-  r.last_name as oc_ln, NULL as ic_name, eetlocatie.field_value as eetlocatie_override 
+  $sql = "select r.id, r.first_name as oc_fn, tussenvoegsel.field_value as oc_tv, 
+    r.last_name as oc_ln, substring_index(v1.field_value,' - ',1) as ic_name
   from joomla.jml_eb_registrants r
-  left join joomla.jml_eb_field_values figu_slaap on (figu_slaap.registrant_id = r.id and figu_slaap.field_id = 72)
-  left join joomla.jml_eb_field_values sl_slaap on (sl_slaap.registrant_id = r.id AND sl_slaap.field_id = 73)
-  left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 16)
-  left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
-  left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
+  join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 101)
+  left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
+  left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 100)
+  where v4.field_value = 'Speler' AND r.event_id = $SPECIALEVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
+  (r.published in (0,1) AND r.payment_method = 'os_offline'))
+UNION
+select r.id, r.first_name as oc_fn, tussenvoegsel.field_value as oc_tv, 
+  r.last_name as oc_ln, NULL as ic_name
+  from joomla.jml_eb_registrants r
+  left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
+  left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 100)
   WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $SPECIALEVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
   (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY oc_fn";
   $res = $UPLINK->query($sql);
   $row_count = mysqli_num_rows($res);
   echo '<button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button>';
-  echo '<font size="5">Eating Locations for ' . $row2['title'] . '</font> - '
+  echo '<font size="5">Participants for ' . $row2['title'] . '</font> - '
     . "<font size='4'>Bastion ($row_count)</font>";
   echo "<table>";
   echo "<th>OC Name</th>";
