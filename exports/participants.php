@@ -5,10 +5,10 @@ $APP = array();
 
 $APP["loginpage"] = "/component/users/?view=login";
 
-include_once('../../db.php');
-include_once("../../_includes/functions.global.php");
+include_once('../db.php');
+include_once("../_includes/functions.global.php");
 
-include_once('../current-players.php');
+include_once('./current-players.php');
 
 ?>
 <!DOCTYPE html>
@@ -104,25 +104,25 @@ include_once('../current-players.php');
 
 <body>
   <?php
-  $sql2 = "SELECT title FROM jml_eb_events where id = $SPECIALEVENTID;";
+  $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);
   $sql = "select r.id, r.first_name as oc_fn, tussenvoegsel.field_value as oc_tv,
-  r.last_name as oc_ln, substring_index(v1.field_value,' - ',1) as ic_name, soort_inschrijving.field_value as type
+  r.last_name as oc_ln, substring_index(charname.field_value,' - ',1) as ic_name, soort_inschrijving.field_value as type
 from joomla.jml_eb_registrants r
-join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 101)
+join joomla.jml_eb_field_values charname on (charname.registrant_id = r.id and charname.field_id = 21 )
 left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
-left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 100)
-where soort_inschrijving.field_value = 'Speler' AND r.event_id = $SPECIALEVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
+left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
+where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
 (r.published in (0,1) AND r.payment_method = 'os_offline'))
 UNION
 select r.id, r.first_name as oc_fn, tussenvoegsel.field_value as oc_tv,
 r.last_name as oc_ln, NULL as ic_name, soort_inschrijving.field_value as type
 from joomla.jml_eb_registrants r
 left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
-left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 100)
-WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $SPECIALEVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-(r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY type, ic_name, oc_fn";
+left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
+WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
+(r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY field(type,'Crew','Figurant','Spelleider','Keuken Crew','Speler'), ic_name, oc_fn";
   $res = $UPLINK->query($sql);
   $row_count = mysqli_num_rows($res);
   echo '<button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button>';
