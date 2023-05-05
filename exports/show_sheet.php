@@ -2,16 +2,10 @@
         include_once $APP["root"] . "/_includes/functions.sheet.php";
         include_once $APP["root"] . "/_includes/functions.skills.php";
 
-        if (isset($_GET['print']) && $_GET['print'] == 'confirm') {
-            $sql = "UPDATE `ecc_characters` SET `print_status` = $EVENTID WHERE `characterID` = '" . (int)$_GET['characterID'] . "' LIMIT 1;";
-            $res = $UPLINK->query($sql);
-        }
-
-
         $sql = "SELECT characterID, faction, born_faction, accountID, aantal_events, character_name
-         FROM `ecc_characters` 
-         WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int)$_GET['characterID']) . "' 
-         LIMIT 1";
+        FROM `ecc_characters` 
+        WHERE accountID = $jid AND sheet_status = 'active'
+        LIMIT 1";
         $res = $UPLINK->query($sql);
 
         $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";

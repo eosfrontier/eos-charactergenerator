@@ -82,14 +82,7 @@ require_once './current-players.php';
 <body>
 
   <?php
-  echo $jid;
-    // $offset = 0;
-    // $perPage = 20;
-
-    // if (isset($_GET['characterID']) && (int)$_GET['characterID'] != 0) {require_once './getsheet.php';}
-    // else {require_once './listsheets.php';}
-
-    // echo "</div>";
+  require_once './show_sheet.php';
     ?>
 
 </body>
