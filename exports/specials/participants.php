@@ -127,7 +127,7 @@ WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $SPECIALEVENTI
   $row_count = mysqli_num_rows($res);
   echo '<button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button>';
   echo '<font size="5">Participants for ' . $row2['title'] . ' - '
-    . "($row_count participants) .</font>";
+    . "($row_count participants)</font>";
   echo "<table>";
   echo '<th width="20%">OC Name</th>';
   echo '<th width="20%">IC Name</th>';
