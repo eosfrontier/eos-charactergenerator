@@ -34,19 +34,6 @@
             $res3 = $UPLINK->query($sql3);
             $row3 = mysqli_fetch_array($res3);
 
-            //Research token tear strips
-            echo "</br><table border='1'>"
-            . "<tr>";
-            if ($res3 && mysqli_num_rows($res3) > 0) {
-                $y = 3;
-            } else {
-                $y = 2;
-            }
-            for ($x = 1; $x <= $y; $x++) {
-                echo "<td height='30'><strong>" . $row['character_name']
-                . "</strong></br>" . $row2['title'] . " - Research Token " . $x . "</td>";
-            };
-            echo "</table>";
             echo "<div style='padding: 15px 45px; 0 15px;'>";
             echo "<font size='6'><strong>" . ucfirst($row['character_name']) . "</strong></font></br>";
             echo "<font size='5'><strong>" . $row2['title'] . "</br>Experience points spent: $expUsed / $expTotal "
