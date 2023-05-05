@@ -124,17 +124,6 @@
             echo "</div>";
 
             // AUGMENTATIONS
-            //Print and Close Button
-            if (isset($_GET['print']) && $_GET['print'] == 'confirm') {
-                echo "<p><a href=\"" . $APP['header'] . "/exports/printsheet.php?characterID=" . $row['characterID'] . "&print=confirm\">"
-                . "<button id=\"printPageButton\" style=\"width: 100%;\" onClick=\"window.print();\">&#x2713;Print</button></td></tr>";
-                echo "<tr><td>";
-                echo "<p><button id=\"printPageButton\" style=\"width: 100%;\" onclick=\"window.open('', '_self', ''); window.close();\">Close Window</button></td></tr>";
-            } else {
-                //Print Button by itself
-                echo "<p><a href=\"" . $APP['header'] . "/exports/printsheet.php?characterID=" . $row['characterID'] . "&print=confirm\">"
-                . "<button id=\"printPageButton\" style=\"width: 100%;\" onClick=\"window.print();\">Print</button></td>";
-            }
         }
 
         echo "</div>";
