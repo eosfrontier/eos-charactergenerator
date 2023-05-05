@@ -15,7 +15,11 @@ include_once('../current-players.php');
 <html>
 
 <head>
-  <style>
+  <style type="text/css">
+    @media screen {
+      table td:last-child {display:none}
+      table th:last-child {display:none}
+    }
     body {
       background: #262e3e;
       color: white;
@@ -27,6 +31,7 @@ include_once('../current-players.php');
       width: 100%;
       color: white;
     }
+    
 
     td,
     th {
@@ -53,11 +58,14 @@ include_once('../current-players.php');
       margin: 4px 2px;
       cursor: pointer;
     }
-
+   
     @media print {
       #printPageButton {
         display: none;
       }
+      table td:last-child {display:block}
+      table th:last-child {display:block}
+
 
       * {
         -webkit-print-color-adjust: exact;
@@ -118,12 +126,15 @@ WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $SPECIALEVENTI
   $res = $UPLINK->query($sql);
   $row_count = mysqli_num_rows($res);
   echo '<button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button>';
-  echo '<font size="5">Participants for ' . $row2['title'] . '</font> - '
-    . "<font size='4'>Bastion ($row_count)</font>";
+  echo '<font size="5">Participants for ' . $row2['title'] . ' - '
+    . "($row_count participants) .</font>";
   echo "<table>";
-  echo "<th>OC Name</th>";
-  echo "<th>IC Name</th>";
-  echo "<th>Soort Inschrijf</th>";
+  echo '<th width="20%">OC Name</th>';
+  echo '<th width="20%">IC Name</th>';
+  echo '<th width="20%">Soort Inschrijf</th>';
+  echo '<div id="printOnly">';
+  echo '<th width="40%">Handtekening</th>';
+  echo '</div>';
   echo "</tr>";
 
   while ($row = mysqli_fetch_array($res)) {
@@ -132,6 +143,7 @@ WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $SPECIALEVENTI
     echo "</td>";
     echo '<td>' . $row['ic_name'] . "</td>";
     echo '<td>' . $row['type'] . "</td>";
+    echo '<td width="40%" height="40px">&nbsp;</td>'; 
 
     echo "</tr>";
   }
