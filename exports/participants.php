@@ -110,6 +110,13 @@ include_once('./current-players.php');
 
 <body>
   <?php
+  if ( isset($_GET["sort"]) ) {
+    $tableSort = urldecode($_GET["sort"]);
+  }
+  else {
+    $tableSort = "register_date desc";
+  }
+  echo $tableSort;
   $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);
@@ -128,8 +135,7 @@ from joomla.jml_eb_registrants r
 left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
 left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
 WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-(r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY register_date desc ";
-#field(, type,'Crew','Figurant','Spelleider','Keuken Crew','Speler'), ic_name, oc_fn
+(r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY $tableSort";
   $res = $UPLINK->query($sql);
   $row_count = mysqli_num_rows($res);
 
@@ -159,7 +165,24 @@ WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $EVENTID and (
     }
     echo "</table>";
 echo "<br><br>";
-  
+# ic_name, oc_fn
+
+echo 'Sorteer op:';
+?> 
+
+<select id="sort_table" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;"
+onchange="location.href = '/eoschargen/exports/participants.php?sort=' + this.value; ">
+<option value="">Kies een optie</option>
+<option value="oc_fn asc"> OC Naam (Oplopend)</option>
+<option value="oc_fn desc">OC Naam (Aflopend)</option>
+<option value="ic_name asc">IC Naam (Oplopend)</option>
+<option value="ic_name desc">IC Naam (Aflopend)</option>
+<option value="type asc">Soort Inschrijf (Oplopend)</option>
+<option value="type desc">Soort Inschrijf (Aflopend)</option>
+<option value="register_date asc">Inschrijf Datum (Oplopend)</option>
+<option value="register_date desc">Inschrijf Datum (Aflopend)</option>
+</select>
+<?php
     echo "<table>";
   echo '<th width="20%">OC Name</th>';
   echo '<th width="20%">IC Name</th>';
