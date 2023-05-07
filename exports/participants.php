@@ -145,10 +145,10 @@ WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $EVENTID and (
   echo '<font size="5">Participants for ' . $row2['title'] . ' - '
     . "($row_count participants)</font>";
   
-    echo "<table>";
-  echo '<th width="20%">Soort Inschrijf</th>';
-  echo '<th width="20%">Aantal Deelneemers</th>';
-  echo "<th>&nbsp;</th><th>&nbsp;</th>";
+    echo '<table style="width:30%">';
+  echo '<th width="10%">Soort Inschrijf</th>';
+  echo '<th width="10%">Aantal Deelneemers</th>';
+  echo '<th>width="80%">&nbsp;</th><th>&nbsp;</th>';
 
     echo "</tr>";
     while ($row2 = mysqli_fetch_array($res3)) {
