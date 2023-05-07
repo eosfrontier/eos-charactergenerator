@@ -1,4 +1,5 @@
 <?php
+$jid = 747;
 // globals
 require_once "../_includes/config.php";
 require_once "../_includes/functions.global.php";
