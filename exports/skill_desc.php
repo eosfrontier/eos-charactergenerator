@@ -7,77 +7,16 @@ require_once './current-players.php';
   <?php 
 include '../_includes/css/style.css';
 ?>
-/* html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      font-size: 10px;
-      background: #FFF;
-    }
-    h1 {
-    display: block;
-    margin-block-start: 0.67em;
-    margin-block-end: 0.67em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    font-weight: bold;
-    }
-    h2 {
-        display: block;
-        margin-block-start: 0.67em;
-        margin-block-end: 0.67em;
-        margin-inline-start: 0px;
-        margin-inline-end: 0px;
-        font-weight: bold;
-    }
-
-    @media only screen and (max-width: 400px) {
-      h1 {
-        font-size: 5rem;
-      }
-      h2 {
-        font-size: 4rem;
-      }
-      div.body {
-        font-size: 3rem;
-      }
+    @media only screen and (max-width: 600px) {
       button {
-        font-size: 4vw;
+      font-size: 4vw;
+        }
       }
-    }
-    @media only screen and (min-width: 401px) {
-      h1 {
-        font-size: 3rem;
-      }
-      h2 {
-        font-size: 2.5rem;
-      }
-      div.body {
-        font-size: 2rem;
-      }
+      @media only screen and (min-width: 601px) {
       button {
-        font-size: 2vw;
+      font-size: 1.5vw;
+        }
       }
-    }
-
-    div.body {
-      font-family: arial;
-      /* font-size: 2vw; */
-      height: 297mm;
-      width: 100%;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 0;
-      margin-bottom: 0;
-      background: #FFF;
-    }
-
-    button {
-      /* cursor: pointer;
-      padding: 8px; */
-      font-size: 5vw;
-    }
     img {
       Padding: 50px,0px //padding positions
     }
