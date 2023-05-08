@@ -4,25 +4,28 @@ require_once "../_includes/functions.global.php";
 require_once './current-players.php';
 ?>
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-  <?php
-  include '../_includes/css/style.css';
-  ?>
-      button {
-      font-size: 4vw;
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      <?php
+      include '../_includes/css/style.css';
+      ?>
+          button {
+          font-size: 4vw;
+            }
+          @media  screen and (min-width: 601px) {
+          button {
+          font-size: 1.5vw;
+            }
+          }
+        img {
+          Padding: 50px,0px //padding positions
         }
-      @media  screen and (min-width: 601px) {
-      button {
-      font-size: 1.5vw;
-        }
-      }
-    img {
-      Padding: 50px,0px //padding positions
-    }
-  </style>
+      </style>
+    </head>
 
   <?php
+  echo "<div class='body'><body>" ;
   echo '<button onclick="history.go(-1);">Back </button> &nbsp; &nbsp; &nbsp; <img src="../img/outpost-icc-pm.png"  width="200" >';
   $skillid = $_GET["id"];
 
@@ -36,7 +39,6 @@ $stmt = db::$conn->prepare(
 foreach ($res as $SKILL => $VALUES) {
     $printableSkills[$VALUES['parent']] = $VALUES;
 }
-echo "<div class='body'><body>" ;
 echo "<h1 font-size='6vw'>Name: " . $VALUES['label'] . "</h1>";
 echo "<h2>" . $VALUES['parent'] ." level:" . $VALUES['level'] . "</h2>";
 echo nl2br($VALUES['description']) . "</body></div>";
