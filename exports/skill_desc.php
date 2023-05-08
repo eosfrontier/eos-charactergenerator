@@ -14,32 +14,77 @@ require_once './current-players.php';
       font-size: 10px;
       background: #FFF;
     }
+    h1 {
+    display: block;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    }
+    h2 {
+        display: block;
+        margin-block-start: 0.67em;
+        margin-block-end: 0.67em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        font-weight: bold;
+    }
 
-    body {
+    @media only screen and (max-width: 320px) {
+      h1 {
+        font-size: 5vw;
+      }
+      h2 {
+        font-size: 4vw;
+      }
+      div.body {
+        font-size: 2vw;
+      }
+      button {
+        font-size: 4vw;
+      }
+    }
+    @media only screen and (min-width: 321px) {
+      h1 {
+        font-size: 3vw;
+      }
+      h2 {
+        font-size: 2vw;
+      }
+      div.body {
+        font-size: 1.5vw;
+      }
+      button {
+        font-size: 2vw;
+      }
+    }
+
+    div.body {
       font-family: arial;
-      font-size: 12px;
+      /* font-size: 2vw; */
       height: 297mm;
-      width: 210mm;
+      width: 100%;
       margin-left: auto;
       margin-right: auto;
       margin-top: 0;
       margin-bottom: 0;
       background: #FFF;
-      background-image: url('../img/32033.png');
-      background-position: top right;
-      background-position: 95% 60px;
-      background-repeat: no-repeat;
+      /* background-image: url('../img/32033.png'); */
+      /* background-position: top right; */
+      /* background-position: 95% -50px; */
+      /* background-repeat: no-repeat; */
     }
 
     button {
       cursor: pointer;
       padding: 8px;
-      font-size: 32px;
+      /* font-size: 4vw; */
     }
   </style>
 
   <?php
-  echo '<button onclick="history.go(-1);">Back </button>';
+  echo '<button onclick="history.go(-1);">Back </button> <br><img src="../img/32033.png"  width="500">';
   $skillid = $_GET["id"];
 
 $stmt = db::$conn->prepare(
@@ -53,6 +98,6 @@ foreach ($res as $SKILL => $VALUES) {
     $printableSkills[$VALUES['parent']] = $VALUES;
 }
 
-echo "<h1>Name:" . $VALUES['label'] . "</h1>";
+echo "<h1 font-size='6vw'>Name:" . $VALUES['label'] . "</h1>";
 echo "<h2>" . $VALUES['parent'] ." level:" . $VALUES['level'] . "</h2>";
-echo "<body>" . nl2br($VALUES['description']) . "</body>";
+echo "<div class='body'><body>" . nl2br($VALUES['description']) . "</body></div>";
