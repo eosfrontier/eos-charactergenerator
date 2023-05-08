@@ -28,11 +28,7 @@
             $skillArr       = getCharacterSkills($row['characterID']);
             $expUsed        = calcUsedExp(EMS_echo($skillArr), $faction);
             $expTotal       = calcTotalExp($row['aantal_events']);
-<<<<<<< HEAD
             $augmentations  = filterSkillAugs(getImplants($row['characterID']));
-=======
-            $augmentations  = filterSkillAugs(getImplants($_GET['characterID']));
->>>>>>> origin/master
             //MySQL Query to Check for Bonus research token skill
             $sql3 = "SELECT charID FROM ecc_char_skills WHERE (skill_id = 31305 AND charID = " . $row['characterID'] . ");";
             $res3 = $UPLINK->query($sql3);
@@ -40,11 +36,7 @@
 
             echo "<div style='padding: 15px 45px; 0 15px;'>";
             echo "<font size='6'><strong>" . ucfirst($row['character_name']) . "</strong></font></br>";
-<<<<<<< HEAD
             echo "<font size='5'><strong>" . "Experience points spent: $expUsed / $expTotal "
-=======
-            echo "<font size='5'><strong>" . $row2['title'] . "</br>Experience points spent: $expUsed / $expTotal "
->>>>>>> origin/master
             . "<span style=\"color: #777; float: right;\">" . ucfirst($displayFaction) . "</span>"
             . "</strong></font></br>";
 
@@ -83,11 +75,7 @@
                 if (isset($VALUES['label']) && $VALUES['label'] !== '') {
                     echo "<tr>"
                     . "<td style=\"color: #888; font-size: 8px;\">" . $parentSkills[$VALUES['parent']] . "</td>"
-<<<<<<< HEAD
                     . "<td colspan=\"2\"><a href='./skill_desc.php?id=" . $VALUES['id'] . "'>" . $VALUES['label'] . "</a>" . ($VALUES['level'] > 5 ? "*" : "") . "</td>"
-=======
-                    . "<td colspan=\"2\">" . $VALUES['label'] . ($VALUES['level'] > 5 ? "*" : "") . "</td>"
->>>>>>> origin/master
                     . "<td style=\"text-align: center; padding: 2px 5px; width: 65px;\">" . $VALUES['level'] . "</td>"
                     . "</tr>";
                 }

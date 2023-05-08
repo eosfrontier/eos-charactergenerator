@@ -146,7 +146,7 @@ WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $EVENTID and (
   (r.published in (0,1) AND r.payment_method = 'os_offline'))
   GROUP BY soort_inschrijving.field_value";
   $res3 = $UPLINK->query($sql3);
-  echo '<button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button>';
+  echo "<button class=\"button\" id=\"printPageButton\" style=\"width: 100px;\" onClick=\"location.href='/eoschargen/exports/participants.php?sort=oc_fn%20asc'; window.print();\">Print</button>";
   echo '<font size="5">Participants for ' . $row2['title'] . ' - '
     . "($row_count participants)</font>";
   
