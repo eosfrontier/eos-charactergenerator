@@ -2,8 +2,7 @@
 require_once "../_includes/config.php";
 require_once "../_includes/functions.global.php";
 require_once './current-players.php';
-echo '<button onclick="history.go(-1);">Back </button>';
-$skillid = $_GET["id"];
+
 
 ?>
 <style>
@@ -35,34 +34,13 @@ $skillid = $_GET["id"];
     button {
       cursor: pointer;
       padding: 8px;
-    }
-
-    table {
-      font-family: arial, sans-serif;
-      border-collapse: collapse;
-      font-size: 12px;
-      width: 100%;
-    }
-
-    td,
-    th {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 2px 5px;
-    }
-
-    tr:nth-child(even) {
-      background-color: #dddddd;
-    }
-
-    @media print {
-      #printPageButton {
-        display: none;
-      }
+      font-size: 32px;
     }
   </style>
 
   <?php
+  echo '<button onclick="history.go(-1);">Back </button>';
+  $skillid = $_GET["id"];
 
 $stmt = db::$conn->prepare(
     "SELECT s.label, s.level, s.description, g.name as parent from ecc_skills_allskills s 
@@ -77,4 +55,4 @@ foreach ($res as $SKILL => $VALUES) {
 
 echo "<h1>Name:" . $VALUES['label'] . "</h1>";
 echo "<h2>" . $VALUES['parent'] ." level:" . $VALUES['level'] . "</h2>";
-echo "<h3>" . nl2br($VALUES['description']) . "</h3>";
+echo "<body>" . nl2br($VALUES['description']) . "</body>";
