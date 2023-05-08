@@ -33,13 +33,13 @@ require_once './current-players.php';
 
     @media only screen and (max-width: 400px) {
       h1 {
-        font-size: 4rem;
+        font-size: 5rem;
       }
       h2 {
-        font-size: 3rem;
+        font-size: 4rem;
       }
       div.body {
-        font-size: 2rem;
+        font-size: 3rem;
       }
       button {
         font-size: 4vw;
