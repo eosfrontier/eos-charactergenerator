@@ -77,4 +77,4 @@ foreach ($res as $SKILL => $VALUES) {
 
 echo "<h1>Name:" . $VALUES['label'] . "</h1>";
 echo "<h2>" . $VALUES['parent'] ." level:" . $VALUES['level'] . "</h2>";
-echo "<h3>" . $VALUES['description'] . "</h3>";
+echo "<h3>" . nl2br($VALUES['description']) . "</h3>";
