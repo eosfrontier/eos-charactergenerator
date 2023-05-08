@@ -31,29 +31,29 @@ require_once './current-players.php';
         font-weight: bold;
     }
 
-    @media only screen and (max-width: 320px) {
+    @media only screen and (max-width: 400px) {
       h1 {
-        font-size: 5vw;
+        font-size: 4rem;
       }
       h2 {
-        font-size: 4vw;
+        font-size: 3rem;
       }
       div.body {
-        font-size: 2vw;
+        font-size: 2rem;
       }
       button {
         font-size: 4vw;
       }
     }
-    @media only screen and (min-width: 321px) {
+    @media only screen and (min-width: 401px) {
       h1 {
-        font-size: 3vw;
+        font-size: 3rem;
       }
       h2 {
-        font-size: 2vw;
+        font-size: 2rem;
       }
       div.body {
-        font-size: 1.5vw;
+        font-size: 1.5rem;
       }
       button {
         font-size: 2vw;
@@ -70,10 +70,6 @@ require_once './current-players.php';
       margin-top: 0;
       margin-bottom: 0;
       background: #FFF;
-      /* background-image: url('../img/32033.png'); */
-      /* background-position: top right; */
-      /* background-position: 95% -50px; */
-      /* background-repeat: no-repeat; */
     }
 
     button {
@@ -84,7 +80,7 @@ require_once './current-players.php';
   </style>
 
   <?php
-  echo '<button onclick="history.go(-1);">Back </button> <br><img src="../img/32033.png"  width="500">';
+  echo '<button onclick="history.go(-1);">Back </button> <br><img src="../img/32033.png"  width="400">';
   $skillid = $_GET["id"];
 
 $stmt = db::$conn->prepare(
