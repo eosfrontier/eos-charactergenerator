@@ -35,7 +35,7 @@ require_once './current-players.php';
       background: #FFF;
       background-image: url('../img/32033.png');
       background-position: top right;
-      background-position: 95% 60px;
+      background-position: 95% 25px;
       background-repeat: no-repeat;
     }
 
