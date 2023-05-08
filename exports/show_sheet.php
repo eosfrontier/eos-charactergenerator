@@ -101,7 +101,7 @@
                 foreach ($augmentations as $aug) {
                     echo "<tr>"
                     . "<td>" . ($aug['type'] == 'cybernetic' ? 'Bionic' : 'Symbiont') . "</td>" 
-                    . "<td>". $aug['name'] . "</td>"
+                    . "<td><a href='./skill_desc.php?id=" . $aug['skill_id'] . "'>". $aug['name'] . "</td>"
                     ."<td>" . $aug['level'] . "</td>"
                     . "</tr>";
                 }
