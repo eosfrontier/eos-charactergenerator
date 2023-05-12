@@ -117,12 +117,7 @@ include_once('./current-players.php');
 
 <body>
   <?php
-  if ( isset($_GET["sort"]) ) {
-    $tableSort = urldecode($_GET["sort"]);
-  }
-  else {
-    $tableSort = "oc_fn asc";
-  }
+  $tableSort = !empty( $_GET['sort'] ) ? $_GET['sort'] : 'oc_fn asc';
   $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);
@@ -190,7 +185,6 @@ echo "<br><br>";
 Type of E-mail Addresses to Copy:
 <select id="email_types" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;"
   onchange="location.href = '/eoschargen/exports/participants.php?<?php if ( isset($_GET["sort"]) ) { echo 'sort=' . $_GET["sort"] .'&';} ?>email=' + this.value; ">
-    <option value="">Kies een optie</option>
     <option value="%%" <?php echo $email == '%%' ? 'selected' : ''; ?>>Alles</option>
     <option value="Speler" <?php echo $email == 'Speler' ? 'selected' : ''; ?>>Speler</option>
     <option value="Figurant" <?php echo $email == 'Figurant' ? 'selected' : ''; ?>>Figurant</option>
@@ -198,12 +192,6 @@ Type of E-mail Addresses to Copy:
     <option value="Keuken Crew" <?php echo $email == 'Keuken Crew' ? 'selected' : ''; ?>>Keuken Crew</option>
   </select>
   <?php
-  if ( isset($_GET["email"]) ) {
-    $email = urldecode($_GET["email"]);
-  }
-  else {
-    $email = "%%";
-  }
     $sql4 = "select r.email as email from joomla.jml_eb_registrants r
     left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
     where soort_inschrijving.field_value LIKE '$email' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
@@ -218,17 +206,16 @@ echo "<input type=\"text\" class=\"hidden-text\" value=\"$emails\" id=\"myInput\
 <button class="button"  onclick="copyTo()">Copy Participant E-mails</button><br><br>
 </div>
 <div id="SortBy">Sorteer op:
-<?php $sort = !empty( $_GET['sort'] ) ? $_GET['sort'] : 'oc_fn asc'; ?>
   <select id="sort_table" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;"
   onchange="location.href = '/eoschargen/exports/participants.php?<?php if ( isset($_GET["email"]) ) { echo 'email=' . $_GET["email"] .'&';} ?>sort=' + this.value; ">
-    <option value="oc_fn asc" <?php echo $sort == 'oc_fn asc' ? 'selected' : ''; ?>> OC Naam (Oplopend)</option>
-    <option value="oc_fn desc" <?php echo $sort == 'oc_fn desc' ? 'selected' : ''; ?>>OC Naam (Aflopend)</option>
-    <option value="ic_name asc" <?php echo $sort == 'ic_name asc"' ? 'selected' : ''; ?>>IC Naam (Oplopend)</option>
-    <option value="ic_name desc" <?php echo $sort == 'ic_name desc' ? 'selected' : ''; ?>>IC Naam (Aflopend)</option>
-    <option value="type asc" <?php echo $sort == 'type asc' ? 'selected' : ''; ?>>Soort Inschrijf (Oplopend)</option>
-    <option value="type desc" <?php echo $sort == 'type desc' ? 'selected' : ''; ?>>Soort Inschrijf (Aflopend)</option>
-    <option value="register_date asc" <?php echo $sort == 'register_date asc' ? 'selected' : ''; ?>>Inschrijf Datum (Oplopend)</option>
-    <option value="register_date desc" <?php echo $sort == 'register_date desc' ? 'selected' : ''; ?>>Inschrijf Datum (Aflopend)</option>
+    <option value="oc_fn asc" <?php echo $tableSort == 'oc_fn asc' ? 'selected' : ''; ?>> OC Naam (Oplopend)</option>
+    <option value="oc_fn desc" <?php echo $tableSort == 'oc_fn desc' ? 'selected' : ''; ?>>OC Naam (Aflopend)</option>
+    <option value="ic_name asc" <?php echo $tableSort == 'ic_name asc"' ? 'selected' : ''; ?>>IC Naam (Oplopend)</option>
+    <option value="ic_name desc" <?php echo $tableSort == 'ic_name desc' ? 'selected' : ''; ?>>IC Naam (Aflopend)</option>
+    <option value="type asc" <?php echo $tableSort == 'type asc' ? 'selected' : ''; ?>>Soort Inschrijf (Oplopend)</option>
+    <option value="type desc" <?php echo $tableSort == 'type desc' ? 'selected' : ''; ?>>Soort Inschrijf (Aflopend)</option>
+    <option value="register_date asc" <?php echo $tableSort == 'register_date asc' ? 'selected' : ''; ?>>Inschrijf Datum (Oplopend)</option>
+    <option value="register_date desc" <?php echo $tableSort == 'register_date desc' ? 'selected' : ''; ?>>Inschrijf Datum (Aflopend)</option>
   </select>
 </div>
 <?php
