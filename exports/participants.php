@@ -145,12 +145,6 @@ WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $EVENTID and (
   $res = $UPLINK->query($sql);
   $row_count = mysqli_num_rows($res);
 
-
-  $sql4 = "select r.email as email from joomla.jml_eb_registrants r
-where r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-(r.published in (0,1) AND r.payment_method = 'os_offline'))";
-  $res4 = $UPLINK->query($sql4);
-
   $sql3 = "select COUNT(r.id) as count, soort_inschrijving.field_value as type
   from joomla.jml_eb_registrants r       
   left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
@@ -177,9 +171,6 @@ where r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_id
     }
     echo "</table></div>";
 echo "<br><br>";
-# ic_name, oc_fn
-// echo "<button class='button' id='printPageButton' style='width: 300px;' onClick='copyText(\"$emails\")'>Copy Participant E-mails</button><br>";
-// echo "<input type=\"text\" value=\"$emails\" id=\"myInput\">";
 ?>
 <script>
   function copyTo() {
@@ -194,26 +185,50 @@ echo "<br><br>";
     navigator.clipboard.writeText(copyText.value);
   }
 </script>
-<?php 
-$emails = '';
+<?php $email = !empty( $_GET['email'] ) ? $_GET['email'] : '%%'; ?>
+<div id="CopyEmailButton">
+Type of E-mail Addresses to Copy:
+<select id="email_types" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;"
+  onchange="location.href = '/eoschargen/exports/participants.php?<?php if ( isset($_GET["sort"]) ) { echo 'sort=' . $_GET["sort"] .'&';} ?>email=' + this.value; ">
+    <option value="">Kies een optie</option>
+    <option value="%%" <?php echo $email == '%%' ? 'selected' : ''; ?>>Alles</option>
+    <option value="Speler" <?php echo $email == 'Speler' ? 'selected' : ''; ?>>Speler</option>
+    <option value="Figurant" <?php echo $email == 'Figurant' ? 'selected' : ''; ?>>Figurant</option>
+    <option value="Spelleider" <?php echo $email == 'Spelleider' ? 'selected' : ''; ?>>Spelleider</option>
+    <option value="Keuken Crew" <?php echo $email == 'Keuken Crew' ? 'selected' : ''; ?>>Keuken Crew</option>
+  </select>
+  <?php
+  if ( isset($_GET["email"]) ) {
+    $email = urldecode($_GET["email"]);
+  }
+  else {
+    $email = "%%";
+  }
+    $sql4 = "select r.email as email from joomla.jml_eb_registrants r
+    left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
+    where soort_inschrijving.field_value LIKE '$email' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
+    (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+      $res4 = $UPLINK->query($sql4);
+      $emails = '';
 while ($row4 = mysqli_fetch_array($res4)) {
   $emails = $emails . $row4['email'].';';
 }
 echo "<input type=\"text\" class=\"hidden-text\" value=\"$emails\" id=\"myInput\">";
-?>
-<button class="button" id="CopyEmailButton" onclick="copyTo()">Copy Participant E-mails</button><br><br>
+  ?>
+<button class="button"  onclick="copyTo()">Copy Participant E-mails</button><br><br>
+</div>
 <div id="SortBy">Sorteer op:
+<?php $sort = !empty( $_GET['sort'] ) ? $_GET['sort'] : 'oc_fn asc'; ?>
   <select id="sort_table" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;"
-  onchange="location.href = '/eoschargen/exports/participants.php?sort=' + this.value; ">
-    <option value="">Kies een optie</option>
-    <option value="oc_fn asc"> OC Naam (Oplopend)</option>
-    <option value="oc_fn desc">OC Naam (Aflopend)</option>
-    <option value="ic_name asc">IC Naam (Oplopend)</option>
-    <option value="ic_name desc">IC Naam (Aflopend)</option>
-    <option value="type asc">Soort Inschrijf (Oplopend)</option>
-    <option value="type desc">Soort Inschrijf (Aflopend)</option>
-    <option value="register_date asc">Inschrijf Datum (Oplopend)</option>
-    <option value="register_date desc">Inschrijf Datum (Aflopend)</option>
+  onchange="location.href = '/eoschargen/exports/participants.php?<?php if ( isset($_GET["email"]) ) { echo 'email=' . $_GET["email"] .'&';} ?>sort=' + this.value; ">
+    <option value="oc_fn asc" <?php echo $sort == 'oc_fn asc' ? 'selected' : ''; ?>> OC Naam (Oplopend)</option>
+    <option value="oc_fn desc" <?php echo $sort == 'oc_fn desc' ? 'selected' : ''; ?>>OC Naam (Aflopend)</option>
+    <option value="ic_name asc" <?php echo $sort == 'ic_name asc"' ? 'selected' : ''; ?>>IC Naam (Oplopend)</option>
+    <option value="ic_name desc" <?php echo $sort == 'ic_name desc' ? 'selected' : ''; ?>>IC Naam (Aflopend)</option>
+    <option value="type asc" <?php echo $sort == 'type asc' ? 'selected' : ''; ?>>Soort Inschrijf (Oplopend)</option>
+    <option value="type desc" <?php echo $sort == 'type desc' ? 'selected' : ''; ?>>Soort Inschrijf (Aflopend)</option>
+    <option value="register_date asc" <?php echo $sort == 'register_date asc' ? 'selected' : ''; ?>>Inschrijf Datum (Oplopend)</option>
+    <option value="register_date desc" <?php echo $sort == 'register_date desc' ? 'selected' : ''; ?>>Inschrijf Datum (Aflopend)</option>
   </select>
 </div>
 <?php
