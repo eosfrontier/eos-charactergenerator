@@ -10,7 +10,7 @@ ini_set('display_errors', 1);
 //}
 
 // First TSQL Statement is for Spelers information
-$stmt = db::$conn->prepare("select r.id, v1.field_value as name, v2.field_value as building, v3.field_value as bastion_room, v4.field_value as tweede_room from joomla.jml_eb_registrants r
+$stmt = db::$conn->prepare("SELECT r.id, v1.field_value as name, v2.field_value as building, v3.field_value as bastion_room, v4.field_value as tweede_room from joomla.jml_eb_registrants r
 join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)  /*Character Name */
 join joomla.jml_eb_field_values v2 ON (v2.registrant_id = r.id AND v2.field_id = 36) /* Partition */
 left join joomla.jml_eb_field_values v6 ON (v6.registrant_id = r.id AND v6.field_id = 93) /* MedSleepSpelerBastion */

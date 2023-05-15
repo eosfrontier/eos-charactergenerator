@@ -10,7 +10,7 @@ if (!isset($_SESSION)) {
   session_start();
 }
 
-$implantsArr = getImplants((int)$_GET['viewChar']);
+$implantsArr = getImplants((int) $_GET['viewChar']);
 
 // check if sheet exists. This also validates for account.
 if (isset($sheetArr['characters'][$_GET['viewChar']]) && $sheetArr['characters'][$_GET['viewChar']] != "") {
@@ -18,7 +18,7 @@ if (isset($sheetArr['characters'][$_GET['viewChar']]) && $sheetArr['characters']
   if ($sheetArr['characters'][$_GET['viewChar']]['status'] == 'deceased') {
     $DISABLE = "disabled";
   }
-?>
+  ?>
   <div class="wsleft cell"></div>
 
   <div class="menu cell">
@@ -40,19 +40,22 @@ if (isset($sheetArr['characters'][$_GET['viewChar']]) && $sheetArr['characters']
 
       <?php
       if (!isset($_COOKIE['implantDialog'])) {
-      ?>
+        ?>
         <div class="dialog">
 
           <h2><i class="fas fa-info-circle"></i>&nbsp;Symbionts, prosthetics, cybernetics, and other implants.</h2>
 
-          <p>Here you can manage any form of augmentation your character could have.<br />For the full ruling on augmentations and the sorts, see <a class="cyan underline" href="http://www.eosfrontier.space/handboeken/boek-2-crafting-economy" target="_blank">rulebook 2 (opens in a new tab)</a>.</p>
+          <p>Here you can manage any form of augmentation your character could have.<br />For the full ruling on
+            augmentations and the sorts, see <a class="cyan underline"
+              href="http://www.eosfrontier.space/handboeken/boek-2-crafting-economy" target="_blank">rulebook 2 (opens in a
+              new tab)</a>.</p>
           <br />
 
           <button class="button" onclick="ecc_setCookie('implantDialog','hide','3');$(this).parent().fadeOut();">
             <i class="fas fa-check green"></i>&nbsp;Understood, hide this message please.
           </button><br />
         </div>
-      <?php
+        <?php
       }
       ?>
 
@@ -94,7 +97,7 @@ if (isset($sheetArr['characters'][$_GET['viewChar']]) && $sheetArr['characters']
                   . "<div class=\"block\">"
                   . "<span class=\"hidden-xs\">Type:&nbsp;<br/></span>{$implant['type']}</div>"
                   . "<div class=\"block\">"
-                  . "<span class=\"hidden-xs\">Skill:&nbsp;<br/></span>{$implant['name']}, lvl " . (int)$implant['skillgroup_level']
+                  . "<span class=\"hidden-xs\">Skill:&nbsp;<br/></span>{$implant['name']}, lvl " . (int) $implant['skillgroup_level']
                   . "</div>"
 
                   . "<div class=\"block smflex\">"
@@ -125,9 +128,12 @@ if (isset($sheetArr['characters'][$_GET['viewChar']]) && $sheetArr['characters']
 
       <div class="xs-horizontal">
 
-        <button type="button" class="button green no-bg <?= $DISABLE ?>" onclick="IM_chooseType('<?= @(int)$_GET["viewChar"] ?>'); disableButtonGroup(this,1);" name="button"><i class="fas fa-plus"></i><br />New</button>
+        <button type="button" class="button green no-bg <?= $DISABLE ?>"
+          onclick="IM_chooseType('<?= @(int) $_GET["viewChar"] ?>'); disableButtonGroup(this,1);" name="button"><i
+            class="fas fa-plus"></i><br />New</button>
         &nbsp;
-        <button type="button" class="button" onclick="location.reload();" name="button"><i class="fas fa-redo"></i><br />Refresh</button>
+        <button type="button" class="button" onclick="location.reload();" name="button"><i
+            class="fas fa-redo"></i><br />Refresh</button>
 
         <hr style="opacity:0.25;" />
       </div>
@@ -138,7 +144,7 @@ if (isset($sheetArr['characters'][$_GET['viewChar']]) && $sheetArr['characters']
   </div>
 
   <div class="wsright cell"></div>
-<?php
+  <?php
 
 } else {
   echo "<h1>Error 0451</h1>";

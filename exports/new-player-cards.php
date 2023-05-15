@@ -106,9 +106,10 @@ echo '<h2>New Card Needed for ' . $row['title'] . '</h2>';
     (r.published in (0,1) AND r.payment_method = 'os_offline'))) AND card_id is NULL";
   if (isset($NPCCards))
     $sqlpart2 = " UNION SELECT character_name, NULL as email, faction, ICC_number, card_id, characterID from ecc_characters WHERE (characterID in ($NPCCards) AND card_id is NULL)";
-  else $sqlpart2 = ' ';
+  else
+    $sqlpart2 = ' ';
   $sqlpart3 = " ORDER BY faction, character_name";
-    
+
   $sql = $sqlpart1 . $sqlpart2 . $sqlpart3;
   $res = $UPLINK->query($sql);
   echo "<table>";
