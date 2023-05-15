@@ -101,7 +101,7 @@ include_once('current-players.php');
   $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);
-  $sql = "select r.id, ifnull(eetlocatie.field_value,slaaplocatie.field_value) as building, r.first_name as oc_fn, v3.field_value as oc_tv, 
+  $sql = "SELECT r.id, ifnull(eetlocatie.field_value,slaaplocatie.field_value) as building, r.first_name as oc_fn, v3.field_value as oc_tv, 
   r.last_name as oc_ln, substring_index(v1.field_value,' - ',1) as ic_name, eetlocatie.field_value as eetlocatie_override 
 from joomla.jml_eb_registrants r
 join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
@@ -135,10 +135,12 @@ select r.id, ifnull(eetlocatie.field_value,coalesce(figu_slaap.field_value,sl_sl
   while ($row = mysqli_fetch_array($res)) {
     echo "<tr>" . "<td>";
     if (isset($row['eetlocatie_override'])) {
-    echo "<span style=\"color:red;\">****</span>" ; } 
+      echo "<span style=\"color:red;\">****</span>";
+    }
     echo $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
     if (isset($row['eetlocatie_override'])) {
-      echo "<span style=\"color:red;\">****</span>" ; }
+      echo "<span style=\"color:red;\">****</span>";
+    }
     echo "</td>";
     echo '<td>' . $row['ic_name'] . "</td>";
     echo "</tr>";
@@ -151,7 +153,7 @@ select r.id, ifnull(eetlocatie.field_value,coalesce(figu_slaap.field_value,sl_sl
   $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);
-  $sql = "select r.id, ifnull(eetlocatie.field_value,slaaplocatie.field_value) as building, r.first_name as oc_fn, v3.field_value as oc_tv, 
+  $sql = "SELECT r.id, ifnull(eetlocatie.field_value,slaaplocatie.field_value) as building, r.first_name as oc_fn, v3.field_value as oc_tv, 
   r.last_name as oc_ln, substring_index(v1.field_value,' - ',1) as ic_name, eetlocatie.field_value as eetlocatie_override
   from joomla.jml_eb_registrants r
   join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
@@ -184,10 +186,12 @@ select r.id, ifnull(eetlocatie.field_value,coalesce(figu_slaap.field_value,sl_sl
   while ($row = mysqli_fetch_array($res)) {
     echo "<tr>" . "<td>";
     if (isset($row['eetlocatie_override'])) {
-    echo "<span style=\"color:red;\">****</span>" ; } 
+      echo "<span style=\"color:red;\">****</span>";
+    }
     echo $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
     if (isset($row['eetlocatie_override'])) {
-      echo "<span style=\"color:red;\">****</span>" ; }
+      echo "<span style=\"color:red;\">****</span>";
+    }
     echo "</td>";
     echo '<td>' . $row['ic_name'] . "</td>";
     echo "</tr>";

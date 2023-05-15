@@ -1,5 +1,6 @@
 <?php
-if (!isset($APP)) die('No direct access allowed');
+if (!isset($APP))
+  die('No direct access allowed');
 
 if (!isset($jid) || $jid == false || $jid == null || $jid == "") {
 
@@ -13,11 +14,11 @@ if (!isset($jid) || $jid == false || $jid == null || $jid == "") {
   }
 }
 
-if ( !isset($APP["allowed_groups"]) || ( isset($APP["allowed_groups"]) &&  !empty(array_intersect($jgroups, $APP["allowed_groups"])))){
-$sheetArr = getCharacterSheets();
+if (!isset($APP["allowed_groups"]) || (isset($APP["allowed_groups"]) && !empty(array_intersect($jgroups, $APP["allowed_groups"])))) {
+  $sheetArr = getCharacterSheets();
 } else {
-echo "Access denied. Please contact a member of the organization to be granted CharGen access.";
-exit();
+  echo "Access denied. Please contact a member of the organization to be granted CharGen access.";
+  exit();
 }
 ?>
 
@@ -49,7 +50,8 @@ exit();
   <body class="notransition" onload="">
 
     <noscript>
-      <p style="font-size:24px;padding:30px 15px;text-align:center;">This application needs JavaScript to work. Please enable JavaScript.</p>
+      <p style="font-size:24px;padding:30px 15px;text-align:center;">This application needs JavaScript to work. Please
+        enable JavaScript.</p>
       <p style="text-align:center;">:(</p>
     </noscript>
 

@@ -4,8 +4,8 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/eoschargen/_includes/config.php";
 require_once $APP["root"] . "/_includes/functions.global.php";
 require_once $APP["root"] . '/exports/current-players.php';
 
-(string)$_FACTION = (isset($_GET['faction']) && $_GET['faction'] != "" ? $_GET['faction'] : '%');
-(string)$_BUILDING = (isset($_GET['building']) && $_GET['building'] != "" ? $_GET['building'] : 'Bastion');
+(string) $_FACTION = (isset($_GET['faction']) && $_GET['faction'] != "" ? $_GET['faction'] : '%');
+(string) $_BUILDING = (isset($_GET['building']) && $_GET['building'] != "" ? $_GET['building'] : 'Bastion');
 
 ?>
 <!DOCTYPE html>
@@ -86,14 +86,17 @@ require_once $APP["root"] . '/exports/current-players.php';
 <body>
 
   <?php
-    $offset = 0;
-    $perPage = 20;
+  $offset = 0;
+  $perPage = 20;
 
-    if (isset($_GET['characterID']) && (int)$_GET['characterID'] != 0) {require_once './getsheet.php';}
-    else {require_once './listsheets.php';}
+  if (isset($_GET['characterID']) && (int) $_GET['characterID'] != 0) {
+    require_once './getsheet.php';
+  } else {
+    require_once './listsheets.php';
+  }
 
-    echo "</div>";
-    ?>
+  echo "</div>";
+  ?>
 
 </body>
 

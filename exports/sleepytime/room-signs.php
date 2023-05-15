@@ -14,14 +14,14 @@
         header("Content-Type: text/html; charset=ISO-8859-1");
         include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
 
-        $bldg_sql = "select field_value from `jml_eb_field_values` where field_id = 36 AND field_value !='medische uitzondering \"Geregeld met Orga\"' GROUP by field_value";
+        $bldg_sql = "SELECT field_value from `jml_eb_field_values` where field_id = 36 AND field_value !='medische uitzondering \"Geregeld met Orga\"' GROUP by field_value";
         $bldg_res = $UPLINK->query($bldg_sql);
         //$row = mysqli_fetch_assoc($res);
-
+        
         while ($bldg_row = mysqli_fetch_assoc($bldg_res)) {
             $building = $bldg_row['field_value'];
             //This makes the list of rooms
-            $room_sql = "select CONCAT(coalesce(v3.field_value,''),coalesce(v4.field_value,'')) as room from joomla.jml_eb_registrants r
+            $room_sql = "SELECT CONCAT(coalesce(v3.field_value,''),coalesce(v4.field_value,'')) as room from joomla.jml_eb_registrants r
                 left join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 36)
                 left join joomla.jml_eb_field_values v6 on (v6.registrant_id = r.id and v6.field_id = 93)
                 left join joomla.jml_eb_field_values v7 on (v7.registrant_id = r.id and v7.field_id = 94)
@@ -68,7 +68,7 @@
 
             while ($room_row = mysqli_fetch_assoc($room_res)) {
                 $room = $room_row['room'];
-                $sql = "select r.id, v6.field_value as foodlocation, SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',1),' - ',-1) as name, 
+                $sql = "SELECT r.id, v6.field_value as foodlocation, SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',1),' - ',-1) as name, 
                         v2.field_value as building, CONCAT(coalesce(v3.field_value,''),coalesce(v4.field_value,'')) as room from joomla.jml_eb_registrants r
                         left join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
                         left join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 36)
@@ -139,7 +139,7 @@
                         if ($foodlocation = 'tweede gebouw') {
                             $foodlocation = 'Zonnedauw';
                         } else {
-                        $foodlocation = $row['foodlocation'];
+                            $foodlocation = $row['foodlocation'];
                         }
                     }
                     echo "<tr><td>" . $row['name'] . "</td>";
@@ -153,4 +153,5 @@
 
     </div>
 </body>
+
 </html>

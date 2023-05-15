@@ -17,9 +17,15 @@ include_once('../current-players.php');
 <head>
   <style type="text/css">
     @media screen {
-      table td:last-child {display:none}
-      table th:last-child {display:none}
+      table td:last-child {
+        display: none
+      }
+
+      table th:last-child {
+        display: none
+      }
     }
+
     body {
       background: #262e3e;
       color: white;
@@ -31,7 +37,7 @@ include_once('../current-players.php');
       width: 100%;
       color: white;
     }
-    
+
 
     td,
     th {
@@ -58,13 +64,19 @@ include_once('../current-players.php');
       margin: 4px 2px;
       cursor: pointer;
     }
-   
+
     @media print {
       #printPageButton {
         display: none;
       }
-      table td:last-child {display:block}
-      table th:last-child {display:block}
+
+      table td:last-child {
+        display: block
+      }
+
+      table th:last-child {
+        display: block
+      }
 
 
       * {
@@ -107,7 +119,7 @@ include_once('../current-players.php');
   $sql2 = "SELECT title FROM jml_eb_events where id = $SPECIALEVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);
-  $sql = "select r.id, r.first_name as oc_fn, tussenvoegsel.field_value as oc_tv,
+  $sql = "SELECT r.id, r.first_name as oc_fn, tussenvoegsel.field_value as oc_tv,
   r.last_name as oc_ln, substring_index(v1.field_value,' - ',1) as ic_name, soort_inschrijving.field_value as type
 from joomla.jml_eb_registrants r
 join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 101)
@@ -143,7 +155,7 @@ WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $SPECIALEVENTI
     echo "</td>";
     echo '<td>' . $row['ic_name'] . "</td>";
     echo '<td>' . $row['type'] . "</td>";
-    echo '<td width="40%" height="40px">&nbsp;</td>'; 
+    echo '<td width="40%" height="40px">&nbsp;</td>';
 
     echo "</tr>";
   }

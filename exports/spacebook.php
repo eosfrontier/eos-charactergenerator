@@ -9,8 +9,7 @@ include_once('current-players.php');
   <meta charset="utf-8">
   <title></title>
 
-
-  <!-- 336 breed 192 hoog -->
+  <!-- 336 width  192 height -->
 
   <style media="screen">
     body {

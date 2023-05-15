@@ -1,6 +1,6 @@
 # Eos Chargen
 
-Character generator, editor and sheet for the Dutch science-fiction larp [Eos Frontier](http://www.eosfrontier.space).
+Character generator, editor and sheet for the Dutch science-fiction larp [Eos Frontier](https://www.eosfrontier.space).
 
 _This project has started on 17-Jan-2018, with the purpose of creating a digital, easy-to-read, easy-to-fill-in character sheet._
 

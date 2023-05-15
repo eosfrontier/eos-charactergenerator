@@ -21,4 +21,3 @@ $APP["root"] = $_SERVER["DOCUMENT_ROOT"] . $APP["header"];
 $APP["loginpage"] = "/return-to-chargen";
 
 // $jid = 451;
-

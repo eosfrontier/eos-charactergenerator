@@ -83,7 +83,7 @@ require_once './current-players.php';
 
   <?php
   require_once './show_sheet.php';
-    ?>
+  ?>
 
 </body>
 

@@ -17,7 +17,7 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
 }
 
 if (isset($_GET['viewSheet']) && $_GET['viewSheet'] != "") {
-  $sql = "SELECT charSheetID FROM `ecc_char_sheet` WHERE accountID = '" . (int)$jid . "' AND characterID = '" . (int)$_GET['viewChar'] . "' AND charSheetID = '" . (int)$_GET['viewSheet'] . "' LIMIT 1";
+  $sql = "SELECT charSheetID FROM `ecc_char_sheet` WHERE accountID = '" . (int) $jid . "' AND characterID = '" . (int) $_GET['viewChar'] . "' AND charSheetID = '" . (int) $_GET['viewSheet'] . "' LIMIT 1";
   $res = $UPLINK->query($sql);
 
   if ($res && mysqli_num_rows($res) != 1) {
