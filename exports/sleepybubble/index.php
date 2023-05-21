@@ -11,7 +11,7 @@ ini_set('display_errors', 1);
 
 // First TSQL Statement is for Spelers information
 $stmt = db::$conn->prepare(
-    "select r.id, v1.field_value as name, v2.field_value as building, v3.field_value as bastion_room, v4.field_value as tweede_room from joomla.jml_eb_registrants r
+    "SELECT r.id, v1.field_value as name, v2.field_value as building, v3.field_value as bastion_room, v4.field_value as tweede_room from joomla.jml_eb_registrants r
     join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 82)
     join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 83)
     left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 84)

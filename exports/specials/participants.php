@@ -107,7 +107,7 @@ include_once('../current-players.php');
   $sql2 = "SELECT title FROM jml_eb_events where id = $SPECIALEVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);
-  $sql = "select r.id, r.first_name as oc_fn, tussenvoegsel.field_value as oc_tv,
+  $sql = "SELECT r.id, r.first_name as oc_fn, tussenvoegsel.field_value as oc_tv,
   r.last_name as oc_ln, substring_index(v1.field_value,' - ',1) as ic_name, soort_inschrijving.field_value as type
 from joomla.jml_eb_registrants r
 join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 101)

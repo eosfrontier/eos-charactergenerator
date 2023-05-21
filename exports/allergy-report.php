@@ -86,7 +86,7 @@ $res = $UPLINK->query($sql);
 $row = mysqli_fetch_array($res);
 $building = 'Bastion';
 echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img src="../img/32033.png"></img></h1>';
-  $sql = "select replace(replace(v2.field_value,'[',''),']',',') as diet 
+  $sql = "SELECT replace(replace(v2.field_value,'[',''),']',',') as diet 
     from joomla.jml_eb_registrants r
     join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
     left join joomla.jml_eb_field_values slaaplocatie on (slaaplocatie.registrant_id = r.id and slaaplocatie.field_id = 36)
@@ -120,7 +120,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
     echo "<font size=5>Detail</font>";
     echo "<table>";
     echo "<th>Name</th><th>Allergie</th><th>Dieet</th><th>Other Allergies</th>";
-    $sql = "select replace(replace(v2.field_value,'[',''),']',',') as diet, concat(r.first_name,' ',r.last_name) as name, 
+    $sql = "SELECT replace(replace(v2.field_value,'[',''),']',',') as diet, concat(r.first_name,' ',r.last_name) as name, 
     v3.field_value as other from joomla.jml_eb_registrants r
       join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
       left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 57)
@@ -180,7 +180,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
   $building = 'tweede gebouw';
   echo '<p class="single_record"></p>';
   echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img src="../img/32033.png"></img></h1>';
-  $sql = "select r.id, replace(replace(v2.field_value,'[',''),']',',') as diet 
+  $sql = "SELECT r.id, replace(replace(v2.field_value,'[',''),']',',') as diet 
     from joomla.jml_eb_registrants r
     join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
     left join joomla.jml_eb_field_values slaaplocatie on (slaaplocatie.registrant_id = r.id and slaaplocatie.field_id = 36)
@@ -226,7 +226,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
     echo "<font size=5>Detail</font>";
     echo "<table>";
     echo "<th>Name</th><th>Allergie</th><th>Dieet</th><th>Other Allergies</th>";
-    $sql = "select replace(replace(v2.field_value,'[',''),']',',') as diet, concat(r.first_name,' ',r.last_name) as name, 
+    $sql = "SELECT replace(replace(v2.field_value,'[',''),']',',') as diet, concat(r.first_name,' ',r.last_name) as name, 
     v3.field_value as other from joomla.jml_eb_registrants r
       join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
       left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 57)
