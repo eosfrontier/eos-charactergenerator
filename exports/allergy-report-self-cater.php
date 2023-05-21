@@ -19,7 +19,7 @@ include_once('./current-players.php');
     table {
       font-family: arial, sans-serif;
       border-collapse: collapse;
-      width: 100%;
+      /* width: 100%; */
     }
 
     td,
@@ -31,6 +31,20 @@ include_once('./current-players.php');
 
     tr:nth-child(even) {
       background-color: #dddddd;
+    }
+
+    ,
+    * {
+      box-sizing: border-box;
+    }
+
+    .row {
+      /* display: flex; */
+    }
+
+    .column {
+      flex: 50%;
+      padding: 5px;
     }
 
     body {
@@ -47,6 +61,7 @@ include_once('./current-players.php');
       background-position: top right;
       background-position: 65% 0px;
       background-repeat: no-repeat;
+      background-attachment:fixed;
     }
 
     .single_record {
@@ -77,6 +92,7 @@ include_once('./current-players.php');
     }
   </style>
 </head>
+
 <body>
   <?php
   $sql = "SELECT title FROM jml_eb_events where id = $EVENTID;";
@@ -91,125 +107,120 @@ include_once('./current-players.php');
     AND ((r.published = 1 AND (r.payment_method = 'os_ideal'
     OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER by result");
 
-    $res_pdo = $stmt->execute();
-    $results = $stmt->fetchAll();
+  $res_pdo = $stmt->execute();
+  $results = $stmt->fetchAll();
 
-    $diet_array = [];
-    $allergie_array = [];
+  $diet_array = [];
+  $allergie_array = [];
 
-    foreach( $results as $result ){
-      $items_array = explode(',', $result['result'] );
+  foreach ($results as $result) {
+    $items_array = explode(',', $result['result']);
 
-      foreach($items_array as $item) {
-        $item = strtolower($item);
-        $item = str_replace('"', '', $item);
-        $item = str_replace('\\/', '/', $item);
-        $item = utf8_encode($item);
+    foreach ($items_array as $item) {
+      $item = str_replace('"', '', $item);
+      $item = str_replace('\\/', '/', $item);
+      $item = str_replace('u00cb', 'u00eb', $item);
+      $item = str_replace('\u', 'u', $item);
+      $item = preg_replace('/u([\da-fA-F]{4})/', '&#x\1;', $item);
+      $item = strtolower($item);
 
-        if(strpos($item, 'dieet') !== false ) {
-          $item = str_replace('dieet: ', '', $item);
-          $diet_array[] = $item;
-        }
+      if (strpos($item, 'dieet') !== false) {
+        $item = str_replace('dieet: ', '', $item);
+        $diet_array[] = $item;
+      }
 
-        if(strpos($item, 'allergie') !== false ) {
-          $item = str_replace('allergie: ', '', $item);
-          $allergie_array[] = $item;
-        }
+      if (strpos($item, 'allergie') !== false) {
+        $item = str_replace('allergie: ', '', $item);
+        $allergie_array[] = $item;
       }
     }
-    
-    echo '<pre>';
-    
-    $allergy_count = array_count_values($allergie_array);
-    arsort($allergy_count);
-    $diet_count = array_count_values($diet_array);
-    arsort($diet_count);
-    var_dump($allergy_count);
-    var_dump($diet_count);
-    echo "</pre>";
- 
+  }
 
+  $allergy_count = array_count_values($allergie_array);
+  arsort($allergy_count);
+  $diet_count = array_count_values($diet_array);
+  arsort($diet_count);
 
-    // echo print_r($result);
+  echo '<p><button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button></p>';
+  echo '<div id="summary">';
+  echo "<h2 align='left'>Summary</h2>";
+  echo "<table style='float: left;' width='50%'><font size=3>";
+  echo "<th>Dieet</th>";
+  echo "<th>hoeveelheid</th>";
+  foreach ($diet_count as $key => $val) {
+    echo "<tr>";
+    echo "<td>" . $key . "</td><td>" . $val . "</td></tr>";
+  }
+  echo "</font></table>";
+  echo '</table>';
+  echo '<table>';
+  echo "<table style='float: left;' width='50%'><font size=3>";
+  echo "<th>Allergieen</th>";
+  echo "<th>hoeveelheid</th>";
+  foreach ($allergy_count as $key => $val) {
+    echo "<tr>";
+    echo "<td>" . $key . "</td><td>" . $val . "</td></tr>";
+  }
+  echo "</font></table>";
+  echo '</div>'; # end summary div
+  echo '<div class="single_record"></div>';
+  echo "<h2>Detail</h2>";
+  echo "<table width='100%'>";
+  echo "<th>Name</th><th>Allergie</th><th>Dieet</th><th>Other Allergies</th>";
 
-    // var_dump(mysqli_fetch_array($res2));
+  $stmt2 = db::$conn->prepare("SELECT concat(r.first_name,' ', COALESCE(tussenvoegsel.field_value,' '), ' ',r.last_name) as name, replace( replace(v2.field_value, ']',''), '[', '') as result,
+  v3.field_value as other
+  from joomla.jml_eb_registrants r
+  join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
+  left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 57)
+  left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
+  WHERE r.event_id = $EVENTID
+  AND ((r.published = 1 AND (r.payment_method = 'os_ideal'
+  OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER by name");
+  $res_pdo2 = $stmt2->execute();
+  $results2 = $stmt2->fetchAll();
 
-    // while ($row = mysqli_fetch_array($res)) {
-    //   $all_allergies .= str_replace(
-    //     "\\u00eb",
-    //     "e",
-    //     str_replace("\\u00cb", "E", $row['diet'])
-    //   );
-    // };
-    // //var_dump($all_allergies);
-    // $allergy_array = explode("\",\"", rtrim(ltrim($all_allergies, "\""), "\","));
+  // $sql = "SELECT replace(replace(replace(v2.field_value,'[',''),']',','),\"Allium(ui,prei,knoflook,bieslook,etc)\", \"Allium(ui;prei;knoflook;bieslook;etc)\") as diet, concat(r.first_name,' ', COALESCE(tussenvoegsel.field_value,' '), ' ',r.last_name) as name, 
+  //     v3.field_value as other from joomla.jml_eb_registrants r
+  //       join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
+  //       left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 57)
+  //       left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
+  //       left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
+  //       WHERE r.event_id = $EVENTID
+  //       AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR 
+  //       (r.published in (0,1) AND r.payment_method = 'os_offline'))  ORDER BY diet desc;";
 
-    //   $allergy_counts = array_count_values($allergy_array);
-    //   arsort($allergy_counts);
-      // $resultsarray = mysqli_fetch_array($res);
-      // $diets = [];
-      // $allergies = [];
-      // var_dump($resultsarray);
-      // echo '<p><button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button></p>';
+  foreach ($results2 as $row) {
+    echo "<tr><td>" . $row['name'] . "</td>";
+    //Store the item in an array for
+    $item = str_replace('"', '', $row['result']);
+    $item = str_replace('\\/', '/', $item);
+    $item = str_replace('u00cb', 'u00eb', $item);
+    $item = str_replace('\u', 'u', $item);
+    $item = preg_replace('/u([\da-fA-F]{4})/', '&#x\1;', $item);
+    $item = strtolower($item);
+    $row_things = explode(",", $item);
+    echo "<td>";
+    for ($x = 0; $x < count($row_things); $x++) {
+      if (preg_match("/allergie.*$/i", $row_things[$x]) == 1) {
+        echo str_replace("allergie: ", '', $row_things[$x]) . "<br>";
+      }
+    }
+    ;
+    echo "</td><td>";
+    arsort($row_things);
+    for ($x = 0; $x < count($row_things); $x++) {
+      if (preg_match("/dieet:.*$/i", $row_things[$x]) == 1) {
+        echo str_replace("dieet: ", '', $row_things[$x]) . "<br>";
+      }
+    }
+    ;
+    echo "<td>" . $row['other'] . "</td></tr>";
+  }
+  ;
+  echo "</table>";
+  ?>
+  <br>
+</body>
 
-      // echo "<font size=5>Summary</font>";
-      // echo "<table><font size=3>";
-      // foreach ($allergy_counts as $key => $val) {
-      //   echo "<tr>";
-      //   echo "<td>" . $key . "</td><td>" . $val . "</td></tr>";
-      // }
-      // echo "</font></table>";
-      // echo "<font size=5>Detail</font>";
-      // echo "<table>";
-      // echo "<th>Name</th><th>Allergie</th><th>Dieet</th><th>Other Allergies</th>";
-      // $sql = "SELECT replace(replace(replace(v2.field_value,'[',''),']',','),\"Allium(ui,prei,knoflook,bieslook,etc)\", \"Allium(ui;prei;knoflook;bieslook;etc)\") as diet, concat(r.first_name,' ', COALESCE(tussenvoegsel.field_value,' '), ' ',r.last_name) as name, 
-      // v3.field_value as other from joomla.jml_eb_registrants r
-      //   join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
-      //   left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 57)
-      // left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
-      //   left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
-      //   WHERE r.event_id = $EVENTID
-      //   AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR 
-      //   (r.published in (0,1) AND r.payment_method = 'os_offline'))  ORDER BY diet desc;";
-      // $res = $UPLINK->query($sql);
-      
-//       while ($row = mysqli_fetch_array($res)) {
-//         echo "<tr><td>" . $row['name'] . "</td>";
-//         //Store the item in an array for
-//         $item = rtrim(str_replace("Allium(ui,prei,knoflook,bieslook,etc)", "Allium(ui;prei;knoflook;bieslook;etc)", str_replace(
-//           "\\/",
-//           "/",
-//           str_replace(
-//             "\"",
-//             "",
-//             str_replace(
-//               "\",\"",
-//               ",  ",
-//               str_replace(
-//                 "\\u00eb",
-//                 "e",
-//                 str_replace("\\u00cb", "E", $row['diet'])
-//               )
-//             )
-//           )
-//         )), ",");
-//         $row_things = explode(",", $item);
-//         echo "<td>";
-//         for ($x = 0; $x < count($row_things); $x++) {
-//           if (preg_match("/Allergie.*$/i", $row_things[$x]) == 1) {
-//             echo str_replace("Allergie: ", '', $row_things[$x]) . ",";
-//           }
-//         };
-//         echo "</td><td>";
-//         for ($x = 0; $x < count($row_things); $x++) {
-//           if (preg_match("/Dieet:.*$/i", $row_things[$x]) == 1) {
-//             echo str_replace("Dieet: ", '', $row_things[$x]) . ",";
-//           }
-//         };
-//         echo "<td>" . $row['other'] . "</td></tr>";
-//       };
-//       echo "</table>";
-//       ?>
-// </body>
-
-// </html>
+</html>
