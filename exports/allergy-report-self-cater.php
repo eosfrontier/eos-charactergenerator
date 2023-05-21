@@ -59,9 +59,9 @@ include_once('./current-players.php');
       background: #FFF;
       background-image: url('../img/32033.png');
       background-position: top right;
-      background-position: 65% 0px;
+      background-position: 95% 5px;
       background-repeat: no-repeat;
-      background-attachment:fixed;
+      background-attachment: fixed;
     }
 
     .single_record {
@@ -100,9 +100,23 @@ include_once('./current-players.php');
   $row = mysqli_fetch_array($res);
 
   echo '<h1>Diet/Allergy report for ' . $row['title'] . '</h1>';
+  $sql = "SELECT count(v4.field_value) as no_restrictions
+  from joomla.jml_eb_registrants r
+  left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 55)
+  WHERE r.event_id = 21 AND v4.field_value='No'
+  AND ((r.published = 1 AND (r.payment_method = 'os_ideal'
+  OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+  $res = $UPLINK->query($sql);
+  $row = mysqli_fetch_array($res);
+
+  echo '<h2><strong>Deelnemers zonder dieetbeperkingen of allergenen:</strong>' . $row['no_restrictions'] . '</h2>';
+  date_default_timezone_set('Europe/Amsterdam');
+  $date = date('d-m-y h:i:s');
+  echo '<h3>Printed on:' . $date . '</h3>';
   $stmt = db::$conn->prepare("SELECT replace( replace(v2.field_value, ']',''), '[', '') as result
     from joomla.jml_eb_registrants r
     join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
+    left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 55)
     WHERE r.event_id = $EVENTID
     AND ((r.published = 1 AND (r.payment_method = 'os_ideal'
     OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER by result");
@@ -189,7 +203,7 @@ include_once('./current-players.php');
   //       WHERE r.event_id = $EVENTID
   //       AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR 
   //       (r.published in (0,1) AND r.payment_method = 'os_offline'))  ORDER BY diet desc;";
-
+  
   foreach ($results2 as $row) {
     echo "<tr><td>" . $row['name'] . "</td>";
     //Store the item in an array for
