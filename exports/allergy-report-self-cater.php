@@ -8,7 +8,7 @@ $APP["loginpage"] = "/component/users/?view=login";
 
 include_once('../db.php');
 include_once("../_includes/functions.global.php");
-include_once('./current-players.php');
+include_once('current-players.php');
 ?>
 
 <!DOCTYPE html>
@@ -179,6 +179,16 @@ include_once('./current-players.php');
   echo '</div>'; # end summary div
   echo '<div class="single_record"></div>';
   echo "<h2>Detail</h2>";
+  $sql = "SELECT count(v4.field_value) as restrictions
+  from joomla.jml_eb_registrants r
+  left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 55)
+  WHERE r.event_id = 21 AND v4.field_value='Yes'
+  AND ((r.published = 1 AND (r.payment_method = 'os_ideal'
+  OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+  $res = $UPLINK->query($sql);
+  $row = mysqli_fetch_array($res);
+
+  echo '<h2><strong>Deelnemers met dieetbeperkingen of allergenen:</strong>' . $row['restrictions'] . '</h2>';
   echo "<table width='100%'>";
   echo "<th>Name</th><th>Allergie</th><th>Dieet</th><th>Other Allergies</th>";
 
