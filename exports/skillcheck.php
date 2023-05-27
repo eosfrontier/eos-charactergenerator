@@ -135,11 +135,7 @@ include_once($APP["root"] . '/exports/current-players.php');
     }
     echo '</optgroup>';
   }
-  // while ($skill_index_row = mysqli_fetch_assoc($skill_index_res)) {
-  //   echo '<option value="' . $skill_index_row['category'] . '"';
-  //   if (isset($_POST['skill_index']) && $_POST['skill_index'] == $skill_index_row['category']) echo "selected";
-  //   echo '>' . $skill_index_row['name'] . '</option>';
-  // };
+
   echo '</select>
     &nbsp;&nbsp;';
 
