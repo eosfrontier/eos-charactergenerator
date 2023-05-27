@@ -113,15 +113,17 @@ include_once($APP["root"] . '/exports/current-players.php');
 <body>
   <?php
 
-  $skill_index_sql = "SELECT substring_index(skill_index,'_',1) as category FROM joomla.ecc_skills_allskills GROUP by category;";
+  $skill_index_sql = "SELECT substring_index(skill_index,'_',1) as category, g.name FROM joomla.ecc_skills_allskills s
+  JOIN ecc_skills_groups g ON g.primaryskill_id = s.parent
+  GROUP by category ORDER by name";
   $skill_index_res = $UPLINK->query($skill_index_sql);
   echo '<p><form action="" method="post">
- <select name="skill_index" id="cname" onchange="this.form.submit();">';
+  <select name="skill_index" id="cname" onchange="this.form.submit();">';
   echo '<option value="">Choose a Category</option>';
   while ($skill_index_row = mysqli_fetch_assoc($skill_index_res)) {
     echo '<option value="' . $skill_index_row['category'] . '"';
     if (isset($_POST['skill_index']) && $_POST['skill_index'] == $skill_index_row['category']) echo "selected";
-    echo '>' . $skill_index_row['category'] . '</option>';
+    echo '>' . $skill_index_row['name'] . '</option>';
   };
   echo '</select>
     &nbsp;&nbsp;';
