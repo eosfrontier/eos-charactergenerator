@@ -146,16 +146,15 @@
                 //     echo "<td><center>" . str_replace('tweede gebouw', 'Zonnedauw', $foodlocation) . "</center></td>";
                     echo "</tr>";
                 }
-                echo "</table>";
-                ?>
-                <br>
-                <h2>Important Note:</h2>
-                <ul>
+                echo "</table></br></br>";
+                echo "<table>
+                <th>Important Note:</th>
+                <tr><td><ul>
                 <li>Breakfast will be served in the Zonnedauw from 9:00 - 11:00</li>
                 <li>Lunch will be served in the Bastion from 12:00 - 14:00</li>
                 <li>Dinner will be served in the Bastion from 18:00 - 20:00</li>
-                </ul>
-                <?php echo "</div>";
+                </ul></td></tr></table>";
+                echo "</div>";
             }
         }
         ?>
