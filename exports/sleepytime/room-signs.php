@@ -129,23 +129,31 @@
                 echo '<p><button class="button" id="printPageButton" style="width: 100%;" onClick="window.print();">Print</button></p>';
                 echo "<center class='center'><font face='Orbitron' size=15><br>" . str_replace('tweede gebouw', 'Zonnedauw', $building) . "<br>$room<br><br></font></center>";
                 echo "<table>";
-                echo "<th><center>Name</center></th>
-                <th><center>Eating Location</center></th>";
+                echo "<th><center>Name</center></th>";
+                // echo "<th><center>Eating Location</center></th>";
                 while ($row = mysqli_fetch_array($res)) {
-                    $foodlocation = $row['foodlocation'];
-                    if ($foodlocation == '') {
-                        $foodlocation = $building;
-                    } else {
-                        if ($foodlocation = 'tweede gebouw') {
-                            $foodlocation = 'Zonnedauw';
-                        } else {
-                        $foodlocation = $row['foodlocation'];
-                        }
-                    }
+                //     $foodlocation = $row['foodlocation'];
+                //     if ($foodlocation == '') {
+                //         $foodlocation = $building;
+                //     } else {
+                //         if ($foodlocation = 'tweede gebouw') {
+                //             $foodlocation = 'Zonnedauw';
+                //         } else {
+                //         $foodlocation = $row['foodlocation'];
+                //         }
+                //     }
                     echo "<tr><td>" . $row['name'] . "</td>";
-                    echo "<td><center>" . str_replace('tweede gebouw', 'Zonnedauw', $foodlocation) . "</center></td></tr>";
+                //     echo "<td><center>" . str_replace('tweede gebouw', 'Zonnedauw', $foodlocation) . "</center></td>";
+                    echo "</tr>";
                 }
-                echo "</table>";
+                echo "</table></br></br>";
+                echo "<table>
+                <th>Important Note:</th>
+                <tr><td><ul>
+                <li>Breakfast will be served in the Zonnedauw from 9:00 - 11:00</li>
+                <li>Lunch will be served in the Bastion from 12:00 - 14:00</li>
+                <li>Dinner will be served in the Bastion from 18:00 - 20:00</li>
+                </ul></td></tr></table>";
                 echo "</div>";
             }
         }
