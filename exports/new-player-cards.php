@@ -1,6 +1,6 @@
 <?php
 // config variable.
-include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
+include_once($_SERVER["DOCUMENT_ROOT"] . '../db.php');
 ?>
 <!DOCTYPE html>
 <html>
