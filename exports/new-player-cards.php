@@ -96,14 +96,15 @@ echo '<h2>New Card Needed for ' . $row['title'] . '</h2>';
 <body>
   <?php
 
-  $sqlpart1 = "SELECT character_name, v3.email, faction ,ICC_number,  card_id, characterID from ecc_characters c
-  JOIN jml_users v3 ON (c.accountID = v3.id) 
-  WHERE characterID in (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1) as id 
-  from jml_eb_registrants r
-    join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
-    join jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 14)
-    where v2.field_value = 'Speler' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-    (r.published in (0,1) AND r.payment_method = 'os_offline'))) AND card_id is NULL";
+  $sqlpart1 = "SELECT c.character_name, u.email, c.faction ,c.ICC_number,  c.card_id, c.characterID
+              from jml_eb_registrants r
+              join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
+              join jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 14)
+              join ecc_characters c ON (c.characterID = SUBSTRING_INDEX(v1.field_value,' - ',-1))
+              join jml_users u ON (c.accountID = u.id) 
+              WHERE c.card_id IS NULL AND r.event_id = $EVENTID AND v2.field_value = "Speler" AND 
+              ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
+              (r.published in (0,1) AND r.payment_method = 'os_offline'))";
   if (isset($NPCCards))
     $sqlpart2 = " UNION SELECT character_name, NULL as email, faction, ICC_number, card_id, characterID from ecc_characters WHERE (characterID in ($NPCCards) AND card_id is NULL)";
   else $sqlpart2 = ' ';
