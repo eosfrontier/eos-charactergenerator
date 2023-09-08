@@ -1,27 +1,6 @@
 <?php
-// globals
 // config variable.
-$APP = array();
-
-// opens an array to be filled later with the CSS and JS, which will eventually be included by PHP.
-$APP["includes"] = array();
-
-// location of the application. for example: http://localhost/chargen/ == '/chargen'. If the application is in the ROOT, you can leave this blank.
-$APP["header"] = "/eoschargen";
-
-// define the root folder by adding the header (location) to the server root, defined by PHP.
-$APP["root"] = $_SERVER["DOCUMENT_ROOT"] . $APP["header"];
-
-// define the login page to redirect to if there is no $jid set/inherited.
-$APP["loginpage"] = "https://new.eosfrontier.space/component/users/?view=login";
-
-// $jid = 451;
-include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
 include_once($APP["root"] . "/_includes/functions.global.php");
-
-include_once($APP["root"] . '/exports/current-players.php');
-
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -102,7 +81,7 @@ echo '<h2>New Card Needed for ' . $row['title'] . '</h2>';
               join jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 14)
               join ecc_characters c ON (c.characterID = SUBSTRING_INDEX(v1.field_value,' - ',-1))
               join jml_users u ON (c.accountID = u.id) 
-              WHERE c.card_id IS NULL AND r.event_id = $EVENTID AND v2.field_value = "Speler" AND 
+              WHERE c.card_id IS NULL AND r.event_id = $EVENTID AND v2.field_value = 'Speler' AND 
               ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
               (r.published in (0,1) AND r.payment_method = 'os_offline'))";
   if (isset($NPCCards))
