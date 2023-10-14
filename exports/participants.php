@@ -15,6 +15,19 @@ include_once('./current-players.php');
 <html>
 
 <head>
+  <script>
+    function copyTo() {
+      // Get the text field
+      var copyText = document.getElementById("myInput");
+
+      // Select the text field
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); // For mobile devices
+
+      // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText.value);
+    }
+  </script>
   <style type="text/css">
     @media screen {
       table td:nth-last-child(-n + 2) {
@@ -219,19 +232,6 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
   echo "</div>"; #div column
   echo "</div>"; #div row
   ?>
-  <script>
-    function copyTo() {
-      // Get the text field
-      var copyText = document.getElementById("myInput");
-
-      // Select the text field
-      copyText.select();
-      copyText.setSelectionRange(0, 99999); // For mobile devices
-
-      // Copy the text inside the text field
-      navigator.clipboard.writeText(copyText.value);
-    }
-  </script>
   <?php $email = !empty($_GET['email']) ? $_GET['email'] : '%%'; ?>
   <div id="CopyEmailButton">
     Type of E-mail Addresses to Copy:
