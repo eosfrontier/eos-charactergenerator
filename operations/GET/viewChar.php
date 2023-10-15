@@ -69,7 +69,7 @@ if (is_array($sheetArr['characters'])) {
                 . '</a>'
                 . '</div>'
                 . '<div class="box33">'
-                . '<a href="/eos_backstory/" target="_blanl">'
+                . '<a href="/eos_backstory/" target="_blank">'
                 . '<button type="button" class="blue no-bg bar" name="button"><i class="fas fa-address-book"></i>&nbsp;Concept/Backstory</button>'
                 . '</a>'
                 . '</div>'
