@@ -13,7 +13,6 @@
          WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int)$_GET['characterID']) . "' 
          LIMIT 1";
         $res = $UPLINK->query($sql);
-
         $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";
         $res2 = $UPLINK->query($sql2);
         $row2 = mysqli_fetch_array($res2);
