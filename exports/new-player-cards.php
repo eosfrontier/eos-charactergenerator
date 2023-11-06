@@ -117,7 +117,12 @@ echo '<h2>New Card Needed for ' . $row['title'] . '</h2>';
   echo "</tr>";
   $emails = '';
   while ($row = mysqli_fetch_array($res)) {
-    $filepath = '../img/passphoto/' . $row['characterID'] . '.jpg ';
+    $filepath = '../img/passphoto/' . $row['characterID'] . '.jpg';
+    if (file_exists($filepath)) {
+      echo "The file $filepath exists <br>";
+  } else {
+      echo "The file $filepath does not exist <br>";
+  }
     if (!file_exists($filepath)) {$emails = $emails . $row['email'] . ';';}
     echo "<tr>";
     echo "<td><center>" . $row['email'] . "</center></td>";
