@@ -200,9 +200,9 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
 (r.published in (0,1) AND r.payment_method = 'os_offline')) GROUP by faction";
   $res5 = $UPLINK->query($sql5);
 
-
+  $event_title = $row2['title'];
   echo "<button class=\"button\" id=\"printPageButton\" style=\"width: 100px;\" onClick=\"window.print();\">Print</button>";
-  echo '<font size="5">Participants for ' . $row2['title'] . ' - '
+  echo '<font size="5">Participants for ' . $event_title . ' - '
     . "($row_count participants)</font>";
 
   echo '<div class="row">';
@@ -219,12 +219,19 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
     echo "<td>&nbsp;</td><td>&nbsp;</td>";
     echo "</tr>";
   }
-  if (in_array("32", $jgroups, true)) {
-    $sql_pending = 'SELECT SUM(payment_amount) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id = ' . $EVENTID;
+  if (!in_array("32", $jgroups, true)) {
+    $sql_pending = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id = ' . $EVENTID;
     $res_pending = $UPLINK->query($sql_pending);
     $pending = mysqli_fetch_array($res_pending);
-    echo '<td>Pending Payments</td> <td>€' . round($pending['amount'],2) . '</td>';
+    $sql_pending_old = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id <> ' . $EVENTID;
+    $res_pending_old = $UPLINK->query($sql_pending_old);
+    $pending_old = mysqli_fetch_array($res_pending_old);
+    echo '<td>Pending Payments ('. $event_title . ')</td> <td>€' . round($pending['amount'],2) . '</td>';
     echo "<td>&nbsp;</td><td>&nbsp;</td> </tr>";
+    if ( $pending_old > 0){
+      echo '<td>Pending Payments (previous events)</td> <td>€' . round($pending_old['amount'],2) . '</td>';
+      echo "<td>&nbsp;</td><td>&nbsp;</td> </tr>";
+    }
   }
   echo "</table>";
   echo "<br><br>";
