@@ -10,10 +10,12 @@ include_once("../_includes/functions.global.php");
 include_once("../_includes/joomla.php");
 include_once('./current-players.php');
 
-if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
-	header('Status: 303 Moved Temporarily', false, 303);
-	header('Location: ../');
-}
+
+
+// if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
+// 	header('Status: 303 Moved Temporarily', false, 303);
+// 	header('Location: ../');
+// }
 
 ?>
 <!DOCTYPE html>
@@ -216,6 +218,13 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
     echo '<td>' . $row2['count'] . "</td>";
     echo "<td>&nbsp;</td><td>&nbsp;</td>";
     echo "</tr>";
+  }
+  if (in_array("32", $jgroups, true)) {
+    $sql_pending = 'SELECT SUM(payment_amount) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id = ' . $EVENTID;
+    $res_pending = $UPLINK->query($sql_pending);
+    $pending = mysqli_fetch_array($res_pending);
+    echo '<td>Pending Payments</td> <td>€' . round($pending['amount'],2) . '</td>';
+    echo "<td>&nbsp;</td><td>&nbsp;</td> </tr>";
   }
   echo "</table>";
   echo "<br><br>";
