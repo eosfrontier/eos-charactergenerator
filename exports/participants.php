@@ -12,10 +12,10 @@ include_once('./current-players.php');
 
 
 
-// if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
-// 	header('Status: 303 Moved Temporarily', false, 303);
-// 	header('Location: ../');
-// }
+if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
+	header('Status: 303 Moved Temporarily', false, 303);
+	header('Location: ../');
+}
 
 ?>
 <!DOCTYPE html>
