@@ -103,7 +103,7 @@ include_once('current-players.php');
   $sql = "SELECT count(v4.field_value) as no_restrictions
   from joomla.jml_eb_registrants r
   left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 55)
-  WHERE r.event_id = 21 AND v4.field_value='No'
+  WHERE r.event_id = $EVENTID AND v4.field_value='No'
   AND ((r.published = 1 AND (r.payment_method = 'os_ideal'
   OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
   $res = $UPLINK->query($sql);
@@ -182,7 +182,7 @@ include_once('current-players.php');
   $sql = "SELECT count(v4.field_value) as restrictions
   from joomla.jml_eb_registrants r
   left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 55)
-  WHERE r.event_id = 21 AND v4.field_value='Yes'
+  WHERE r.event_id = $EVENTID AND v4.field_value='Yes'
   AND ((r.published = 1 AND (r.payment_method = 'os_ideal'
   OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
   $res = $UPLINK->query($sql);
