@@ -35,7 +35,7 @@ left join joomla.jml_eb_field_values v7 on (v7.registrant_id = r.id and v7.field
 left join joomla.jml_eb_field_values v8 on (v8.registrant_id = r.id and v8.field_id = 38)
 left join joomla.jml_eb_field_values medicsleep on (medicsleep.registrant_id = r.id and medicsleep.field_id = 71)
 where coalesce(substring_index(medicsleep.field_value,',',1),'') != 'tweede gebouw' AND ASCII(UPPER(LEFT(CONCAT(COALESCE(v4.field_value,''),COALESCE(v3.field_value,''),COALESCE(v8.field_value,'')),1))) NOT BETWEEN 64 AND 90 
-AND r.event_id = $EVENTID and ((v5.field_value = 'Figurant' AND v7.field_value = 'Yes') or (v5.field_value = 'Keuken Crew' or v5.field_value = 'Spelleider')) 
+AND r.event_id = $EVENTID and ((v5.field_value = 'Figurant') or (v5.field_value = 'Keuken Crew' or v5.field_value = 'Spelleider')) 
 and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR 
 (r.published in (0,1) AND r.payment_method = 'os_offline'))
 UNION
