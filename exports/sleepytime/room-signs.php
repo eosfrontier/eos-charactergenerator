@@ -150,7 +150,7 @@
                 echo "<table>
                 <th>Important Note:</th>
                 <tr><td><ul>
-                <li>Breakfast will be served in the Zonnedauw from 9:00 - 11:00</li>
+                <li>Breakfast will be served in the Zonnedauw from 8:30 - 10:00</li>
                 <li>Lunch will be served in the Bastion from 12:00 - 14:00</li>
                 <li>Dinner will be served in the Bastion from 18:00 - 20:00</li>
                 </ul></td></tr></table>";
