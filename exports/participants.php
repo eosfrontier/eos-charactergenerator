@@ -121,13 +121,11 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
       <tr>
         <th width="10%">Faction</th>
         <th width="10%">Aantal Deelneemers</th>
-        <th width="80%">&nbsp;</th><th>&nbsp;</th>
       </tr>
       <?php while ($row3 = mysqli_fetch_array($res5)) {
       echo "<tr>";
       echo '<td>' . ucwords($row3['faction']) . "</td>";
         echo '<td>' . $row3['count'] . "</td>";
-        echo '<td>&nbsp;</td><td>&nbsp;</td>';
         echo '</tr>';
       }?>
     </table>
