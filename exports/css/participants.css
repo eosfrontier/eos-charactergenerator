@@ -1,11 +1,4 @@
 @media screen {
-  table td:nth-last-child(-n + 2) {
-    display: none
-  }
-
-  table th:nth-last-child(-n + 2) {
-    display: none
-  }
   tr:nth-child(even) {
     background-color: #555555;
     color: white;
