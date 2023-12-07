@@ -1,12 +1,10 @@
 @media screen {
-  .maintable {
-    table td:nth-last-child(-n + 2) {
-      display: none
-    }
+  table.maintable td:nth-last-child(-n + 2) {
+    display: none
+  }
 
-    table th:nth-last-child(-n + 2) {
-      display: none
-    }
+  table.maintable th:nth-last-child(-n + 2) {
+    display: none
   }
 
   tr:nth-child(even) {
