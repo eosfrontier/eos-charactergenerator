@@ -170,7 +170,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
     </select>
   </div>
   <?php
-  echo '<table class="maintable">';
+  echo '<table class="main">';
   echo '<th width="20%">OC Name</th>';
   echo '<th width="20%">IC Name</th>';
   echo '<th width="15%">Soort Inschrijf</th>';
