@@ -92,13 +92,11 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
       <tr>
         <th>Soort Inschrijf</th>
         <th>Aantal Deelneemers</th>
-        <th>&nbsp;</th>
       </tr>
       <?php while ($row2 = mysqli_fetch_array($res3)) {
         echo '<tr>';
         echo '<td>' . $row2['type'] . "</td>";
         echo '<td>' . $row2['count'] . "</td>";
-        echo "<td>&nbsp;</td>";
         echo "</tr>";
         }?>
       <?php if (in_array("32", $jgroups, true)) {
