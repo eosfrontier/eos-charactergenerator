@@ -1,9 +1,9 @@
 @media screen {
-  table.maintable td:nth-last-child(-n + 2) {
+  table td:nth-last-child(-n + 2) {
     display: none
   }
 
-  table.maintable th:nth-last-child(-n + 2) {
+  table th:nth-last-child(-n + 2) {
     display: none
   }
 
