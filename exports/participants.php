@@ -238,7 +238,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
       }
       }?>
     </table>
-    <br><br>
+    <!-- <br><br> -->
     <table>
       <tr>
         <th width="10%">Faction</th>
