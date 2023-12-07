@@ -135,9 +135,14 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
         border-collapse: collapse;
         padding: 1px 5px;
         font-size: 8px;
-        width: 95%;
+        width: 35%;
         margin-left: auto;
         margin-right: auto;
+      }
+      .grid {
+        display: grid;
+        gap: 40px;
+        grid-template-columns: 1fr 1fr;
       }
 
       td,
@@ -146,15 +151,6 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
         text-align: left;
         padding: 0px 0px;
         font-size: 10px;
-      }
-
-      .single_record {
-        page-break-after: always;
-      }
-      .grid {
-        display: grid;
-        gap: 40px;
-        grid-template-columns: 1fr 1fr;
       }
     }
   </style>
