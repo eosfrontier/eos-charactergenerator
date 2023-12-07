@@ -95,13 +95,13 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
         <th width="80%">&nbsp;</th>
         <th>&nbsp;</th>
       </tr>
-      <tr><?php while ($row2 = mysqli_fetch_array($res3)) {
+      <?php while ($row2 = mysqli_fetch_array($res3)) {
+        echo '<tr>';
         echo '<td>' . $row2['type'] . "</td>";
         echo '<td>' . $row2['count'] . "</td>";
         echo "<td>&nbsp;</td><td>&nbsp;</td>";
         echo "</tr>";
         }?>
-      </tr>
       <?php if (in_array("32", $jgroups, true)) {
       $sql_pending = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id = ' . $EVENTID;
       $res_pending = $UPLINK->query($sql_pending);
