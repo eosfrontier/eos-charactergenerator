@@ -112,7 +112,6 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
       echo '<tr>';
       echo '<td>Pending Payments ('. $event_title . ')</td> <td>€' . round($pending['amount'],2) . '</td>';
       echo '</tr>';
-      echo "<td>&nbsp;</td><td>&nbsp;</td> </tr>";
       if ( round($pending_old['amount'],2) > 0){
         echo '<tr>';
         echo '<td>Pending Payments (previous events)</td> <td>€' . round($pending_old['amount'],2) . '</td>';
