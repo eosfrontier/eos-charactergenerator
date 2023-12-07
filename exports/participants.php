@@ -157,7 +157,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
 
 <body>
   <?php
-  $tableSort = !empty($_GET['sort']) ? $_GET['sort'] : 'oc_fn asc';
+  $tableSort = !empty($_GET['sort']) ? $_GET['sort'] : 'register_date desc';
   $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);
@@ -281,8 +281,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
   </div>
   <div id="SortBy">Sorteer op:
     <select id="sort_table" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;" onchange="location.href = '/eoschargen/exports/participants.php?<?php if (isset($_GET["email"])) {
-      echo 'email=' . $_GET["email"] . '&';
-    } ?>sort=' + this.value; ">
+      echo 'email=' . $_GET["email"] . '&'; } ?>sort=' + this.value; ">
       <option value="oc_fn asc" <?php if ($tableSort === 'oc_fn asc') echo 'selected' ?>> OC Naam (Oplopend)</option>
       <option value="oc_fn desc" <?php if ($tableSort === 'oc_fn desc') echo 'selected' ?>>OC Naam (Aflopend)</option>
       <option value="ic_name asc" <?php if ($tableSort === 'ic_name asc') echo 'selected' ?>>IC Naam (Oplopend)</option>
@@ -290,7 +289,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
       <option value="type asc" <?php if ($tableSort === 'type asc') echo 'selected' ?>>Soort Inschrijf (Oplopend)</option>
       <option value="type desc" <?php if ($tableSort === 'type desc') echo 'selected' ?>>Soort Inschrijf (Aflopend)</option>
       <option value="register_date asc" <?php if ($tableSort === 'register_date asc') echo 'selected' ?>>Inschrijf Datum(Oplopend)</option>
-      <option value="register_date desc" <?php if ($tableSort === 'register_date asc') echo 'selected' ?>>InschrijfDatum (Aflopend)</option>
+      <option value="register_date desc" <?php if ($tableSort === 'register_date desc') echo 'selected' ?>>InschrijfDatum (Aflopend)</option>
     </select>
   </div>
   <?php

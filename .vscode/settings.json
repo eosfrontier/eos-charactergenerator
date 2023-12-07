@@ -17,6 +17,7 @@
         "getsheets",
         "homeplanet",
         "ICCID",
+        "Inschrijf",
         "isset",
         "jgroups",
         "joomla",
@@ -36,6 +37,7 @@
         "smflex",
         "sona",
         "Sonur",
+        "Soort",
         "wsleft",
         "wsright"
     ]
