@@ -283,20 +283,14 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
     <select id="sort_table" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;" onchange="location.href = '/eoschargen/exports/participants.php?<?php if (isset($_GET["email"])) {
       echo 'email=' . $_GET["email"] . '&';
     } ?>sort=' + this.value; ">
-      <option value="oc_fn asc" <?php echo $tableSort == 'oc_fn asc' ? 'selected' : ''; ?>> OC Naam (Oplopend)</option>
-      <option value="oc_fn desc" <?php echo $tableSort == 'oc_fn desc' ? 'selected' : ''; ?>>OC Naam (Aflopend)</option>
-      <option value="ic_name asc" <?php echo $tableSort == 'ic_name asc"' ? 'selected' : ''; ?>>IC Naam (Oplopend)
-      </option>
-      <option value="ic_name desc" <?php echo $tableSort == 'ic_name desc' ? 'selected' : ''; ?>>IC Naam (Aflopend)
-      </option>
-      <option value="type asc" <?php echo $tableSort == 'type asc' ? 'selected' : ''; ?>>Soort Inschrijf (Oplopend)
-      </option>
-      <option value="type desc" <?php echo $tableSort == 'type desc' ? 'selected' : ''; ?>>Soort Inschrijf (Aflopend)
-      </option>
-      <option value="register_date asc" <?php echo $tableSort == 'register_date asc' ? 'selected' : ''; ?>>Inschrijf Datum
-        (Oplopend)</option>
-      <option value="register_date desc" <?php echo $tableSort == 'register_date desc' ? 'selected' : ''; ?>>Inschrijf
-        Datum (Aflopend)</option>
+      <option value="oc_fn asc" <?php if ($tableSort === 'oc_fn asc') echo 'selected' ?>> OC Naam (Oplopend)</option>
+      <option value="oc_fn desc" <?php if ($tableSort === 'oc_fn desc') echo 'selected' ?>>OC Naam (Aflopend)</option>
+      <option value="ic_name asc" <?php if ($tableSort === 'ic_name asc') echo 'selected' ?>>IC Naam (Oplopend)</option>
+      <option value="ic_name desc" <?php if ($tableSort === 'ic_name desc') echo 'selected' ?>>IC Naam (Aflopend)</option>
+      <option value="type asc" <?php if ($tableSort === 'type asc') echo 'selected' ?>>Soort Inschrijf (Oplopend)</option>
+      <option value="type desc" <?php if ($tableSort === 'type desc') echo 'selected' ?>>Soort Inschrijf (Aflopend)</option>
+      <option value="register_date asc" <?php if ($tableSort === 'register_date asc') echo 'selected' ?>>Inschrijf Datum(Oplopend)</option>
+      <option value="register_date desc" <?php if ($tableSort === 'register_date asc') echo 'selected' ?>>InschrijfDatum (Aflopend)</option>
     </select>
   </div>
   <?php
