@@ -169,9 +169,8 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
       <option value="register_date desc" <?php if ($tableSort === 'register_date desc') echo 'selected' ?>>InschrijfDatum (Aflopend)</option>
     </select>
   </div>
-  <div class="maintable">
   <?php
-  echo "<table>";
+  echo '<table class="maintable">';
   echo '<th width="20%">OC Name</th>';
   echo '<th width="20%">IC Name</th>';
   echo '<th width="15%">Soort Inschrijf</th>';
@@ -179,7 +178,6 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
   echo '<th width="10%">Inschrif Datum</th>';
   echo '<th width="25%">Handtekening</th>';
   echo '<th width="10%">Foto Opt-Out</th>';
-  echo "</tr>";
 
   while ($row = mysqli_fetch_array($res)) {
     echo "<tr>" . "<td>";
