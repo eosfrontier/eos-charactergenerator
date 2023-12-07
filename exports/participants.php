@@ -202,57 +202,55 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
 
   $event_title = $row2['title'];
   echo "<button class=\"button\" id=\"printPageButton\" style=\"width: 100px;\" onClick=\"window.print();\">Print</button>";
-  echo '<font size="5">Participants for ' . $event_title . ' - '
-    . "($row_count participants)</font>";
-
-  echo '<div class="row">';
-  echo '<div class="column">';
-  echo '<table style="width:30%">';
-  echo '<th width="10%">Soort Inschrijf</th>';
-  echo '<th width="10%">Aantal Deelneemers</th>';
-  echo '<th width="80%">&nbsp;</th><th>&nbsp;</th>';
-
-  echo "</tr>";
-  while ($row2 = mysqli_fetch_array($res3)) {
-    echo '<td>' . $row2['type'] . "</td>";
-    echo '<td>' . $row2['count'] . "</td>";
-    echo "<td>&nbsp;</td><td>&nbsp;</td>";
-    echo "</tr>";
-  }
-  if (in_array("32", $jgroups, true)) {
-    $sql_pending = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id = ' . $EVENTID;
-    $res_pending = $UPLINK->query($sql_pending);
-    $pending = mysqli_fetch_array($res_pending);
-    $sql_pending_old = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id <> ' . $EVENTID;
-    $res_pending_old = $UPLINK->query($sql_pending_old);
-    $pending_old = mysqli_fetch_array($res_pending_old);
-    echo '<td>Pending Payments ('. $event_title . ')</td> <td>€' . round($pending['amount'],2) . '</td>';
-    echo "<td>&nbsp;</td><td>&nbsp;</td> </tr>";
-    if ( round($pending_old['amount'],2) > 0){
-      echo '<td>Pending Payments (previous events)</td> <td>€' . round($pending_old['amount'],2) . '</td>';
-      echo "<td>&nbsp;</td><td>&nbsp;</td> </tr>";
-    }
-  }
-  echo "</table>";
-  echo "<br><br>";
-  echo "</div>"; #div column
-  
-  echo '<div class="column">';
-  echo '<table style="width:30%">';
-  echo '<th width="10%">Faction</th>';
-  echo '<th width="10%">Aantal Deelneemers</th>';
-  echo '<th width="80%">&nbsp;</th><th>&nbsp;</th>';
-  echo "</tr>";
-  while ($row3 = mysqli_fetch_array($res5)) {
-    echo '<td>' . ucwords($row3['faction']) . "</td>";
-    echo '<td>' . $row3['count'] . "</td>";
-    echo "<td>&nbsp;</td><td>&nbsp;</td>";
-    echo "</tr>";
-  }
-  echo "</table>";
-  echo "</div>"; #div column
-  echo "</div>"; #div row
+  echo '<font size="5">Participants for ' . $event_title . ' - '  . "($row_count participants)</font>";
   ?>
+  <div class="grid">
+    <table style="width:30%">
+      <tr>
+        <th width="10%">Soort Inschrijf</th>
+        <th width="10%">Aantal Deelneemers</th>
+        <th width="80%">&nbsp;</th><th>&nbsp;</th>
+      </tr>
+      <tr><?php while ($row2 = mysqli_fetch_array($res3)) {
+        echo '<td>' . $row2['type'] . "</td>";
+        echo '<td>' . $row2['count'] . "</td>";
+        echo "<td>&nbsp;</td><td>&nbsp;</td>";
+        echo "</tr>";
+        }?>
+      </tr>
+      <?php if (in_array("32", $jgroups, true)) {
+      $sql_pending = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id = ' . $EVENTID;
+      $res_pending = $UPLINK->query($sql_pending);
+      $pending = mysqli_fetch_array($res_pending);
+      $sql_pending_old = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id <> ' . $EVENTID;
+      $res_pending_old = $UPLINK->query($sql_pending_old);
+      $pending_old = mysqli_fetch_array($res_pending_old);
+      echo '<tr>';
+      echo '<td>Pending Payments ('. $event_title . ')</td> <td>€' . round($pending['amount'],2) . '</td>';
+      echo '</tr>';
+      echo "<td>&nbsp;</td><td>&nbsp;</td> </tr>";
+      if ( round($pending_old['amount'],2) > 0){
+        echo '<tr>';
+        echo '<td>Pending Payments (previous events)</td> <td>€' . round($pending_old['amount'],2) . '</td>';
+        echo "<td>&nbsp;</td><td>&nbsp;</td> </tr>";
+        echo '</tr>';
+      }
+      }?>
+    </table>
+    <br><br>
+    <table style="width:30%">
+      <tr>
+        <th width="10%">Faction</th>
+        <th width="10%">Aantal Deelneemers</th>
+        <th width="80%">&nbsp;</th><th>&nbsp;</th>
+      </tr>
+      <tr> <?php while ($row3 = mysqli_fetch_array($res5)) {
+        echo '<td>' . ucwords($row3['faction']) . "</td>";
+        echo '<td>' . $row3['count'] . "</td>";
+        echo '<td>&nbsp;</td><td>&nbsp;</td>';
+        }?>
+      </tr>
+    </table>
   <?php $email = !empty($_GET['email']) ? $_GET['email'] : '%%'; ?>
   <div id="CopyEmailButton">
     Type of E-mail Addresses to Copy:
