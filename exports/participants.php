@@ -151,6 +151,11 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       .single_record {
         page-break-after: always;
       }
+      .grid {
+        display: grid;
+        gap: 40px;
+        grid-template-columns: 1fr 1fr;
+      }
     }
   </style>
 </head>
