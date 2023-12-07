@@ -244,12 +244,13 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
         <th width="10%">Aantal Deelneemers</th>
         <th width="80%">&nbsp;</th><th>&nbsp;</th>
       </tr>
-      <tr> <?php while ($row3 = mysqli_fetch_array($res5)) {
-        echo '<td>' . ucwords($row3['faction']) . "</td>";
+      <?php while ($row3 = mysqli_fetch_array($res5)) {
+      echo "<tr>";
+      echo '<td>' . ucwords($row3['faction']) . "</td>";
         echo '<td>' . $row3['count'] . "</td>";
         echo '<td>&nbsp;</td><td>&nbsp;</td>';
-        }?>
-      </tr>
+        echo '</tr>';
+      }?>
     </table>
   <?php $email = !empty($_GET['email']) ? $_GET['email'] : '%%'; ?>
   <div id="CopyEmailButton">
