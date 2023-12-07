@@ -210,7 +210,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
   echo '<font size="5">Participants for ' . $event_title . ' - '  . "($row_count participants)</font>";
   ?>
   <div class="grid">
-    <table style="width:30%">
+    <table>
       <tr>
         <th width="10%">Soort Inschrijf</th>
         <th width="10%">Aantal Deelneemers</th>
@@ -243,7 +243,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
       }?>
     </table>
     <br><br>
-    <table style="width:30%">
+    <table>
       <tr>
         <th width="10%">Faction</th>
         <th width="10%">Aantal Deelneemers</th>
