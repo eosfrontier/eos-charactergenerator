@@ -252,6 +252,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
         echo '</tr>';
       }?>
     </table>
+  </div>
   <?php $email = !empty($_GET['email']) ? $_GET['email'] : '%%'; ?>
   <div id="CopyEmailButton">
     Type of E-mail Addresses to Copy:
