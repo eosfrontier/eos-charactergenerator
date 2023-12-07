@@ -169,6 +169,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
       <option value="register_date desc" <?php if ($tableSort === 'register_date desc') echo 'selected' ?>>InschrijfDatum (Aflopend)</option>
     </select>
   </div>
+  <div class="maintable">
   <?php
   echo "<table>";
   echo '<th width="20%">OC Name</th>';
@@ -194,6 +195,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
   }
   echo "</table>";
   ?>
+  </div>
 </body>
 
 </html>
