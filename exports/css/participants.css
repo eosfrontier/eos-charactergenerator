@@ -14,7 +14,7 @@
   tr:nth-child(odd) {
     color: white;
   }
-  table {
+  table .grid {
     max-width: 35%;
   }
 }
