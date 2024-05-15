@@ -216,7 +216,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
 
   while ($row = mysqli_fetch_array($res)) {
     echo "<tr>" . "<td>";
-    echo "<a href='participant_detail.php?selected_event=' . $selected_event . '&participant_id=" . $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
+    echo "<a href='participant_detail.php?participant_id=" . $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
     echo "</td>";
     echo '<td>' . $row['ic_name'] . "</td>";
     echo '<td>' . $row['type'] . "</td>";
