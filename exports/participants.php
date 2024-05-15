@@ -10,6 +10,12 @@ include_once("../_includes/functions.global.php");
 include_once("../_includes/joomla.php");
 include_once('./current-players.php');
 
+if (isset($_GET['selected_event'])) {
+  $selected_event = $_GET['selected_event'];
+}
+else {
+  $selected_event = $EVENTID;
+}
 
 
 if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
@@ -41,25 +47,34 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
 <body>
   <?php
   $tableSort = !empty($_GET['sort']) ? $_GET['sort'] : 'register_date desc';
-  $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";
+  $sql_all_events = "SELECT e.id, e.title FROM jml_eb_events e
+  LEFT JOIN joomla.jml_eb_event_categories cats ON (cats.event_id = e.id)
+  WHERE cats.category_id = 1 AND e.id <= $EVENTID
+  ORDER By event_date;";
+  $res_all_events = $UPLINK->query($sql_all_events);?>
+    <?php
+  $sql2 = "SELECT title FROM jml_eb_events where id = $selected_event;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);
   $sql = "SELECT r.id as id, r.first_name as oc_fn, r.register_date, r.email as email, tussenvoegsel.field_value as oc_tv,
-    r.last_name as oc_ln, faction.character_name as ic_name, soort_inschrijving.field_value as type, faction.faction as faction
+    r.last_name as oc_ln, faction.character_name as ic_name, soort_inschrijving.field_value as type, faction.faction as faction, foto.field_value as foto
     from joomla.jml_eb_registrants r
     left join joomla.jml_eb_field_values charname on (charname.registrant_id = r.id and charname.field_id = 21 )
     left join joomla.ecc_characters faction ON (faction.characterID = substring_index(charname.field_value,' - ',-1))
     left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
     left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
-    where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
+    left join joomla.jml_eb_field_values foto on (foto.registrant_id = r.id and foto.field_id = 105)
+    where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
     (r.published in (0,1) AND r.payment_method = 'os_offline'))
     UNION
     select r.id as id, r.first_name as oc_fn, r.register_date, r.email as email, tussenvoegsel.field_value as oc_tv,
-    r.last_name as oc_ln, NULL as ic_name, soort_inschrijving.field_value as type, NULL as faction
+    r.last_name as oc_ln, NULL as ic_name, soort_inschrijving.field_value as type, NULL as faction, foto.field_value as foto
     from joomla.jml_eb_registrants r
     left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
     left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
-    WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
+    left join joomla.jml_eb_field_values foto on (foto.registrant_id = r.id and foto.field_id = 105)
+
+    WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $selected_event and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
     (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY $tableSort";
   $res = $UPLINK->query($sql);
   $row_count = mysqli_num_rows($res);
@@ -68,7 +83,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
   from joomla.jml_eb_registrants r       
   left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
   left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
-  where  soort_inschrijving.field_value IS NOT NULL AND r.event_id = $EVENTID  and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
+  where  soort_inschrijving.field_value IS NOT NULL AND r.event_id = $selected_event  and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
   (r.published in (0,1) AND r.payment_method = 'os_offline'))
   GROUP BY soort_inschrijving.field_value";
   $res3 = $UPLINK->query($sql3);
@@ -79,14 +94,34 @@ join joomla.jml_eb_field_values charname on (charname.registrant_id = r.id and c
 join joomla.ecc_characters faction ON (faction.characterID = substring_index(charname.field_value,' - ',-1))
 left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
 left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
-where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
+where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
 (r.published in (0,1) AND r.payment_method = 'os_offline')) GROUP by faction";
   $res5 = $UPLINK->query($sql5);
 
   $event_title = $row2['title'];
   echo "<button class=\"button\" id=\"printPageButton\" style=\"width: 100px;\" onClick=\"window.print();\">Print</button>";
-  echo '<font size="5">Participants for ' . $event_title . ' - '  . "($row_count participants)</font>";
+  echo '<font size="5">Participants for ' . $event_title . ' - '  . "($row_count participants)</font><br>";
   ?>
+  Choose another event: 
+  <select name="eventid" id="eventid" onchange="location.href = '/eoschargen/exports/participants.php?&<?php if (isset($_GET["email"])) {
+      echo 'email=' . $_GET["email"] . '&'; } ?><?php if (isset($_GET["sort"])) {
+      echo 'sort=' . $_GET["sort"] . '&'; } ?>&selected_event=' + this.value; ">
+  <?php while ($row_all_events = mysqli_fetch_array($res_all_events)) {
+        if ($row_all_events['id'] == $selected_event)  {
+          $event_select = 'selected';
+        }
+        else {
+        $event_select = '';
+        }
+        if ($row_all_events['id'] == $EVENTID){
+          $title = $row_all_events['title'] . " (Upcoming Event)";
+        }
+        else {
+          $title = $row_all_events['title'];
+        }
+        echo '<option value="' . $row_all_events['id'] . '"' . $event_select . '>' . $title . "</option>";
+        }?>
+</select>
   <div class="grid">
     <table>
       <tr>
@@ -100,16 +135,16 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
         echo "</tr>";
         }?>
       <?php if (in_array("32", $jgroups, true)) {
-      $sql_pending = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id = ' . $EVENTID;
+      $sql_pending = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id = ' . $selected_event;
       $res_pending = $UPLINK->query($sql_pending);
       $pending = mysqli_fetch_array($res_pending);
-      $sql_pending_old = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id <> ' . $EVENTID;
+      $sql_pending_old = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id <> ' . $selected_event;
       $res_pending_old = $UPLINK->query($sql_pending_old);
       $pending_old = mysqli_fetch_array($res_pending_old);
       echo '<tr>';
       echo '<td>Pending Payments ('. $event_title . ')</td> <td>€' . round($pending['amount'],2) . '</td>';
       echo '</tr>';
-      if ( round($pending_old['amount'],2) > 0){
+      if ( (round($pending_old['amount'],2) > 0) && $selected_event == $EVENTID){
         echo '<tr>';
         echo '<td>Pending Payments (previous events)</td> <td>€' . round($pending_old['amount'],2) . '</td>';
         echo '</tr>';
@@ -133,7 +168,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
   <?php $email = !empty($_GET['email']) ? $_GET['email'] : '%%'; ?>
   <div id="CopyEmailButton">
     Type of E-mail Addresses to Copy:
-    <select id="email_types" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;" onchange="location.href = '/eoschargen/exports/participants.php?<?php if (isset($_GET["sort"])) {
+    <select id="email_types" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;" onchange="location.href = '/eoschargen/exports/participants.php?<?php echo 'selected_event=' . $selected_event; ?>&<?php if (isset($_GET["sort"])) {
       echo 'sort=' . $_GET["sort"] . '&';
     } ?>email=' + this.value; ">
       <option value="%%" <?php echo $email == '%%' ? 'selected' : ''; ?>>Alles</option>
@@ -145,7 +180,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
     <?php
     $sql4 = "SELECT r.email as email from joomla.jml_eb_registrants r
     left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
-    where soort_inschrijving.field_value LIKE '$email' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
+    where soort_inschrijving.field_value LIKE '$email' AND r.event_id = $selected_event and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
     (r.published in (0,1) AND r.payment_method = 'os_offline'))";
     $res4 = $UPLINK->query($sql4);
     $emails = '';
@@ -157,7 +192,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
     <button class="button" onclick="copyTo()">Copy Participant E-mails</button><br><br>
   </div>
   <div id="SortBy">Sorteer op:
-    <select id="sort_table" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;" onchange="location.href = '/eoschargen/exports/participants.php?<?php if (isset($_GET["email"])) {
+    <select id="sort_table" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;" onchange="location.href = '/eoschargen/exports/participants.php?<?php echo 'selected_event=' . $selected_event; ?>&<?php if (isset($_GET["email"])) {
       echo 'email=' . $_GET["email"] . '&'; } ?>sort=' + this.value; ">
       <option value="oc_fn asc" <?php if ($tableSort === 'oc_fn asc') echo 'selected' ?>> OC Naam (Oplopend)</option>
       <option value="oc_fn desc" <?php if ($tableSort === 'oc_fn desc') echo 'selected' ?>>OC Naam (Aflopend)</option>
@@ -181,14 +216,19 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
 
   while ($row = mysqli_fetch_array($res)) {
     echo "<tr>" . "<td>";
-    echo "<a href='participant_detail.php?participant_id=" . $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
+    echo "<a href='participant_detail.php?selected_event=' . $selected_event . '&participant_id=" . $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
     echo "</td>";
     echo '<td>' . $row['ic_name'] . "</td>";
     echo '<td>' . $row['type'] . "</td>";
     echo '<td>' . ucwords($row['faction']) . "</td>";
     echo '<td>' . $row['register_date'] . "</td>";
     echo '<td height="40px">&nbsp;</td>';
+    if (strpos($row['foto'],'afmelden') != false) {
+    echo '<td height="40px">Yes</td>';
+    }
+    else {
     echo '<td height="40px">&nbsp;</td>';
+    }
     echo "</tr>";
   }
   echo "</table>";
