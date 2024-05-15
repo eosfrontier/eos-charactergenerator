@@ -148,12 +148,13 @@
                 echo "</tr>";
                 }
                 echo "</table></br></br>";
-                echo "<table>
+                ?>
+                <table>
                 <th>Important Notes:</th>
                 <tr><td><ul>
                 <li>Please nominate 1 person from your room to do the final clean-and-swept check. They should sign next to their name when the room is clean and ready to be checked.</li></br>
                 </ul></td></tr>
-                <tr><td><ul>";?>
+                <tr><td><ul>
                 <h3>Meal Times/Locations</h3>
                 <table>
                     <tr>
