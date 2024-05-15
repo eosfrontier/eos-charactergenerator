@@ -99,9 +99,12 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
   $res5 = $UPLINK->query($sql5);
 
   $event_title = $row2['title'];
-  echo "<button class=\"button\" id=\"printPageButton\" style=\"width: 100px;\" onClick=\"window.print();\">Print</button>";
+  echo "<div id='printButton'>";
+  echo "<button class=\"button\" id=\"printPageButton\" style=\"width: 100px;\" onClick=\"window.print();\">Print</button> <font color='red'>IMPORTANT: Before clicking print, change sorting to OC Naam (oplopend)!</font>
+  </div>";
   echo '<font size="5">Participants for ' . $event_title . ' - '  . "($row_count participants)</font><br>";
   ?>
+  <div id="event_chooser">
   Choose another event: 
   <select name="eventid" id="eventid" onchange="location.href = '/eoschargen/exports/participants.php?&<?php if (isset($_GET["email"])) {
       echo 'email=' . $_GET["email"] . '&'; } ?><?php if (isset($_GET["sort"])) {
@@ -122,6 +125,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
         echo '<option value="' . $row_all_events['id'] . '"' . $event_select . '>' . $title . "</option>";
         }?>
 </select>
+</div>
   <div class="grid">
     <table>
       <tr>

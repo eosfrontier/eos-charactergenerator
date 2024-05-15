@@ -65,6 +65,12 @@ th {
 }
 
 @media print {
+  #event_chooser{
+    display: none;
+  }
+  #printButton{
+    display: none;
+  }
   #printPageButton {
     display: none;
   }
