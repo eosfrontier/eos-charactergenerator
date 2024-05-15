@@ -161,7 +161,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
   $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);
-  $sql = "SELECT r.id, r.first_name as oc_fn, r.register_date, r.email as email, tussenvoegsel.field_value as oc_tv,
+  $sql = "SELECT r.id as id, r.first_name as oc_fn, r.register_date, r.email as email, tussenvoegsel.field_value as oc_tv,
     r.last_name as oc_ln, faction.character_name as ic_name, soort_inschrijving.field_value as type, faction.faction as faction
     from joomla.jml_eb_registrants r
     left join joomla.jml_eb_field_values charname on (charname.registrant_id = r.id and charname.field_id = 21 )
@@ -171,7 +171,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
     where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
     (r.published in (0,1) AND r.payment_method = 'os_offline'))
     UNION
-    select r.id, r.first_name as oc_fn, r.register_date, r.email as email, tussenvoegsel.field_value as oc_tv,
+    select r.id as id, r.first_name as oc_fn, r.register_date, r.email as email, tussenvoegsel.field_value as oc_tv,
     r.last_name as oc_ln, NULL as ic_name, soort_inschrijving.field_value as type, NULL as faction
     from joomla.jml_eb_registrants r
     left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
@@ -312,7 +312,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
 
   while ($row = mysqli_fetch_array($res)) {
     echo "<tr>" . "<td>";
-    echo $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
+    echo "<a href='participant_detail.php?participant_id=" . $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
     echo "</td>";
     echo '<td>' . $row['ic_name'] . "</td>";
     echo '<td>' . $row['type'] . "</td>";
