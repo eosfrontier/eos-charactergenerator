@@ -242,7 +242,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
     <tr>
       <td width="20%"><strong>adres:</strong> </td>
       <td><?php 
-        if (!in_array("30", $jgroups, true)) { echo "<font color='red'>You must be bestuur to retrieve this info.<br> If you need this info, please ask a member of the board to access this record for you.</font>";}
+        if (!in_array("32", $jgroups, true)) { echo "<font color='red'>You must be bestuur to retrieve this info.<br> If you need this info, please ask a member of the board to access this record for you.</font>";}
         else {
         echo $row['address'] . "<br>"; 
         if ($row['address2'] != ''){
