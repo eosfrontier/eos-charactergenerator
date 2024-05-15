@@ -35,129 +35,12 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       navigator.clipboard.writeText(copyText.value);
     }
   </script>
-  <style type="text/css">
-    @media screen {
-      table td:nth-last-child(-n + 2) {
-        display: none
-      }
-
-      table th:nth-last-child(-n + 2) {
-        display: none
-      }
-    }
-
-    body {
-      background: #262e3e;
-      color: white;
-    }
-
-    table {
-      font-family: arial, sans-serif;
-      border-collapse: collapse;
-      width: 100%;
-      color: white;
-    }
-
-    td,
-    th {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 2px 4px;
-      font-size: 16px;
-    }
-
-    @media screen {
-      tr:nth-child(even) {
-        background-color: #555555;
-        color: white;
-      }
-
-      tr:nth-child(odd) {
-        color: white;
-      }
-    }
-
-    .button {
-      background-color: #4CAF50;
-      border: none;
-      color: white;
-      padding: 15px 32px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-    }
-
-    .hidden-text {
-      display: none;
-    }
-
-    @media print {
-      #printPageButton {
-        display: none;
-      }
-
-      #CopyEmailButton {
-        display: none;
-      }
-
-      #SortBy {
-        display: none;
-      }
-
-      .row {
-        display: flex;
-        margin-left: -5px;
-        margin-right: -5px;
-      }
-
-      .column {
-        flex: 50%;
-        padding: 5px;
-      }
-
-
-      * {
-        box-sizing: border-box;
-        -webkit-print-color-adjust: exact;
-      }
-
-      body {
-        background-color: #fff;
-        color: #000;
-        font-size: 10px;
-      }
-
-      table {
-        color: #000;
-        border-collapse: collapse;
-        padding: 1px 5px;
-        font-size: 8px;
-        width: 95%;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      td,
-      th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 0px 0px;
-        font-size: 10px;
-      }
-
-      .single_record {
-        page-break-after: always;
-      }
-    }
-  </style>
+   <link rel="stylesheet" href="css/participants.css">
 </head>
 
 <body>
   <?php
-  $tableSort = !empty($_GET['sort']) ? $_GET['sort'] : 'oc_fn asc';
+  $tableSort = !empty($_GET['sort']) ? $_GET['sort'] : 'register_date desc';
   $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);
@@ -202,57 +85,51 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
 
   $event_title = $row2['title'];
   echo "<button class=\"button\" id=\"printPageButton\" style=\"width: 100px;\" onClick=\"window.print();\">Print</button>";
-  echo '<font size="5">Participants for ' . $event_title . ' - '
-    . "($row_count participants)</font>";
-
-  echo '<div class="row">';
-  echo '<div class="column">';
-  echo '<table style="width:30%">';
-  echo '<th width="10%">Soort Inschrijf</th>';
-  echo '<th width="10%">Aantal Deelneemers</th>';
-  echo '<th width="80%">&nbsp;</th><th>&nbsp;</th>';
-
-  echo "</tr>";
-  while ($row2 = mysqli_fetch_array($res3)) {
-    echo '<td>' . $row2['type'] . "</td>";
-    echo '<td>' . $row2['count'] . "</td>";
-    echo "<td>&nbsp;</td><td>&nbsp;</td>";
-    echo "</tr>";
-  }
-  if (in_array("32", $jgroups, true)) {
-    $sql_pending = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id = ' . $EVENTID;
-    $res_pending = $UPLINK->query($sql_pending);
-    $pending = mysqli_fetch_array($res_pending);
-    $sql_pending_old = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id <> ' . $EVENTID;
-    $res_pending_old = $UPLINK->query($sql_pending_old);
-    $pending_old = mysqli_fetch_array($res_pending_old);
-    echo '<td>Pending Payments ('. $event_title . ')</td> <td>€' . round($pending['amount'],2) . '</td>';
-    echo "<td>&nbsp;</td><td>&nbsp;</td> </tr>";
-    if ( $pending_old > 0){
-      echo '<td>Pending Payments (previous events)</td> <td>€' . round($pending_old['amount'],2) . '</td>';
-      echo "<td>&nbsp;</td><td>&nbsp;</td> </tr>";
-    }
-  }
-  echo "</table>";
-  echo "<br><br>";
-  echo "</div>"; #div column
-  
-  echo '<div class="column">';
-  echo '<table style="width:30%">';
-  echo '<th width="10%">Faction</th>';
-  echo '<th width="10%">Aantal Deelneemers</th>';
-  echo '<th width="80%">&nbsp;</th><th>&nbsp;</th>';
-  echo "</tr>";
-  while ($row3 = mysqli_fetch_array($res5)) {
-    echo '<td>' . ucwords($row3['faction']) . "</td>";
-    echo '<td>' . $row3['count'] . "</td>";
-    echo "<td>&nbsp;</td><td>&nbsp;</td>";
-    echo "</tr>";
-  }
-  echo "</table>";
-  echo "</div>"; #div column
-  echo "</div>"; #div row
+  echo '<font size="5">Participants for ' . $event_title . ' - '  . "($row_count participants)</font>";
   ?>
+  <div class="grid">
+    <table>
+      <tr>
+        <th>Soort Inschrijf</th>
+        <th>Aantal Deelneemers</th>
+      </tr>
+      <?php while ($row2 = mysqli_fetch_array($res3)) {
+        echo '<tr>';
+        echo '<td>' . $row2['type'] . "</td>";
+        echo '<td>' . $row2['count'] . "</td>";
+        echo "</tr>";
+        }?>
+      <?php if (in_array("32", $jgroups, true)) {
+      $sql_pending = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id = ' . $EVENTID;
+      $res_pending = $UPLINK->query($sql_pending);
+      $pending = mysqli_fetch_array($res_pending);
+      $sql_pending_old = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id <> ' . $EVENTID;
+      $res_pending_old = $UPLINK->query($sql_pending_old);
+      $pending_old = mysqli_fetch_array($res_pending_old);
+      echo '<tr>';
+      echo '<td>Pending Payments ('. $event_title . ')</td> <td>€' . round($pending['amount'],2) . '</td>';
+      echo '</tr>';
+      if ( round($pending_old['amount'],2) > 0){
+        echo '<tr>';
+        echo '<td>Pending Payments (previous events)</td> <td>€' . round($pending_old['amount'],2) . '</td>';
+        echo '</tr>';
+      }
+      }?>
+    </table>
+    <!-- <br><br> -->
+    <table>
+      <tr>
+        <th width="10%">Faction</th>
+        <th width="10%">Aantal Deelneemers</th>
+      </tr>
+      <?php while ($row3 = mysqli_fetch_array($res5)) {
+      echo "<tr>";
+      echo '<td>' . ucwords($row3['faction']) . "</td>";
+        echo '<td>' . $row3['count'] . "</td>";
+        echo '</tr>';
+      }?>
+    </table>
+  </div>
   <?php $email = !empty($_GET['email']) ? $_GET['email'] : '%%'; ?>
   <div id="CopyEmailButton">
     Type of E-mail Addresses to Copy:
@@ -281,26 +158,19 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
   </div>
   <div id="SortBy">Sorteer op:
     <select id="sort_table" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;" onchange="location.href = '/eoschargen/exports/participants.php?<?php if (isset($_GET["email"])) {
-      echo 'email=' . $_GET["email"] . '&';
-    } ?>sort=' + this.value; ">
-      <option value="oc_fn asc" <?php echo $tableSort == 'oc_fn asc' ? 'selected' : ''; ?>> OC Naam (Oplopend)</option>
-      <option value="oc_fn desc" <?php echo $tableSort == 'oc_fn desc' ? 'selected' : ''; ?>>OC Naam (Aflopend)</option>
-      <option value="ic_name asc" <?php echo $tableSort == 'ic_name asc"' ? 'selected' : ''; ?>>IC Naam (Oplopend)
-      </option>
-      <option value="ic_name desc" <?php echo $tableSort == 'ic_name desc' ? 'selected' : ''; ?>>IC Naam (Aflopend)
-      </option>
-      <option value="type asc" <?php echo $tableSort == 'type asc' ? 'selected' : ''; ?>>Soort Inschrijf (Oplopend)
-      </option>
-      <option value="type desc" <?php echo $tableSort == 'type desc' ? 'selected' : ''; ?>>Soort Inschrijf (Aflopend)
-      </option>
-      <option value="register_date asc" <?php echo $tableSort == 'register_date asc' ? 'selected' : ''; ?>>Inschrijf Datum
-        (Oplopend)</option>
-      <option value="register_date desc" <?php echo $tableSort == 'register_date desc' ? 'selected' : ''; ?>>Inschrijf
-        Datum (Aflopend)</option>
+      echo 'email=' . $_GET["email"] . '&'; } ?>sort=' + this.value; ">
+      <option value="oc_fn asc" <?php if ($tableSort === 'oc_fn asc') echo 'selected' ?>> OC Naam (Oplopend)</option>
+      <option value="oc_fn desc" <?php if ($tableSort === 'oc_fn desc') echo 'selected' ?>>OC Naam (Aflopend)</option>
+      <option value="ic_name asc" <?php if ($tableSort === 'ic_name asc') echo 'selected' ?>>IC Naam (Oplopend)</option>
+      <option value="ic_name desc" <?php if ($tableSort === 'ic_name desc') echo 'selected' ?>>IC Naam (Aflopend)</option>
+      <option value="type asc" <?php if ($tableSort === 'type asc') echo 'selected' ?>>Soort Inschrijf (Oplopend)</option>
+      <option value="type desc" <?php if ($tableSort === 'type desc') echo 'selected' ?>>Soort Inschrijf (Aflopend)</option>
+      <option value="register_date asc" <?php if ($tableSort === 'register_date asc') echo 'selected' ?>>Inschrijf Datum(Oplopend)</option>
+      <option value="register_date desc" <?php if ($tableSort === 'register_date desc') echo 'selected' ?>>InschrijfDatum (Aflopend)</option>
     </select>
   </div>
   <?php
-  echo "<table>";
+  echo '<table class="main">';
   echo '<th width="20%">OC Name</th>';
   echo '<th width="20%">IC Name</th>';
   echo '<th width="15%">Soort Inschrijf</th>';
@@ -308,7 +178,6 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
   echo '<th width="10%">Inschrif Datum</th>';
   echo '<th width="25%">Handtekening</th>';
   echo '<th width="10%">Foto Opt-Out</th>';
-  echo "</tr>";
 
   while ($row = mysqli_fetch_array($res)) {
     echo "<tr>" . "<td>";
@@ -324,6 +193,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $EVENTID and ((
   }
   echo "</table>";
   ?>
+  </div>
 </body>
 
 </html>
