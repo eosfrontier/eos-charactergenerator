@@ -206,8 +206,8 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
       <option value="type desc" <?php if ($tableSort === 'type desc') echo 'selected' ?>>Soort Inschrijf (Aflopend)</option>
       <option value="register_date asc" <?php if ($tableSort === 'register_date asc') echo 'selected' ?>>Inschrijf Datum(Oplopend)</option>
       <option value="register_date desc" <?php if ($tableSort === 'register_date desc') echo 'selected' ?>>InschrijfDatum (Aflopend)</option>
-      <option value="faction asc" <?php if ($tableSort === 'faction asc') echo 'selected' ?>>Factie(Oplopend)</option>
-      <option value="faction desc" <?php if ($tableSort === 'faction desc') echo 'selected' ?>>Factie (Aflopend)</option>
+      <option value="type desc, faction asc, oc_fn asc" <?php if ($tableSort === 'type desc, faction asc, oc_fn asc') echo 'selected' ?>>Factie(Oplopend)</option>
+      <option value="type desc, faction desc, oc_fn asc" <?php if ($tableSort === 'type desc, faction desc, oc_fn asc') echo 'selected' ?>>Factie (Aflopend)</option>
 
     </select>
   </div>
