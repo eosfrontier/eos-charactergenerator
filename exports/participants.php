@@ -102,30 +102,30 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
   echo "<div id='printButton'>";
   echo "<button class=\"button\" id=\"printPageButton\" style=\"width: 100px;\" onClick=\"window.print();\">Print</button> <font color='red'>IMPORTANT: Before clicking print, change sorting to OC Naam (oplopend)!</font>
   </div>";
-  echo '<font size="5">Participants for ' . $event_title . ' - '  . "($row_count participants)</font><br>";
+  echo '<font size="5">Participants for ';
   ?>
-  <div id="event_chooser">
-  Choose another event: 
-  <select name="eventid" id="eventid" onchange="location.href = '/eoschargen/exports/participants.php?&<?php if (isset($_GET["email"])) {
-      echo 'email=' . $_GET["email"] . '&'; } ?><?php if (isset($_GET["sort"])) {
-      echo 'sort=' . $_GET["sort"] . '&'; } ?>&selected_event=' + this.value; ">
-  <?php while ($row_all_events = mysqli_fetch_array($res_all_events)) {
-        if ($row_all_events['id'] == $selected_event)  {
-          $event_select = 'selected';
-        }
-        else {
-        $event_select = '';
-        }
-        if ($row_all_events['id'] == $EVENTID){
-          $title = $row_all_events['title'] . " (Upcoming Event)";
-        }
-        else {
-          $title = $row_all_events['title'];
-        }
-        echo '<option value="' . $row_all_events['id'] . '"' . $event_select . '>' . $title . "</option>";
-        }?>
+  <select style="font-size:20px;" name="eventid" id="eventid" onchange="location.href = '/eoschargen/exports/participants.php?&<?php if (isset($_GET["email"])) {
+    echo 'email=' . $_GET["email"] . '&'; } ?><?php if (isset($_GET["sort"])) {
+    echo 'sort=' . $_GET["sort"] . '&'; } ?>&selected_event=' + this.value; ">
+<?php while ($row_all_events = mysqli_fetch_array($res_all_events)) {
+      if ($row_all_events['id'] == $selected_event)  {
+        $event_select = 'selected';
+      }
+      else {
+      $event_select = '';
+      }
+      if ($row_all_events['id'] == $EVENTID){
+        $title = $row_all_events['title'] . " (Upcoming Event)";
+      }
+      else {
+        $title = $row_all_events['title'];
+      }
+      echo '<option value="' . $row_all_events['id'] . '"' . $event_select . '>' . $title . "</option>";
+      }?>
 </select>
-</div>
+<?php
+ echo '- '  . "($row_count participants)</font><br>";
+  ?>
   <div class="grid">
     <table>
       <tr>
