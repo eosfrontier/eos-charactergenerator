@@ -127,10 +127,14 @@
                 $res = $UPLINK->query($sql);
                 echo "<div class='roomsign' style=''>";
                 echo '<p><button class="button" id="printPageButton" style="width: 100%;" onClick="window.print();">Print</button></p>';
-                echo "<center class='center'><font face='Orbitron' size=15><br>" . str_replace('tweede gebouw', 'Zonnedauw', $building) . "<br>$room<br><br></font></center>";
-                echo "<table>";
-                echo "<th><center>Name</center></th>";
-                echo "<th><center>Room Clean Sign-Off</center></th>";
+                echo "<center class='center'><font face='Orbitron' size=15><br>" . str_replace('tweede gebouw', 'Zonnedauw', $building) . "<br>$room<br></font></center>";
+                ?>
+                <table>
+                    <tr>
+                    <th><center>Name</center></th>";
+                <th><center>Room Clean Sign-Off</center></th>
+                    </tr>
+                <?php
                 while ($row = mysqli_fetch_array($res)) {
                     //     $foodlocation = $row['foodlocation'];
                     //     if ($foodlocation == '') {
@@ -142,12 +146,13 @@
                     //         $foodlocation = $row['foodlocation'];
                     //         }
                     //     }
-                    echo "<tr><td>" . $row['name'] . "</td>";
+                    echo "<tr>
+                    <td>" . $row['name'] . "</td>";
                     //     echo "<td><center>" . str_replace('tweede gebouw', 'Zonnedauw', $foodlocation) . "</center></td>";
                     echo "<td><center>&nbsp;</center></td>";
                     echo "</tr>";
                 }
-                echo "</table></br></br>";
+                echo "</table>";
                 ?>
                 <table>
                     <th>Important Notes:</th>
@@ -155,14 +160,13 @@
                         <td>
                             <ul>
                                 <li>Please nominate 1 person from your room to do the final clean-and-swept check. They should
-                                    sign next to their name when the room is clean and ready to be checked.</li></br>
+                                    sign next to their name when the room is clean and ready to be checked.</li>
                             </ul>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <ul>
-                                <h3>Meal Times/Locations</h3>
+                                <h5>Meal Times/Locations</h5>
                                 <table>
                                     <tr>
                                         <th>Meal</th>
@@ -185,7 +189,6 @@
                                         <td>18:30 - 20:00</td>
                                     </tr>
                                 </table>
-                            </ul>
                         </td>
                     </tr>
                 </table>
