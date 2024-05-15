@@ -68,7 +68,11 @@ if (is_array($sheetArr['characters'])) {
                 . '<button type="button" class="blue no-bg bar" name="button"><i class="fas fa-list"></i>&nbsp;Background-check details</button>'
                 . '</a>'
                 . '</div>'
-                . '<div class="box33"></div>'
+                . '<div class="box33">'
+                . '<a href="/eos_backstory/">'
+                . '<button type="button" class="blue no-bg bar" name="button"><i class="fas fa-address-book"></i>&nbsp;Concept/Backstory</button>'
+                . '</a>'
+                . '</div>'
                 . '</div>';// end second row
             }
         } else {

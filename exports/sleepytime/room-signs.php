@@ -130,7 +130,7 @@
                 echo "<center class='center'><font face='Orbitron' size=15><br>" . str_replace('tweede gebouw', 'Zonnedauw', $building) . "<br>$room<br><br></font></center>";
                 echo "<table>";
                 echo "<th><center>Name</center></th>";
-                // echo "<th><center>Eating Location</center></th>";
+                echo "<th><center>Room Clean Sign-Off</center></th>";
                 while ($row = mysqli_fetch_array($res)) {
                 //     $foodlocation = $row['foodlocation'];
                 //     if ($foodlocation == '') {
@@ -144,11 +144,15 @@
                 //     }
                     echo "<tr><td>" . $row['name'] . "</td>";
                 //     echo "<td><center>" . str_replace('tweede gebouw', 'Zonnedauw', $foodlocation) . "</center></td>";
-                    echo "</tr>";
+                    echo "<td><center>&nbsp;</center></td>";
+                echo "</tr>";
                 }
                 echo "</table></br></br>";
                 echo "<table>
-                <th>Important Note:</th>
+                <th>Important Notes:</th>
+                <tr><td><ul>
+                <li>Please nominate 1 person from your room to do the final clean-and-swept check. They should sign next to their name when the room is clean and ready to be checked.</li></br>
+                </ul></td></tr>
                 <tr><td><ul>
                 <li>Breakfast will be served in the Zonnedauw from 8:30 - 10:00</li>
                 <li>Lunch will be served in the Bastion from 12:00 - 14:00</li>
