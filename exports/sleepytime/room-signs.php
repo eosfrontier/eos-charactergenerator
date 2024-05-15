@@ -12,12 +12,12 @@
     <div>
         <?php
         header("Content-Type: text/html; charset=ISO-8859-1");
-        include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
+        include_once ($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
 
         $bldg_sql = "SELECT field_value from `jml_eb_field_values` where field_id = 36 AND field_value !='medische uitzondering \"Geregeld met Orga\"' GROUP by field_value";
         $bldg_res = $UPLINK->query($bldg_sql);
         //$row = mysqli_fetch_assoc($res);
-
+        
         while ($bldg_row = mysqli_fetch_assoc($bldg_res)) {
             $building = $bldg_row['field_value'];
             //This makes the list of rooms
@@ -132,59 +132,70 @@
                 echo "<th><center>Name</center></th>";
                 echo "<th><center>Room Clean Sign-Off</center></th>";
                 while ($row = mysqli_fetch_array($res)) {
-                //     $foodlocation = $row['foodlocation'];
-                //     if ($foodlocation == '') {
-                //         $foodlocation = $building;
-                //     } else {
-                //         if ($foodlocation = 'tweede gebouw') {
-                //             $foodlocation = 'Zonnedauw';
-                //         } else {
-                //         $foodlocation = $row['foodlocation'];
-                //         }
-                //     }
+                    //     $foodlocation = $row['foodlocation'];
+                    //     if ($foodlocation == '') {
+                    //         $foodlocation = $building;
+                    //     } else {
+                    //         if ($foodlocation = 'tweede gebouw') {
+                    //             $foodlocation = 'Zonnedauw';
+                    //         } else {
+                    //         $foodlocation = $row['foodlocation'];
+                    //         }
+                    //     }
                     echo "<tr><td>" . $row['name'] . "</td>";
-                //     echo "<td><center>" . str_replace('tweede gebouw', 'Zonnedauw', $foodlocation) . "</center></td>";
+                    //     echo "<td><center>" . str_replace('tweede gebouw', 'Zonnedauw', $foodlocation) . "</center></td>";
                     echo "<td><center>&nbsp;</center></td>";
-                echo "</tr>";
+                    echo "</tr>";
                 }
                 echo "</table></br></br>";
                 ?>
                 <table>
-                <th>Important Notes:</th>
-                <tr><td><ul>
-                <li>Please nominate 1 person from your room to do the final clean-and-swept check. They should sign next to their name when the room is clean and ready to be checked.</li></br>
-                </ul></td></tr>
-                <tr><td><ul>
-                <h3>Meal Times/Locations</h3>
-                <table>
+                    <th>Important Notes:</th>
                     <tr>
-                        <th>Meal</th>
-                        <th>Location</th>
-                        <th>Time</th>
+                        <td>
+                            <ul>
+                                <li>Please nominate 1 person from your room to do the final clean-and-swept check. They should
+                                    sign next to their name when the room is clean and ready to be checked.</li></br>
+                            </ul>
+                        </td>
                     </tr>
                     <tr>
-                        <td>Breakfast</td>
-                        <td>Zonnedauw</td>
-                        <td>8:30 - 10:00</td>
-                    </tr>
-                    <tr>
-                        <td>Lunch</td>
-                        <td>Bastion</td>
-                        <td>12:00 - 14:00</td>
-                    </tr>
-                    <tr>
-                        <td>Dinner</td>
-                        <td>Bastion</td>
-                        <td>18:30 - 20:00</td>
+                        <td>
+                            <ul>
+                                <h3>Meal Times/Locations</h3>
+                                <table>
+                                    <tr>
+                                        <th>Meal</th>
+                                        <th>Location</th>
+                                        <th>Time</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Breakfast</td>
+                                        <td>Zonnedauw</td>
+                                        <td>8:30 - 10:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lunch</td>
+                                        <td>Bastion</td>
+                                        <td>12:00 - 14:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dinner</td>
+                                        <td>Bastion</td>
+                                        <td>18:30 - 20:00</td>
+                                    </tr>
+                                </table>
+                            </ul>
+                        </td>
                     </tr>
                 </table>
-                </ul></td></tr></table>
-                <?php 
-                    echo "</div>";
+                <?php
+                echo "</div>";
             }
         }
         ?>
 
     </div>
 </body>
+
 </html>
