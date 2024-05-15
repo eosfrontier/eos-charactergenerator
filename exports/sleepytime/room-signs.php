@@ -153,12 +153,33 @@
                 <tr><td><ul>
                 <li>Please nominate 1 person from your room to do the final clean-and-swept check. They should sign next to their name when the room is clean and ready to be checked.</li></br>
                 </ul></td></tr>
-                <tr><td><ul>
-                <li>Breakfast will be served in the Zonnedauw from 8:30 - 10:00</li>
-                <li>Lunch will be served in the Bastion from 12:00 - 14:00</li>
-                <li>Dinner will be served in the Bastion from 18:30 - 20:00</li>
-                </ul></td></tr></table>";
-                echo "</div>";
+                <tr><td><ul>";?>
+                <h3>Meal Times/Locations</h3>
+                <table>
+                    <tr>
+                        <th>Meal</th>
+                        <th>Location</th>
+                        <th>Time</th>
+                    </tr>
+                    <tr>
+                        <td>Breakfast</td>
+                        <td>Zonnedauw</td>
+                        <td>8:30 - 10:00</td>
+                    </tr>
+                    <tr>
+                        <td>Lunch</td>
+                        <td>Bastion</td>
+                        <td>12:00 - 14:00</td>
+                    </tr>
+                    <tr>
+                        <td>Dinner</td>
+                        <td>Bastion</td>
+                        <td>18:30 - 20:00</td>
+                    </tr>
+                </table>
+                </ul></td></tr></table>
+                <?php 
+                    echo "</div>";
             }
         }
         ?>
