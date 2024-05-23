@@ -64,6 +64,10 @@ th {
   display: none;
 }
 
+.playername {
+  color: lightblue;
+}
+
 @media print {
   #event_chooser{
     display: none;

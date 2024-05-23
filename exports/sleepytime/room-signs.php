@@ -68,7 +68,7 @@
 
             while ($room_row = mysqli_fetch_assoc($room_res)) {
                 $room = $room_row['room'];
-                $sql = "SELECT r.id, v6.field_value as foodlocation, SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',1),' - ',-1) as name, 
+                $sql = "SELECT r.id, v6.field_value as foodlocation, (SELECT character_name from ecc_characters WHERE ecc_characters.characterID = substring_index(v1.field_value, ' - ', -1)) as name, 
                         v2.field_value as building, CONCAT(coalesce(v3.field_value,''),coalesce(v4.field_value,'')) as room from joomla.jml_eb_registrants r
                         left join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
                         left join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 36)
@@ -109,7 +109,7 @@
 
                 UNION
 
-                select r.id, v7.field_value as foodlocation, if(v5.field_value = 'Speler', trim(SUBSTRING_INDEX(v1.field_value,' - ',1)),CONCAT(v5.field_value,' ',r.first_name, ' ', COALESCE(v2.field_value,''),' ', SUBSTRING(r.last_name,1,1),'.')) as name,
+                select r.id, v7.field_value as foodlocation, if(v5.field_value = 'Speler', (SELECT character_name from ecc_characters WHERE ecc_characters.characterID = substring_index(v1.field_value, ' - ', -1)),CONCAT(v5.field_value,' ',r.first_name, ' ', COALESCE(v2.field_value,''),' ', SUBSTRING(r.last_name,1,1),'.')) as name,
                 LEFT(v6.field_value,LOCATE(',',v6.field_value) - 1) as building, substring_index(LEFT(v6.field_value,LOCATE(' - ',v6.field_value) - 1),',',-1) as room 
                 from joomla.jml_eb_registrants r
                     left join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
