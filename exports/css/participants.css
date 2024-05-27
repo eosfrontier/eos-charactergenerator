@@ -103,6 +103,10 @@ th {
     color: black;
   }
 
+  .inschrijf_datum {
+    display: none;
+  }
+
 
   * {
     box-sizing: border-box;
