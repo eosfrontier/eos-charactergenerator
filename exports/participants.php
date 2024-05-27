@@ -228,7 +228,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
     echo '<td>' . $row['ic_name'] . "</td>";
     echo '<td>' . $row['type'] . "</td>";
     echo '<td>' . ucwords($row['faction']) . "</td>";
-    echo '<div class="inschrijf_datum"><td>' . $row['register_date'] . "</td>,</div>";
+    echo '<td><div class="inschrijf_datum">' . $row['register_date'] . "</div></td>";
     echo '<td height="40px">&nbsp;</td>';
     if (strpos($row['foto'],'afmelden') != false) {
     echo '<td height="40px">Yes</td>';
