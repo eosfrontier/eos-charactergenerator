@@ -217,7 +217,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
   echo '<th width="20%">IC Name</th>';
   echo '<th width="15%">Soort Inschrijf</th>';
   echo '<th width="15%">Factie</th>';
-  echo '<th width="10%">Inschrif Datum</th>';
+  echo '<div class="inschrijf_datum"><th width="10%">Inschrif Datum</th></div>';
   echo '<th width="25%">Handtekening</th>';
   echo '<th width="10%">Foto Opt-Out</th>';
 
@@ -228,7 +228,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
     echo '<td>' . $row['ic_name'] . "</td>";
     echo '<td>' . $row['type'] . "</td>";
     echo '<td>' . ucwords($row['faction']) . "</td>";
-    echo '<td><div class="inschrijf_datum">' . $row['register_date'] . "</div></td>";
+    echo '<div class="inschrijf_datum"><td>' . $row['register_date'] . "</td></div>";
     echo '<td height="40px">&nbsp;</td>';
     if (strpos($row['foto'],'afmelden') != false) {
     echo '<td height="40px">Yes</td>';
