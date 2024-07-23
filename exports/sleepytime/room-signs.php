@@ -12,12 +12,12 @@
     <div>
         <?php
         header("Content-Type: text/html; charset=ISO-8859-1");
-        include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
+        include_once ($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
 
         $bldg_sql = "SELECT field_value from `jml_eb_field_values` where field_id = 36 AND field_value !='medische uitzondering \"Geregeld met Orga\"' GROUP by field_value";
         $bldg_res = $UPLINK->query($bldg_sql);
         //$row = mysqli_fetch_assoc($res);
-
+        
         while ($bldg_row = mysqli_fetch_assoc($bldg_res)) {
             $building = $bldg_row['field_value'];
             //This makes the list of rooms
@@ -68,7 +68,7 @@
 
             while ($room_row = mysqli_fetch_assoc($room_res)) {
                 $room = $room_row['room'];
-                $sql = "SELECT r.id, v6.field_value as foodlocation, SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',1),' - ',-1) as name, 
+                $sql = "SELECT r.id, v6.field_value as foodlocation, (SELECT character_name from ecc_characters WHERE ecc_characters.characterID = substring_index(v1.field_value, ' - ', -1)) as name, 
                         v2.field_value as building, CONCAT(coalesce(v3.field_value,''),coalesce(v4.field_value,'')) as room from joomla.jml_eb_registrants r
                         left join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
                         left join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 36)
@@ -109,7 +109,7 @@
 
                 UNION
 
-                select r.id, v7.field_value as foodlocation, if(v5.field_value = 'Speler', trim(SUBSTRING_INDEX(v1.field_value,' - ',1)),CONCAT(v5.field_value,' ',r.first_name, ' ', COALESCE(v2.field_value,''),' ', SUBSTRING(r.last_name,1,1),'.')) as name,
+                select r.id, v7.field_value as foodlocation, if(v5.field_value = 'Speler', (SELECT character_name from ecc_characters WHERE ecc_characters.characterID = substring_index(v1.field_value, ' - ', -1)),CONCAT(v5.field_value,' ',r.first_name, ' ', COALESCE(v2.field_value,''),' ', SUBSTRING(r.last_name,1,1),'.')) as name,
                 LEFT(v6.field_value,LOCATE(',',v6.field_value) - 1) as building, substring_index(LEFT(v6.field_value,LOCATE(' - ',v6.field_value) - 1),',',-1) as room 
                 from joomla.jml_eb_registrants r
                     left join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
@@ -127,37 +127,72 @@
                 $res = $UPLINK->query($sql);
                 echo "<div class='roomsign' style=''>";
                 echo '<p><button class="button" id="printPageButton" style="width: 100%;" onClick="window.print();">Print</button></p>';
-                echo "<center class='center'><font face='Orbitron' size=15><br>" . str_replace('tweede gebouw', 'Zonnedauw', $building) . "<br>$room<br><br></font></center>";
-                echo "<table>";
-                echo "<th><center>Name</center></th>";
-                echo "<th><center>Room Clean Sign-Off</center></th>";
+                echo "<center class='center'><font face='Orbitron' size=15><br>" . str_replace('tweede gebouw', 'Zonnedauw', $building) . "<br>$room<br></font></center>";
+                ?>
+                <table>
+                    <tr>
+                    <th><center>Name</center></th>";
+                <th><center>Room Clean Sign-Off</center></th>
+                    </tr>
+                <?php
                 while ($row = mysqli_fetch_array($res)) {
-                //     $foodlocation = $row['foodlocation'];
-                //     if ($foodlocation == '') {
-                //         $foodlocation = $building;
-                //     } else {
-                //         if ($foodlocation = 'tweede gebouw') {
-                //             $foodlocation = 'Zonnedauw';
-                //         } else {
-                //         $foodlocation = $row['foodlocation'];
-                //         }
-                //     }
-                    echo "<tr><td>" . $row['name'] . "</td>";
-                //     echo "<td><center>" . str_replace('tweede gebouw', 'Zonnedauw', $foodlocation) . "</center></td>";
+                    //     $foodlocation = $row['foodlocation'];
+                    //     if ($foodlocation == '') {
+                    //         $foodlocation = $building;
+                    //     } else {
+                    //         if ($foodlocation = 'tweede gebouw') {
+                    //             $foodlocation = 'Zonnedauw';
+                    //         } else {
+                    //         $foodlocation = $row['foodlocation'];
+                    //         }
+                    //     }
+                    echo "<tr>
+                    <td>" . $row['name'] . "</td>";
+                    //     echo "<td><center>" . str_replace('tweede gebouw', 'Zonnedauw', $foodlocation) . "</center></td>";
                     echo "<td><center>&nbsp;</center></td>";
-                echo "</tr>";
+                    echo "</tr>";
                 }
-                echo "</table></br></br>";
-                echo "<table>
-                <th>Important Notes:</th>
-                <tr><td><ul>
-                <li>Please nominate 1 person from your room to do the final clean-and-swept check. They should sign next to their name when the room is clean and ready to be checked.</li></br>
-                </ul></td></tr>
-                <tr><td><ul>
-                <li>Breakfast will be served in the Zonnedauw from 8:30 - 10:00</li>
-                <li>Lunch will be served in the Bastion from 12:00 - 14:00</li>
-                <li>Dinner will be served in the Bastion from 18:30 - 20:00</li>
-                </ul></td></tr></table>";
+                echo "</table>";
+                ?>
+                <table>
+                    <th>Important Notes:</th>
+                    <tr>
+                        <td>
+                            <ul>
+                                <li>Please nominate 1 person from your room to do the final clean-and-swept check. They should
+                                    sign next to their name when the room is clean and ready to be checked.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                                <h5>Meal Times/Locations</h5>
+                                <table>
+                                    <tr>
+                                        <th>Meal</th>
+                                        <th>Location</th>
+                                        <th>Time</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Breakfast</td>
+                                        <td>Zonnedauw</td>
+                                        <td>8:30 - 10:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lunch</td>
+                                        <td>Bastion</td>
+                                        <td>12:00 - 14:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dinner</td>
+                                        <td>Bastion</td>
+                                        <td>18:30 - 20:00</td>
+                                    </tr>
+                                </table>
+                        </td>
+                    </tr>
+                </table>
+                <?php
                 echo "</div>";
             }
         }
@@ -165,4 +200,5 @@
 
     </div>
 </body>
+
 </html>

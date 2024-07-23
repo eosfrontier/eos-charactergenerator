@@ -19,6 +19,10 @@
   table .grid {
     max-width: 35%;
   }
+
+  .playername {
+    color: lightblue;
+  }
 }
 
 body {
@@ -64,7 +68,14 @@ th {
   display: none;
 }
 
+
 @media print {
+  #event_chooser{
+    display: none;
+  }
+  #printButton{
+    display: none;
+  }
   #printPageButton {
     display: none;
   }
@@ -86,6 +97,14 @@ th {
   .column {
     flex: 50%;
     padding: 5px;
+  }
+
+  .playername {
+    color: black;
+  }
+
+  .inschrijf_datum {
+    display: none;
   }
 
 
