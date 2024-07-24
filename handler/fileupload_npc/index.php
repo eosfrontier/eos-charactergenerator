@@ -41,11 +41,11 @@ if (!in_array("31", $jgroups, true) && !in_array("30", $jgroups, true)) {
       $filepath = $APP["root"] . '/img/passphoto/npc/'.$jid.'.jpg';
       $url = '../../img/passphoto/npc/'.$jid.'.jpg';
       if (file_exists($filepath)) {
-      echo '<h1>Existing Profile Image</h1>';
+      echo '<h2>Existing Profile Image</h2>';
       echo '<img src="'.$url.'">';
       }
       ?>
-      <h1>Select<?php if (file_exists($filepath)) {echo " New";} ?> Profile Image</h2>
+      <h2>Select<?php if (file_exists($filepath)) {echo " New";} ?> Profile Image</h2>
         <input type="file" name="upload_image" id="upload_image" />
         <br />
         <div id="uploaded_image"></div>
