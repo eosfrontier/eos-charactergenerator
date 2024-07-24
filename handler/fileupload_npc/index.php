@@ -51,7 +51,7 @@ if (!in_array("31", $jgroups, true) && !in_array("30", $jgroups, true)) {
         <div class="panel-body">
           <h3>Please submit a photo of your head and shoulders, taken against a solid color (preferably white) background. <br />
             Please use the below photos as an example of what you should submit. <br />
-            This will be printed on your character's IC ID Card, so ideally the photo should be of you dressed as your character would appear.</h3>
+            This will be used to represent any NPC you might play, so ideally the photo should be of you dressed as generically as possible.</h3>
           <img src="../../img/Example.png">
         </div>
     </div>
