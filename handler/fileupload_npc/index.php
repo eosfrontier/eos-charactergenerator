@@ -36,7 +36,14 @@ if (!in_array("31", $jgroups, true) && !in_array("30", $jgroups, true)) {
 
   <div class="main cell" align="center">
     <div class="panel-body" align="center">
-      <h1>Select Profile Image</h2>
+      <?php
+      $filepath = $APP["root"] . '/img/passphoto/npc/'.$jid.'.jpg';
+      if (file_exists($filepath)) {
+      echo '<h1>Existing Profile Image</h1>';
+      echo '<img src="'.$filepath.'">';
+      }
+      ?>
+      <h1>Select<?php if (file_exists($filepath)) {echo " New";} ?> Profile Image</h2>
         <input type="file" name="upload_image" id="upload_image" />
         <br />
         <div id="uploaded_image"></div>
