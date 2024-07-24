@@ -37,7 +37,7 @@ if (!in_array("31", $jgroups, true) && !in_array("30", $jgroups, true)) {
   <div class="main cell" align="center">
     <div class="panel-body" align="center">
       <?php
-      $filepath = $APP["root"] . '/img/passphoto/npc/'.$jid.'.jpg';
+      $filepath = './img/passphoto/npc/'.$jid.'.jpg';
       if (file_exists($filepath)) {
       echo '<h1>Existing Profile Image</h1>';
       echo '<img src="'.$filepath.'">';
