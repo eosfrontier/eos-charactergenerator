@@ -36,6 +36,7 @@ if (!in_array("31", $jgroups, true) && !in_array("30", $jgroups, true)) {
 
   <div class="main cell" align="center">
     <div class="panel-body" align="center">
+      <h1>SL/NPC Photo Uploader</h1>
       <?php
       $filepath = $APP["root"] . '/img/passphoto/npc/'.$jid.'.jpg';
       $url = '../../img/passphoto/npc/'.$jid.'.jpg';
