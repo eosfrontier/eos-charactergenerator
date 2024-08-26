@@ -65,7 +65,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       echo "<tr>";
       echo '<td>' . $row['character_name'] . "</td>";
       echo '<td>' . ucwords($row['faction']) . "</td>";
-      echo '<td><img src="../../img/passphoto/' . $_GET['id'] . '.jpg" alt="Pasfoto" width="300" height="300"></td>';
+      echo '<td><img src="../../img/passphoto/' . $_GET['id'] . '.jpg" alt="Pasfoto" height="300"></td>';
       echo '</tr>';
       $name = $row['character_name'];
     }
