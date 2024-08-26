@@ -331,6 +331,21 @@ function get_player_cap_events() {
   return $line;
 }
 
+function player_cap_count_from() {
+  global $UPLINK;
+  $sql = "SELECT min(res.id) as id FROM (SELECT id from jml_eb_events 
+  WHERE title LIKE 'Frontier %' AND event_end_date < CURDATE()
+  ORDER BY event_date DESC
+  LIMIT 6) res";
+  $res = $UPLINK->query($sql);
+  while ($row=mysqli_fetch_row($res)){
+  $sql2 = "SELECT title from jml_eb_events WHERE id = $row[0];";
+  $res2 = $UPLINK->query($sql2);
+  while($row2=mysqli_fetch_row($res2)){
+  return $row2[0];}
+  }
+}
+
 function get_active_factions() {
   global $UPLINK;
   $events = get_player_cap_events();

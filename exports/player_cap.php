@@ -45,7 +45,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
 </head>
 
 <body>
-  <h1> Active <?php echo ucwords($_GET['faction']);?> Players</h1>
+  <h1> Active <?php echo ucwords($_GET['faction']);?> Players since <?php echo player_cap_count_from();?></h1>
   <table>
       <tr>
         <th width="10%">Character Name</th>

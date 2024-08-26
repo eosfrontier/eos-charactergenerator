@@ -171,7 +171,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
     <table>
       <tr>
         <th width="10%">Faction</th>
-        <th width="10%">Active Characters</th>
+        <th width="10%">Active Characters (since <?php echo player_cap_count_from();?>)</th>
       </tr>
       <?php 
       $faction_caps = get_active_factions();
