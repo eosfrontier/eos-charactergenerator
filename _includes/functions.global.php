@@ -320,3 +320,42 @@ function EMS_echo(&$var, $else = '')
 {
   return isset($var) && $var ? $var : $else;
 }
+
+function get_player_cap_events() {
+  $stmt = db::$conn->prepare("SELECT id from jml_eb_events 
+  WHERE title LIKE 'Frontier %' AND event_end_date < CURDATE()
+  ORDER BY event_date DESC
+  LIMIT 6");
+  $stmt->execute(); // execute the prepared query
+  $line = implode(',', $stmt->fetchAll(PDO::FETCH_COLUMN));
+  return $line;
+}
+
+function get_active_factions() {
+  global $UPLINK;
+  $events = get_player_cap_events();
+  $sql = "SELECT faction, COUNT(faction) as count FROM ecc_characters 
+  WHERE sheet_status = 'active' AND characterID IN (
+  SELECT DISTINCT substring_index(jml_eb_field_values.field_value,' - ',-1) 
+  FROM jml_eb_registrants r
+  JOIN jml_eb_field_values ON (r.id = jml_eb_field_values.registrant_id AND jml_eb_field_values.field_id='21')
+  WHERE r.published = 1 AND r.event_id IN ($events)
+  )
+  GROUP BY faction;";
+  $res = $UPLINK->query($sql);
+  return $res;
+}
+
+function get_active_players($faction) {
+  global $UPLINK;
+  $events = get_player_cap_events();
+  $sql = "SELECT character_name, faction FROM ecc_characters 
+  WHERE sheet_status = 'active' AND faction = '$faction' AND characterID IN (
+  SELECT DISTINCT substring_index(jml_eb_field_values.field_value,' - ',-1) 
+  FROM jml_eb_registrants r
+  JOIN jml_eb_field_values ON (r.id = jml_eb_field_values.registrant_id AND jml_eb_field_values.field_id='21')
+  WHERE r.published = 1 AND r.event_id IN ($events))
+  ORDER BY character_name;";
+  $res = $UPLINK->query($sql);
+  return $res;
+}

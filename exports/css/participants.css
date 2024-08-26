@@ -17,7 +17,7 @@
   }
 
   table .grid {
-    max-width: 35%;
+    max-width: 33%;
   }
 
   .playername {
@@ -40,8 +40,15 @@ table {
 .grid {
   display: grid;
   gap: 40px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 }
+
+  table a:link{
+    color: cyan;
+  }
+  table a:visited{
+    color: #dc0bff;
+  }
 
 td,
 th {

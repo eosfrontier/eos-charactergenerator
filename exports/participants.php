@@ -159,12 +159,26 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
     <table>
       <tr>
         <th width="10%">Faction</th>
-        <th width="10%">Aantal Deelneemers</th>
+        <th width="10%">Aantal Deelneemers op <?php echo $title;?></th>
       </tr>
       <?php while ($row3 = mysqli_fetch_array($res5)) {
       echo "<tr>";
       echo '<td>' . ucwords($row3['faction']) . "</td>";
         echo '<td>' . $row3['count'] . "</td>";
+        echo '</tr>';
+      }?>
+    </table>
+    <table>
+      <tr>
+        <th width="10%">Faction</th>
+        <th width="10%">Active Characters</th>
+      </tr>
+      <?php 
+      $faction_caps = get_active_factions();
+      while ($faction_cap_row = mysqli_fetch_array($faction_caps)) {
+      echo "<tr>";
+      echo '<td><a href="./player_cap.php?faction=' . $faction_cap_row['faction'] . '" target="_blank">' . ucwords($faction_cap_row['faction']) . "</a></td>";
+        echo '<td>' . $faction_cap_row['count'] . "</td>";
         echo '</tr>';
       }?>
     </table>
