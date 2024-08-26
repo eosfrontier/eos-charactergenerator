@@ -364,7 +364,7 @@ function get_active_factions() {
 function get_active_players($faction) {
   global $UPLINK;
   $events = get_player_cap_events();
-  $sql = "SELECT character_name, faction FROM ecc_characters 
+  $sql = "SELECT characterID, character_name, faction FROM ecc_characters 
   WHERE sheet_status = 'active' AND faction = '$faction' AND characterID IN (
   SELECT DISTINCT substring_index(jml_eb_field_values.field_value,' - ',-1) 
   FROM jml_eb_registrants r
