@@ -374,3 +374,11 @@ function get_active_players($faction) {
   $res = $UPLINK->query($sql);
   return $res;
 }
+
+function get_active_player($id) {
+  global $UPLINK;
+  $sql = "SELECT characterID, character_name, faction FROM ecc_characters 
+  WHERE characterID =  $id";
+  $res = $UPLINK->query($sql);
+  return $res;
+}

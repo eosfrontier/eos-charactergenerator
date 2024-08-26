@@ -177,7 +177,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
       $faction_caps = get_active_factions();
       while ($faction_cap_row = mysqli_fetch_array($faction_caps)) {
       echo "<tr>";
-      echo '<td><a href="./player_cap.php?faction=' . $faction_cap_row['faction'] . '" target="_blank">' . ucwords($faction_cap_row['faction']) . "</a></td>";
+      echo '<td><a href="./player_cap/player_cap.php?faction=' . $faction_cap_row['faction'] . '">' . ucwords($faction_cap_row['faction']) . "</a></td>";
         echo '<td>' . $faction_cap_row['count'] . "</td>";
         echo '</tr>';
       }?>
