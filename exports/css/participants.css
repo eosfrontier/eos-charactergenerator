@@ -43,12 +43,13 @@ table {
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-  table a:link{
-    color: cyan;
-  }
-  table a:visited{
-    color: #dc0bff;
-  }
+table a:link {
+  color: cyan;
+}
+
+table a:visited {
+  color: #dc0bff;
+}
 
 td,
 th {
@@ -130,16 +131,27 @@ a.deactivateButton {
 
 
 @media print {
-  #event_chooser{
+  #event_chooser {
     display: none;
   }
-  #printButton{
+
+  #printButton {
     display: none;
   }
+
   #printPageButton {
     display: none;
   }
-  #backButton{
+
+  #backButton {
+    display: none;
+  }
+
+  #deactivateButton {
+    display: none;
+  }
+
+  a.deactivateButton {
     display: none;
   }
 
