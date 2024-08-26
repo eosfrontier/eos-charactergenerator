@@ -57,7 +57,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
     <tr>
       <th width="10%">Character Name</th>
       <th width="10%">Faction</th>
-
+      <th width="20%">Photo</th>
     </tr>
     <?php
     $active_player = get_active_player($_GET['id']);
@@ -65,6 +65,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       echo "<tr>";
       echo '<td>' . $row['character_name'] . "</td>";
       echo '<td>' . ucwords($row['faction']) . "</td>";
+      echo '<td><img src="../../img/passphoto/' . $_GET['id'] . '.jpg" alt="Pasfoto" width="500" height="600"></td>';
       echo '</tr>';
       $name = $row['character_name'];
     }
