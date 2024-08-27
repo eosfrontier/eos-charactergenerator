@@ -231,7 +231,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
   echo '<th width="20%">IC Name</th>';
   echo '<th width="15%">Soort Inschrijf</th>';
   echo '<th width="15%">Factie</th>';
-  echo '<th class="inschrijf_datum" width="10%">Inschrif Datum</th>';
+  echo '<th class="inschrijf_datum" width="10%">Inschrijf Datum</th>';
   echo '<th width="25%">Handtekening</th>';
   echo '<th width="10%">Foto Opt-Out</th>';
 
