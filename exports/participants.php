@@ -7,6 +7,7 @@ $APP["loginpage"] = "/component/users/?view=login";
 
 include_once('../db.php');
 include_once("../_includes/functions.global.php");
+include_once("../_includes/functions.playercap.php");
 include_once("../_includes/joomla.php");
 include_once('./current-players.php');
 

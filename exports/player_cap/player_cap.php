@@ -61,7 +61,13 @@ if(isset($_GET['deactivate']))
     onClick="window.history.go(-1); return false;">Back</button> -->
   <button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button><br>
   </form>
-  <h1> Active <?php echo ucwords($_GET['faction']); ?> Players since <?php echo player_cap_count_from(); ?></h1>
+  <?php
+  $event_title = explode(' ', player_cap_count_from());
+  $event_number = $event_title[1];
+  $event_title_converted = $event_title[0] . ' ' . roman_to_integer($event_number);
+  ?>
+  <h1> Active <?php echo ucwords($_GET['faction']); ?> Players since <?php echo $event_title_converted;?></h1>
+  
   <table>
     <tr>
       <th width="10%">Character Name</th>
@@ -76,7 +82,11 @@ if(isset($_GET['deactivate']))
     while ($row = mysqli_fetch_array($active_players)) {
       echo "<tr>";
       echo '<td>' . ucwords($row['character_name']) . "</td>";
-      echo '<td>' . get_latest_event_player($row['characterID']) .'</td>';  
+      $last_event_player = get_latest_event_player($row['characterID']);
+      $last_event_title = explode(' ', $last_event_player['title']);
+      $last_event_number = $last_event_title[1];
+      $last_event_title_converted = $last_event_title[0] . ' ' . roman_to_integer($last_event_number);
+      echo '<td>' . $last_event_title_converted .'</td>';  
       if (in_array("32", $jgroups, true)) {
         echo '<td width="10%">';
         echo '<a href="./deactivate_character.php?faction=' . $_GET['faction'] . '&id=' . $row['characterID'] . '" class="deactivateButton">Deactivate</a>';

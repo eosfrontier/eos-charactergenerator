@@ -72,9 +72,8 @@ function get_latest_event_player($id) {
   $res = $UPLINK->query($sql);
   $row = mysqli_fetch_assoc($res);
   $last_event = $row['last_event_id'];
-  $sql2 = "SELECT title FROM jml_eb_events WHERE id = $last_event";
+  $sql2 = "SELECT id, title FROM jml_eb_events WHERE id = $last_event";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_assoc($res2);
-  $last_event_title = $row2['title'];
-  return $last_event_title;
+  return $row2;
 }
