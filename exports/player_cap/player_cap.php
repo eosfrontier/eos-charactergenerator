@@ -7,6 +7,7 @@ $APP["loginpage"] = "/component/users/?view=login";
 
 include_once ('../../db.php');
 include_once ("../../_includes/functions.global.php");
+include_once ("../../_includes/functions.playercap.php");
 include_once ("../../_includes/joomla.php");
 include_once ('../current-players.php');
 
@@ -64,6 +65,7 @@ if(isset($_GET['deactivate']))
   <table>
     <tr>
       <th width="10%">Character Name</th>
+      <th width="10%">Latest Event</th>
       <?php
       if (in_array("32", $jgroups, true)) { ?>
         <th width="10%">Deactivate</th>
@@ -74,6 +76,7 @@ if(isset($_GET['deactivate']))
     while ($row = mysqli_fetch_array($active_players)) {
       echo "<tr>";
       echo '<td>' . ucwords($row['character_name']) . "</td>";
+      echo '<td>' . get_latest_event_player($row['characterID']) .'</td>';  
       if (in_array("32", $jgroups, true)) {
         echo '<td width="10%">';
         echo '<a href="./deactivate_character.php?faction=' . $_GET['faction'] . '&id=' . $row['characterID'] . '" class="deactivateButton">Deactivate</a>';
