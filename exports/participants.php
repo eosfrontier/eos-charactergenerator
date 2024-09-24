@@ -160,7 +160,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
     <table>
       <tr>
         <th width="10%">Faction</th>
-        <th width="10%">Aantal Deelneemers op <?php echo $title;?></th>
+        <th width="10%">Aantal Deelneemers op evenement</th>
       </tr>
       <?php while ($row3 = mysqli_fetch_array($res5)) {
       echo "<tr>";
