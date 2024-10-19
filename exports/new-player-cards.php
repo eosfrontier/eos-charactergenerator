@@ -82,7 +82,7 @@ if (isset($_POST['action'])) {
  
     // Headers for download 
     header("Content-Disposition: attachment; filename=\"$fileName\""); 
-    header("Content-Type: application/vnd.ms-excel"); 
+    header("Content-Type:  text/csv"); 
  
     $flag = false; 
     foreach($data as $row) { 
