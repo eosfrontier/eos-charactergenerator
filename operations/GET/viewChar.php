@@ -9,7 +9,7 @@ if (isset($_GET['u']) && $_GET['u'] == 1) {
     $printresult .= "<p class=\"dialog\"><i class=\"fas fa-check green\"></i>&nbsp;Updated successfully.</p>";
 }
 
-      // check if characters is valid
+// check if characters is valid
 if (is_array($sheetArr['characters'])) {
     if (count($sheetArr['characters']) > 0) {
 
@@ -17,11 +17,11 @@ if (is_array($sheetArr['characters'])) {
 
             // put the character into an easier to access variable for laziness.
             $character = $sheetArr["characters"][$_GET['viewChar']];
-            if ( isset($character['born_faction']) && ($character['born_faction'] != '')) {
-                $faction = $character['faction'] . " (Originally: " . $character['born_faction'] .")";
-              } else {
+            if (isset($character['born_faction']) && ($character['born_faction'] != '')) {
+                $faction = $character['faction'] . " (Originally: " . $character['born_faction'] . ")";
+            } else {
                 $faction = $character['faction'];
-              }
+            }
 
             if (EMS_echo($character['character_name']) != "") {
                 $printresult .= "<h1>{$character['character_name']} - {$faction}</h1>";
@@ -29,32 +29,32 @@ if (is_array($sheetArr['characters'])) {
                 $printresult .= "<h1>[character name] - {$faction}</h1>";
             }
 
-            if (isset($_GET['editInfo']) && $_GET['editInfo'] == true) {include 'editInfo.php';
-            }
-            else {
+            if (isset($_GET['editInfo']) && $_GET['editInfo'] == true) {
+                include 'editInfo.php';
+            } else {
                 $printresult .= '<div class="row">'
-                . '<a href="' . $APP['header'] . '/index.php"><button><i class="fas fa-arrow-left"></i>&nbsp;Back</button></a>'
-                . '</div>'
-                . '<hr/>';
+                    . '<a href="' . $APP['header'] . '/index.php"><button><i class="fas fa-arrow-left"></i>&nbsp;Back</button></a>'
+                    . '</div>'
+                    . '<hr/>';
 
                 // default: character menu.
                 $printresult .= '<div class="row">';
 
                 $printresult .= '<div class="box33">'
-                . '<a href="' . $APP['header'] . '/index.php?viewChar=' . $character['characterID'] . '&editInfo=true">'
-                . '<button type="button" class="blue bar" name="button"><i class="far fa-id-card"></i>&nbsp;Edit basic info</button>'
-                . '</a>'
-                . '</div>'
-                . '<div class="box33">'
-                . '<a href="' . $APP['header'] .'/stats/skillsV2.php?viewChar=' . $character['characterID'] . '">'
-                . '<button type="button" class="blue bar" name="button"><i class="fas fa-book"></i>&nbsp;Character Skills</button>'
-                . '</a>'
-                . '</div>'
-                . '<div class="box33">'
-                . '<a class="" href="' . $APP['header'] . '/stats/implantsV2.php?viewChar=' . $_GET['viewChar'] . '">'
-                . '<button type="button" class="button bar blue" name="button"><i class="fas fa-microchip"></i>&nbsp;Implants/Symbionts</button>'
-                . '</a>'
-                . '</div></div>'; //end first row
+                    . '<a href="' . $APP['header'] . '/index.php?viewChar=' . $character['characterID'] . '&editInfo=true">'
+                    . '<button type="button" class="blue bar" name="button"><i class="far fa-id-card"></i>&nbsp;Edit basic info</button>'
+                    . '</a>'
+                    . '</div>'
+                    . '<div class="box33">'
+                    . '<a href="' . $APP['header'] . '/stats/skillsV2.php?viewChar=' . $character['characterID'] . '">'
+                    . '<button type="button" class="blue bar" name="button"><i class="fas fa-book"></i>&nbsp;Character Skills</button>'
+                    . '</a>'
+                    . '</div>'
+                    . '<div class="box33">'
+                    . '<a class="" href="' . $APP['header'] . '/stats/implantsV2.php?viewChar=' . $_GET['viewChar'] . '">'
+                    . '<button type="button" class="button bar blue" name="button"><i class="fas fa-microchip"></i>&nbsp;Implants/Symbionts</button>'
+                    . '</a>'
+                    . '</div></div>'; //end first row
 
                 // start second row
                 $printresult .= '<div class="row">'
@@ -80,8 +80,8 @@ if (is_array($sheetArr['characters'])) {
             $printresult .= "ERROR: NO MATCH.";
         }
     } else {
-                  header('location: ' . $APP['header'] . '/index.php');
-                  exit();
+        header('location: ' . $APP['header'] . '/index.php');
+        exit();
     }
 } else {
     header('location: ' . $APP['header'] . '/index.php');

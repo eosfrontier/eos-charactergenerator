@@ -88,7 +88,6 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
   (r.published in (0,1) AND r.payment_method = 'os_offline'))
   GROUP BY soort_inschrijving.field_value";
   $res3 = $UPLINK->query($sql3);
-
   $sql5 = "SELECT faction.faction as faction, COUNT(*) as count
 from joomla.jml_eb_registrants r
 join joomla.jml_eb_field_values charname on (charname.registrant_id = r.id and charname.field_id = 21 )

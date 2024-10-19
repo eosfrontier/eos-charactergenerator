@@ -143,14 +143,16 @@ include_once($APP["root"] . '/exports/current-players.php');
     $skillindex = $_POST['skill_index'];
     $skillsql = "SELECT skill_id, concat(skill_index,'>',label) as SkillName, label, substring_index(skill_index,'_',-1) as level FROM joomla.ecc_skills_allskills WHERE skill_index LIKE '$skillindex%' ORDER by skill_index+0, label+0;";
     $skillres = $UPLINK->query($skillsql);
-    echo  '<select name="skillID" id="sname" onchange="this.form.submit();">';
+    echo '<select name="skillID" id="sname" onchange="this.form.submit();">';
     echo '<option value="">Choose a Skill</option>';
     while ($skillrow = mysqli_fetch_assoc($skillres)) {
 
       echo '<option value="' . $skillrow['skill_id'] . '"';
-      if (isset($_POST['skillID']) && $_POST['skillID'] == $skillrow['skill_id']) echo "selected";
+      if (isset($_POST['skillID']) && $_POST['skillID'] == $skillrow['skill_id'])
+        echo "SELECTed";
       echo '>' . '(' . $skillrow['level'] . '): ' . $skillrow['label'] . '</option>';
-    };
+    }
+    ;
     echo '</select>
     </form></p>';
   }
@@ -164,7 +166,7 @@ include_once($APP["root"] . '/exports/current-players.php');
     $selskillres = $UPLINK->query($selskillsql);
     $row = mysqli_fetch_array($selskillres);
 
-    echo '<h1> Characters with Skill: ' . $row['category'] . '(' . $row['level'] . '): ' . ' ' .  $row['label'] . '</h1>';
+    echo '<h1> Characters with Skill: ' . $row['category'] . '(' . $row['level'] . '): ' . ' ' . $row['label'] . '</h1>';
     echo '<h2>' . $row2['title'] . '</h2>';
     echo '<h3>Description: ' . $row['description'] . '</h3>';
     echo '<button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button>';
@@ -180,7 +182,8 @@ OR (r.published in (0,1) AND r.payment_method = 'os_offline'))) ORDER BY charact
     echo '<table><th>Name</th><th>Faction</th>';
     while ($row = mysqli_fetch_assoc($res)) {
       echo '<tr><td>' . $row['character_name'] . '</td><td>' . $row['faction'] . '</td></tr>';
-    };
+    }
+    ;
     echo '</table>';
   }
 

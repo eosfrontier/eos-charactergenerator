@@ -135,10 +135,12 @@ select r.id, ifnull(eetlocatie.field_value,coalesce(figu_slaap.field_value,sl_sl
   while ($row = mysqli_fetch_array($res)) {
     echo "<tr>" . "<td>";
     if (isset($row['eetlocatie_override'])) {
-    echo "<span style=\"color:red;\">****</span>" ; } 
+      echo "<span style=\"color:red;\">****</span>";
+    }
     echo $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
     if (isset($row['eetlocatie_override'])) {
-      echo "<span style=\"color:red;\">****</span>" ; }
+      echo "<span style=\"color:red;\">****</span>";
+    }
     echo "</td>";
     echo '<td>' . $row['ic_name'] . "</td>";
     echo "</tr>";
@@ -184,10 +186,12 @@ select r.id, ifnull(eetlocatie.field_value,coalesce(figu_slaap.field_value,sl_sl
   while ($row = mysqli_fetch_array($res)) {
     echo "<tr>" . "<td>";
     if (isset($row['eetlocatie_override'])) {
-    echo "<span style=\"color:red;\">****</span>" ; } 
+      echo "<span style=\"color:red;\">****</span>";
+    }
     echo $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
     if (isset($row['eetlocatie_override'])) {
-      echo "<span style=\"color:red;\">****</span>" ; }
+      echo "<span style=\"color:red;\">****</span>";
+    }
     echo "</td>";
     echo '<td>' . $row['ic_name'] . "</td>";
     echo "</tr>";

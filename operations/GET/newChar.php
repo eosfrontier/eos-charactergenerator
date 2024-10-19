@@ -76,4 +76,3 @@ $factions = array('aquila','dugo','ekanesh','pendzal','sona');
       . 'lush style of living and financial prowess made sure these information brokers secured worlds of their own and '
       . 'managed to abolish all other currencies in favour of their universal standard, the Sonur.</p>'
       . '</div>';
-

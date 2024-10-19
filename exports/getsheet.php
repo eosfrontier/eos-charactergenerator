@@ -1,17 +1,18 @@
 <?php
-        include_once $APP["root"] . "/_includes/functions.sheet.php";
-        include_once $APP["root"] . "/_includes/functions.skills.php";
+include_once $APP["root"] . "/_includes/functions.sheet.php";
+include_once $APP["root"] . "/_includes/functions.skills.php";
 
-        if (isset($_GET['print']) && $_GET['print'] == 'confirm') {
-            $sql = "UPDATE `ecc_characters` SET `print_status` = $EVENTID WHERE `characterID` = '" . (int)$_GET['characterID'] . "' LIMIT 1;";
-            $res = $UPLINK->query($sql);
-        }
+if (isset($_GET['print']) && $_GET['print'] == 'confirm') {
+    $sql = "UPDATE `ecc_characters` SET `print_status` = $EVENTID WHERE `characterID` = '" . (int) $_GET['characterID'] . "' LIMIT 1;";
+    $res = $UPLINK->query($sql);
+}
 
 
-        $sql = "SELECT characterID, faction, born_faction, accountID, aantal_events, character_name
+$sql = "SELECT characterID, faction, born_faction, accountID, aantal_events, character_name
          FROM `ecc_characters` 
-         WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int)$_GET['characterID']) . "' 
+         WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int) $_GET['characterID']) . "' 
          LIMIT 1";
+
         $res = $UPLINK->query($sql);
         $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";
         $res2 = $UPLINK->query($sql2);
@@ -141,6 +142,50 @@
                 . "<button id=\"printPageButton\" style=\"width: 100%;\" onClick=\"window.print();\">Print</button></td>";
             }
         }
+    }
 
-        echo "</div>";
-   ?>
+    echo "</table>";
+    echo "<p style=\"font-size: 13px;\"><i>* specialty skills</i></p>";
+
+
+
+    echo "</div>";
+
+    echo "<div style=\"width: 30%; float: left;\">";
+
+    if ($augmentations != "") {
+        echo "<font size='4'><strong>Augmentations</strong></font></br>";
+        echo "<table style=\"border: 0; width: 90%;\">";
+        echo "<tr style=\"background-color: #CCC;\">"
+            . "<th>Type</th>"
+            . "<th>Skill</th>"
+            . "<th>Level</th>"
+            . "</tr>";
+        foreach ($augmentations as $aug) {
+            echo "<tr>"
+                . "<td>" . ($aug['type'] == 'cybernetic' ? 'Bionic' : 'Symbiont') . "</td>"
+                . "<td>" . $aug['name'] . "</td>"
+                . "<td>" . $aug['level'] . "</td>"
+                . "</tr>";
+        }
+        echo "</table>";
+    }
+
+    echo "</div>";
+
+    // AUGMENTATIONS
+    //Print and Close Button
+    if (isset($_GET['print']) && $_GET['print'] == 'confirm') {
+        echo "<p><a href=\"" . $APP['header'] . "/exports/printsheet.php?characterID=" . $row['characterID'] . "&print=confirm\">"
+            . "<button id=\"printPageButton\" style=\"width: 100%;\" onClick=\"window.print();\">&#x2713;Print</button></td></tr>";
+        echo "<tr><td>";
+        echo "<p><button id=\"printPageButton\" style=\"width: 100%;\" onclick=\"window.open('', '_self', ''); window.close();\">Close Window</button></td></tr>";
+    } else {
+        //Print Button by itself
+        echo "<p><a href=\"" . $APP['header'] . "/exports/printsheet.php?characterID=" . $row['characterID'] . "&print=confirm\">"
+            . "<button id=\"printPageButton\" style=\"width: 100%;\" onClick=\"window.print();\">Print</button></td>";
+    }
+}
+
+echo "</div>";
+?>
