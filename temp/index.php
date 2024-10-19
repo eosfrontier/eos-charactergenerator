@@ -85,4 +85,3 @@ if (!isset($_SESSION)) {
 
 </html>
 
-<?php

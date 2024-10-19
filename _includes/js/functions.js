@@ -161,16 +161,15 @@ function SH_animateFormDiv(printresult) {
 
 function switchFactionBlurb(factionName) {
 
-    var target = $('.factionblurb');
+	var target = $('.factionblurb');
+	if (target.html() != "" && factionName && factionName != "") {
+		target.hide();
 
-    if (target.html() != "" && factionName && factionName != "") {
-        target.hide();
+		$("#fct_" + factionName).fadeIn();
+		$("#createButton").fadeIn();
 
-        $("#fct_" + factionName).fadeIn();
-
-        return true;
-    }
-
+		return true;
+	}
 }
 
 

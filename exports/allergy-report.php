@@ -226,10 +226,12 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
     echo "<font size=5>Detail</font>";
     echo "<table>";
     echo "<th>Name</th><th>Allergie</th><th>Dieet</th><th>Other Allergies</th>";
-    $sql = "SELECT replace(replace(v2.field_value,'[',''),']',',') as diet, concat(r.first_name,' ',r.last_name) as name, 
+
+    $sql = "SELECT replace(replace(replace(v2.field_value,'[',''),']',','),\"Allium(ui,prei,knoflook,bieslook,etc)\", \"Allium(ui;prei;knoflook;bieslook;etc)\") as diet, concat(r.first_name,' ', COALESCE(tussenvoegsel.field_value,' '), ' ', r.last_name) as name, 
     v3.field_value as other from joomla.jml_eb_registrants r
       join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
       left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 57)
+      left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
       left join joomla.jml_eb_field_values slaaplocatie on (slaaplocatie.registrant_id = r.id and slaaplocatie.field_id = 36)
       left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
       left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
@@ -237,10 +239,11 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
       AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR 
       (r.published in (0,1) AND r.payment_method = 'os_offline')) 
       UNION
-      select replace(replace(v2.field_value,'[',''),']',',') as diet, concat(r.first_name,' ',r.last_name) as name, 
+      SELECT replace(replace(replace(v2.field_value,'[',''),']',','),\"Allium(ui,prei,knoflook,bieslook,etc)\", \"Allium(ui;prei;knoflook;bieslook;etc)\") as diet, concat(r.first_name,' ', COALESCE(tussenvoegsel.field_value,' '), ' ',r.last_name) as name, 
       v3.field_value as other from joomla.jml_eb_registrants r
       join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
       left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 57)
+      left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
       left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
       left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
       WHERE r.event_id = $EVENTID AND ifnull(eetlocatie.field_value,'tweede gebouw') != 'Bastion' AND soort_inschrijving.field_value != 'Speler'
@@ -251,7 +254,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
     while ($row = mysqli_fetch_array($res)) {
       echo "<tr><td>" . $row['name'] . "</td>";
       //Store the item in an array for
-      $item = rtrim(str_replace("Allium(ui,prei,knoflook,bieslook,etc)", "Allium(ui;prei;knoflook;bieslook;etc)", str_replace(
+      $item = rtrim( str_replace(
         "\\/",
         "/",
         str_replace(
@@ -267,7 +270,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
             )
           )
         )
-      )), ",");
+      ), ",");
       $row_things = explode(",", $item);
       echo "<td>";
       for ($x = 0; $x < count($row_things); $x++) {

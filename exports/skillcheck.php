@@ -113,18 +113,29 @@ include_once($APP["root"] . '/exports/current-players.php');
 <body>
   <?php
 
-  $skill_index_sql = "SELECT substring_index(skill_index,'_',1) as category FROM joomla.ecc_skills_allskills GROUP by category;";
-  $skill_index_res = $UPLINK->query($skill_index_sql);
+  $skill_parents_sql = "SELECT siteindex, name FROM joomla.ecc_skills_groups WHERE parents='none' ORDER by name";
+  $skill_parents_res = $UPLINK->query($skill_parents_sql);
+  
+
   echo '<p><form action="" method="post">
- <select name="skill_index" id="cname" onchange="this.form.submit();">';
+  <select name="skill_index" id="cname" onchange="this.form.submit();">';
   echo '<option value="">Choose a Category</option>';
-  while ($skill_index_row = mysqli_fetch_assoc($skill_index_res)) {
-    echo '<option value="' . $skill_index_row['category'] . '"';
-    if (isset($_POST['skill_index']) && $_POST['skill_index'] == $skill_index_row['category'])
-      echo "SELECTed";
-    echo '>' . $skill_index_row['category'] . '</option>';
+  while ($skill_parents_row = mysqli_fetch_assoc($skill_parents_res)){
+    echo '<optgroup label="' . $skill_parents_row['name'] . '">';
+    echo '<option value="' . $skill_parents_row['siteindex'] . '"';
+    if (isset($_POST['skill_index']) && $_POST['skill_index'] == $skill_parents_row['siteindex']) echo "selected";
+    echo '>' . $skill_parents_row['name'] . '</option>';
+    $row = $skill_parents_row['siteindex'];
+    $skill_index_sql = "SELECT siteindex, name ,parents FROM joomla.ecc_skills_groups WHERE parents LIKE '%$row%' ORDER BY name";
+    $skill_index_res = $UPLINK->query($skill_index_sql);
+    while ($skill_subparents_row = mysqli_fetch_assoc($skill_index_res)){
+        echo '<option value="' . $skill_subparents_row['siteindex'] . '"';
+      if (isset($_POST['skill_index']) && $_POST['skill_index'] == $skill_subparents_row['siteindex']) echo "selected";
+    echo '>' . $skill_subparents_row['name'] . '</option>';
+    }
+    echo '</optgroup>';
   }
-  ;
+
   echo '</select>
     &nbsp;&nbsp;';
 

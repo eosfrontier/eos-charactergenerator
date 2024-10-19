@@ -58,18 +58,22 @@ if (is_array($sheetArr['characters'])) {
 
                 // start second row
                 $printresult .= '<div class="row">'
-                    . '<div class="box33">'
-                    . '<a onclick="SH_editPlayedForm(' . $_GET['viewChar'] . ')">'
-                    . '<button type="button" class="button blue no-bg bar" name="button"><i class="fas fa-sort-numeric-up"></i>&nbsp;Events Played</button>'
-                    . '</a>'
-                    . '</div>'
-                    . '<div class="box33">'
-                    . '<a href="/bgcheck" target="_blank">'
-                    . '<button type="button" class="blue no-bg bar" name="button"><i class="fas fa-list"></i>&nbsp;Background-check details</button>'
-                    . '</a>'
-                    . '</div>'
-                    . '<div class="box33"></div>'
-                    . '</div>'; // end second row
+                .'<div class="box33">'
+                . '<a onclick="SH_editPlayedForm(' . $_GET['viewChar'] . ')">'
+                . '<button type="button" class="button blue no-bg bar" name="button"><i class="fas fa-sort-numeric-up"></i>&nbsp;Events Played</button>'
+                . '</a>'
+                . '</div>'
+                . '<div class="box33">'
+                . '<a href="/bgcheck" target="_blank">'
+                . '<button type="button" class="blue no-bg bar" name="button"><i class="fas fa-list"></i>&nbsp;Background-check details</button>'
+                . '</a>'
+                . '</div>'
+                . '<div class="box33">'
+                . '<a href="/eos_backstory/">'
+                . '<button type="button" class="blue no-bg bar" name="button"><i class="fas fa-address-book"></i>&nbsp;Concept/Backstory</button>'
+                . '</a>'
+                . '</div>'
+                . '</div>';// end second row
             }
         } else {
             // error : account ID  doesn't match the logged in account ID !!
