@@ -145,8 +145,37 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
       $sql_pending_old = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id <> ' . $selected_event;
       $res_pending_old = $UPLINK->query($sql_pending_old);
       $pending_old = mysqli_fetch_array($res_pending_old);
+      $sql_sponsor = "SELECT COUNT(r.id) as count
+              from jml_eb_registrants r
+              join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 103)
+              WHERE v3.field_value = 'Yes' AND r.event_id = $EVENTID AND 
+              ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR 
+				  r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+      $res_sponsor = $UPLINK->query($sql_sponsor);
+      $sponsor = mysqli_fetch_array($res_sponsor);
+      $total_sponsor_tickets_purchased = "SELECT SUM(total_amount) from jml_eb_registrants r
+          WHERE  r.event_id = 24 AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' 
+			 OR r.payment_method = 'os_bancontact'))
+          OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+      $fifteen_sponsor_tickets_used= "SELECT COUNT(r.id) * 15.00 as count from jml_eb_registrants r
+          join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 103)
+          WHERE v3.field_value = 'Yes' AND r.event_id = 23 AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR
+          r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+      $twenty_sponsor_tickets_used="SELECT COUNT(r.id) * 20.00 as count from jml_eb_registrants r
+          join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 103)
+          WHERE v3.field_value = 'Yes' AND r.event_id != 23 AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR
+          r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+      $sql_sponsor_tickets_remain = "SELECT (($total_sponsor_tickets_purchased) - ($fifteen_sponsor_tickets_used) - ($twenty_sponsor_tickets_used))/20 as tickets_remaining";
+      $res_sponsor_tickets_remain = $UPLINK->query($sql_sponsor_tickets_remain);
+      $remaining_tickets = mysqli_fetch_array($res_sponsor_tickets_remain);
       echo '<tr>';
       echo '<td>Pending Payments ('. $event_title . ')</td> <td>€' . round($pending['amount'],2) . '</td>';
+      echo '</tr>';
+      echo '<tr>';
+      echo '<td>Number of Sponsor Tickets used this event:</td> <td>' . $sponsor['count'] . '</td>';
+      echo '</tr>';
+      echo '<tr>';
+      echo '<td>Number of Sponsor Tickets remaining:</td> <td>' . intval($remaining_tickets['tickets_remaining']) . '</td>';
       echo '</tr>';
       if ( (round($pending_old['amount'],2) > 0) && $selected_event == $EVENTID){
         echo '<tr>';
