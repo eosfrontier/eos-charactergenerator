@@ -168,6 +168,11 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
       $sql_sponsor_tickets_remain = "SELECT (($total_sponsor_tickets_purchased) - ($fifteen_sponsor_tickets_used) - ($twenty_sponsor_tickets_used))/20 as tickets_remaining";
       $res_sponsor_tickets_remain = $UPLINK->query($sql_sponsor_tickets_remain);
       $remaining_tickets = mysqli_fetch_array($res_sponsor_tickets_remain);
+      $sql_donations = "SELECT sum(v3.field_value) AS total_donations from jml_eb_registrants r
+              join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 102)
+				      WHERE  r.event_id = 26 AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR 
+				      r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'));";
+      $donations = mysqli_fetch_array($UPLINK->query($sql_donations));
       echo '<tr>';
       echo '<td>Pending Payments ('. $event_title . ')</td> <td>€' . round($pending['amount'],2) . '</td>';
       echo '</tr>';
@@ -176,6 +181,9 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
       echo '</tr>';
       echo '<tr>';
       echo '<td>Number of Sponsor Tickets remaining:</td> <td>' . intval($remaining_tickets['tickets_remaining']) . '</td>';
+      echo '</tr>';
+      echo '<tr>';
+      echo '<td>Donations made this event:</td> <td>€' . round($donations['total_donations'],2) . '</td>';
       echo '</tr>';
       if ( (round($pending_old['amount'],2) > 0) && $selected_event == $EVENTID){
         echo '<tr>';
