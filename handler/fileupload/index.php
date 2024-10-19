@@ -104,13 +104,13 @@ if (mysqli_num_rows($res2) > 0) {
     $image_crop = $('#image_demo').croppie({
       enableExif: true,
       viewport: {
-        width: 200,
-        height: 200,
-        type: 'square' //circle
+        width: 300,
+        height: 400,
+        type: 'rectangle' //circle
       },
       boundary: {
         width: 300,
-        height: 300
+        height: 400
       }
     });
 

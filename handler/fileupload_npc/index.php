@@ -98,13 +98,13 @@ if (!in_array("31", $jgroups, true) && !in_array("30", $jgroups, true)) {
     $image_crop = $('#image_demo').croppie({
       enableExif: true,
       viewport: {
-        width: 200,
-        height: 200,
-        type: 'square' //circle
+        width: 300,
+        height: 400,
+        type: 'rectangle' //circle
       },
       boundary: {
         width: 300,
-        height: 300
+        height: 400
       }
     });
 
