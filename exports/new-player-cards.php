@@ -1,11 +1,15 @@
 <?php
 // config variable.
 include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
+$UPLINK->set_charset("utf8mb4");
+ini_set('default_charset', 'UTF-8');
+header('Content-Type: text/html; charset=UTF-8');
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
+<meta charset="utf-8">
   <script>
     function copyTo() {
       // Get the text field
@@ -17,6 +21,17 @@ include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
 
       // Copy the text inside the text field
       navigator.clipboard.writeText(copyText.value);
+    }
+    function downloadImages() {
+      $.ajax({
+           type: "POST",
+           url: './new-player-cards.php',
+           data:{action:'call_this'},
+           success:function(html) {
+             alert(html);
+           }
+
+      });
     }
   </script>
   <style>
@@ -91,17 +106,20 @@ echo '<h2>New Card Needed for ' . $row['title'] . '</h2>';
 <body>
   <?php
 
-  $sqlpart1 = "SELECT c.character_name, r.email as email, c.faction ,c.ICC_number,  c.card_id, c.characterID
-              from jml_eb_registrants r
-              join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
-              join jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 14)
-              join ecc_characters c ON (c.characterID = SUBSTRING_INDEX(v1.field_value,' - ',-1))
-              join jml_users u ON (c.accountID = u.id) 
-              WHERE c.card_id IS NULL AND r.event_id = $EVENTID AND v2.field_value = 'Speler' AND 
-              ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-              (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+    $sqlpart1 = "SELECT c.character_name, r.email as email, c.faction ,c.ICC_number,  c.card_id, c.characterID, c.aantal_events, c.bastion_clearance
+                from jml_eb_registrants r
+                join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
+                join jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 14)
+                join jml_eb_field_values newplayer on (newplayer.registrant_id = r.id and newplayer.field_id = 54)
+                join ecc_characters c ON (c.characterID = SUBSTRING_INDEX(v1.field_value,' - ',-1))
+                join jml_users u ON (c.accountID = u.id) 
+                WHERE 
+                newplayer.field_value = 'Yes' AND
+                 r.event_id = $EVENTID AND v2.field_value = 'Speler' AND 
+                ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
+                (r.published in (0,1) AND r.payment_method = 'os_offline'))";
   if (isset($NPCCards))
-    $sqlpart2 = " UNION SELECT character_name, NULL as email, faction, ICC_number, card_id, characterID from ecc_characters WHERE (characterID in ($NPCCards) AND card_id is NULL)";
+    $sqlpart2 = " UNION SELECT character_name, NULL as email, faction, ICC_number, card_id, characterID, aantal_events, bastion_clearance from ecc_characters WHERE (characterID in ($NPCCards) AND card_id is NULL)";
   else
     $sqlpart2 = ' ';
   $sqlpart3 = " ORDER BY faction, character_name";
@@ -109,26 +127,34 @@ echo '<h2>New Card Needed for ' . $row['title'] . '</h2>';
   $sql = $sqlpart1 . $sqlpart2 . $sqlpart3;
   $res = $UPLINK->query($sql);
   echo "<table>";
-  echo "<th>E-Mail</th>";
+  // echo "<th>E-Mail</th>";
   echo "<th>Faction</th>";
   echo "<th>Name</th>";
   echo "<th>ICC Number</th>";
+  echo "<th>Card ID</th>";
+  echo "<th>Bastion Clearance</th>";
   echo "<th>Image Name</th>";
   echo "</tr>";
   $emails = '';
+  $images = array();
   while ($row = mysqli_fetch_array($res)) {
     $filepath = '../img/passphoto/' . $row['characterID'] . '.jpg';
-    if (file_exists($filepath)) {} else {$emails = $emails . $row['email'] . ';'; }
+    if (file_exists($filepath)) {
+      array_push($images, $filepath);
+    } 
+    else {$emails = $emails . $row['email'] . ';'; }
     echo "<tr>";
-    echo "<td><center>" . $row['email'] . "</center></td>";
-    echo "<td><center>" . $row['faction'] . "</center></td>";
+    // echo "<td><center>" . $row['email'] . "</center></td>";
+    echo "<td><center>" . ucwords($row['faction']) . "</center></td>";
     if ($row['characterID'] == 402) {
       echo '<td><center>Invalid character specified by player.</center></td>';
       echo "<td><center>xxxx xxxxx xxxx</center></td>";
       echo "<td><center>n/a</center></td>";
     } else {
-      echo '<td><center> <a href="/admin_sl/character-edit.php?id=' . $row['characterID'] . '">' . $row['character_name'] . "</a></center></td>";
+      echo '<td><center> <a href="/admin_sl/character-edit.php?id=' . $row['characterID'] . '">' .$row['character_name'] . "</a></center></td>";
       echo "<td><center>" . $row['ICC_number'] . "</center></td>";
+      echo "<td><center>" . $row['card_id'] . "</center></td>";
+      echo "<td><center>" . $row['bastion_clearance'] . "</center></td>";
       if (file_exists($filepath)) {
       echo '<td><center><img src="' . $filepath . '" alt="Character photo" width="42"><a href="../img/passphoto/' . $row['characterID'] . '.jpg " target="_blank" download">' . $row['characterID'] . '.jpg</a></center></td>';}
       else {
@@ -139,8 +165,16 @@ echo '<h2>New Card Needed for ' . $row['title'] . '</h2>';
   }
   echo "</table>";
   echo "<input type=\"text\" class=\"hidden-text\" value=\"$emails\" id=\"myInput\">";
-  echo '<button class="button" onclick="copyTo()">Copy Participant E-mails with Mising Photos</button><br><br>';
+  echo '';
+  if (isset($_POST['action'])) {
+    if($_POST['action'] == 'call_this') {
+      require './zipanddownload.php';
+      $filename = 'Images - ' . $row['title'] . ' - ' . date('Y-m-d H:i:s', time());
+      zipFilesAndDownload($images,$filename,'./temp/');
+    }
+  }
   ?>
+  <button class="button" onclick="copyTo()">Copy Participant E-mails with Mising Photos</button><br><br>
+  <button class="button" onclick="downloadImages()">Download Images</button><br><br>
 </body>
-
 </html>
