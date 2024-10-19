@@ -129,7 +129,11 @@ echo '<h2>New Card Needed for ' . $row['title'] . '</h2>';
     } else {
       echo '<td><center> <a href="/admin_sl/character-edit.php?id=' . $row['characterID'] . '">' . $row['character_name'] . "</a></center></td>";
       echo "<td><center>" . $row['ICC_number'] . "</center></td>";
-      echo '<td><center><img src="' . $filepath . '" alt="Character photo" width="42"><a href="../img/passphoto/' . $row['characterID'] . '.jpg " target="_blank" download">' . $row['characterID'] . '.jpg</a></center></td>';
+      if (file_exists($filepath)) {
+      echo '<td><center><img src="' . $filepath . '" alt="Character photo" width="42"><a href="../img/passphoto/' . $row['characterID'] . '.jpg " target="_blank" download">' . $row['characterID'] . '.jpg</a></center></td>';}
+      else {
+        echo '<td><center><i>Not yet uploaded...</i></center></td>';
+      }
     }
     echo "</tr></center>";
   }
