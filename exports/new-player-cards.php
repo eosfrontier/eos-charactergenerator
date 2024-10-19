@@ -61,6 +61,45 @@ if (isset($_POST['action'])) {
     }
     zipFilesAndDownload($images, '../img/passphoto/');
   }
+  if($_POST['action'] == 'Export to CSV') {
+    $data = array();
+    while ($row = mysqli_fetch_array($res)) {
+      $filename = $row['characterID'] . '.jpg';
+    array_push($data, array(
+      "Faction" => $row['faction'], 
+      "Name" => $row['character_name'], 
+      "ICC_Number" => $row['ICC_number'], 
+      "Bastion_Clearance" => $row['bastion_clearance'], 
+      "Filename" => $filename
+    ));
+  }
+  function filterData(&$str){ 
+    $str = preg_replace("/\t/", "\\t", $str); 
+    $str = preg_replace("/\r?\n/", "\\n", $str); 
+    if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"'; 
+  }
+  // Excel file name for download 
+  $fileName = "new-player-export-" . date('Y-m-d H.i.s', time()) . ".csv"; 
+ 
+  // Headers for download 
+  header("Content-Disposition: attachment; filename=\"$fileName\""); 
+  header("Content-Type: application/vnd.ms-excel"); 
+ 
+  $flag = false; 
+  foreach($data as $row) { 
+    if(!$flag) { 
+        // display column names as first row 
+        echo implode(",", array_keys($row)) . "\n"; 
+        $flag = true; 
+    } 
+    // filter data 
+    array_walk($row, 'filterData'); 
+    echo implode(",", array_values($row)) . "\n"; 
+} 
+ 
+exit;
+}
+
 }
 
 ?>
@@ -198,8 +237,11 @@ echo '<h2>New Card Needed for ' . $eventrow['title'] . '</h2>';
   ?>
   <button class="button" onclick="copyTo()">Copy Participant E-mails with Mising Photos</button><br><br>
   <form method="post">
-  <input type="submit" name="action" class="button" value="Download Images" />
+  <input type="submit" name="action" class="button" value="Download Images" /> &nbsp;&nbsp;
+  <input type="submit" name="action" class="button" value="Export to CSV" />
   </form>
   <!-- <button class="button" onclick="downloadImages()">Download Images</button><br><br> -->
 </body>
 </html>
+
+<?php

@@ -142,7 +142,7 @@ $sql = "SELECT characterID, faction, born_faction, accountID, aantal_events, cha
                 . "<button id=\"printPageButton\" style=\"width: 100%;\" onClick=\"window.print();\">Print</button></td>";
             }
         }
-    }
+
 
     echo "</table>";
     echo "<p style=\"font-size: 13px;\"><i>* specialty skills</i></p>";
@@ -185,7 +185,6 @@ $sql = "SELECT characterID, faction, born_faction, accountID, aantal_events, cha
         echo "<p><a href=\"" . $APP['header'] . "/exports/printsheet.php?characterID=" . $row['characterID'] . "&print=confirm\">"
             . "<button id=\"printPageButton\" style=\"width: 100%;\" onClick=\"window.print();\">Print</button></td>";
     }
-}
+
 
 echo "</div>";
-?>
