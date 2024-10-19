@@ -4,12 +4,75 @@ include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
 $UPLINK->set_charset("utf8mb4");
 ini_set('default_charset', 'UTF-8');
 header('Content-Type: text/html; charset=UTF-8');
+$sql = "SELECT title FROM jml_eb_events where id = $EVENTID;";
+$res = $UPLINK->query($sql);
+$eventrow = mysqli_fetch_array($res);
+$sqlpart1 = "SELECT c.character_name, r.email as email, c.faction ,c.ICC_number,  c.card_id, c.characterID, c.aantal_events, c.bastion_clearance
+                from jml_eb_registrants r
+                join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
+                join jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 14)
+                join jml_eb_field_values newplayer on (newplayer.registrant_id = r.id and newplayer.field_id = 54)
+                join ecc_characters c ON (c.characterID = SUBSTRING_INDEX(v1.field_value,' - ',-1))
+                join jml_users u ON (c.accountID = u.id) 
+                WHERE 
+                newplayer.field_value = 'Yes' AND
+                 r.event_id = $EVENTID AND v2.field_value = 'Speler' AND 
+                ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
+                (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+                if (isset($NPCCards))
+                $sqlpart2 = " UNION SELECT character_name, NULL as email, faction, ICC_number, card_id, characterID, aantal_events, bastion_clearance from ecc_characters WHERE (characterID in ($NPCCards) AND card_id is NULL)";
+              else
+              $sqlpart2 = ' ';
+              $sqlpart3 = " ORDER BY faction, character_name";
+              $sql = $sqlpart1 . $sqlpart2 . $sqlpart3;
+              $res = $UPLINK->query($sql);
+if (isset($_POST['action'])) {
+  if($_POST['action'] == 'Download Images') {
+    $images = array();
+  while ($row = mysqli_fetch_array($res)) {
+    $filepath = $row['characterID'] . '.jpg';
+    if (file_exists('../img/passphoto/'.$filepath)) {
+      array_push($images, $filepath);
+    } 
+  }
+    function zipFilesAndDownload($file_names,$file_path){
+      $zip = new ZipArchive();
+      $archive_file_name = 'Images - ' . date('Y-m-d H.i.s', time()) . '.zip';
+      //create the file and throw the error if unsuccessful
+      if ($zip->open($archive_file_name, ZIPARCHIVE::CREATE )!==TRUE) {
+          exit("cannot open <$archive_file_name>\n");
+      }
+      //add each files of $file_name array to archive
+      foreach($file_names as $files){
+        // echo $file_path . $files . '<br>';
+        $zip->addFile($file_path.$files, $files);
+      }
+      $zip->close();
+      // then send the headers to force download the zip file
+      header("Content-type: application/zip"); 
+      header("Content-Disposition: attachment; filename=$archive_file_name");
+      header("Content-length: " . filesize($archive_file_name));
+      header("Pragma: no-cache"); 
+      header("Expires: 0"); 
+      readfile("$archive_file_name");
+      ignore_user_abort(true);
+      unlink($archive_file_name);
+      exit;
+    }
+    zipFilesAndDownload($images, '../img/passphoto/');
+  }
+}
+
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
 <meta charset="utf-8">
+  <script
+          src="https://code.jquery.com/jquery-3.4.1.min.js"
+          integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+          crossorigin="anonymous"></script>
   <script>
     function copyTo() {
       // Get the text field
@@ -22,18 +85,7 @@ header('Content-Type: text/html; charset=UTF-8');
       // Copy the text inside the text field
       navigator.clipboard.writeText(copyText.value);
     }
-    function downloadImages() {
-      $.ajax({
-           type: "POST",
-           url: './new-player-cards.php',
-           data:{action:'call_this'},
-           success:function(html) {
-             alert(html);
-           }
-
-      });
-    }
-  </script>
+    </script>
   <style>
     .hidden-text {
       display: none;
@@ -96,36 +148,13 @@ header('Content-Type: text/html; charset=UTF-8');
 </head>
 <?php
 
-$sql = "SELECT title FROM jml_eb_events where id = $EVENTID;";
-$res = $UPLINK->query($sql);
-$row = mysqli_fetch_array($res);
 
-echo '<h2>New Card Needed for ' . $row['title'] . '</h2>';
+
+echo '<h2>New Card Needed for ' . $eventrow['title'] . '</h2>';
 ?>
 
 <body>
   <?php
-
-    $sqlpart1 = "SELECT c.character_name, r.email as email, c.faction ,c.ICC_number,  c.card_id, c.characterID, c.aantal_events, c.bastion_clearance
-                from jml_eb_registrants r
-                join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
-                join jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 14)
-                join jml_eb_field_values newplayer on (newplayer.registrant_id = r.id and newplayer.field_id = 54)
-                join ecc_characters c ON (c.characterID = SUBSTRING_INDEX(v1.field_value,' - ',-1))
-                join jml_users u ON (c.accountID = u.id) 
-                WHERE 
-                newplayer.field_value = 'Yes' AND
-                 r.event_id = $EVENTID AND v2.field_value = 'Speler' AND 
-                ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-                (r.published in (0,1) AND r.payment_method = 'os_offline'))";
-  if (isset($NPCCards))
-    $sqlpart2 = " UNION SELECT character_name, NULL as email, faction, ICC_number, card_id, characterID, aantal_events, bastion_clearance from ecc_characters WHERE (characterID in ($NPCCards) AND card_id is NULL)";
-  else
-    $sqlpart2 = ' ';
-  $sqlpart3 = " ORDER BY faction, character_name";
-
-  $sql = $sqlpart1 . $sqlpart2 . $sqlpart3;
-  $res = $UPLINK->query($sql);
   echo "<table>";
   // echo "<th>E-Mail</th>";
   echo "<th>Faction</th>";
@@ -165,16 +194,12 @@ echo '<h2>New Card Needed for ' . $row['title'] . '</h2>';
   }
   echo "</table>";
   echo "<input type=\"text\" class=\"hidden-text\" value=\"$emails\" id=\"myInput\">";
-  echo '';
-  if (isset($_POST['action'])) {
-    if($_POST['action'] == 'call_this') {
-      require './zipanddownload.php';
-      $filename = 'Images - ' . $row['title'] . ' - ' . date('Y-m-d H:i:s', time());
-      zipFilesAndDownload($images,$filename,'./temp/');
-    }
-  }
+
   ?>
   <button class="button" onclick="copyTo()">Copy Participant E-mails with Mising Photos</button><br><br>
-  <button class="button" onclick="downloadImages()">Download Images</button><br><br>
+  <form method="post">
+  <input type="submit" name="action" class="button" value="Download Images" />
+  </form>
+  <!-- <button class="button" onclick="downloadImages()">Download Images</button><br><br> -->
 </body>
 </html>
