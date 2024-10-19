@@ -1,4 +1,4 @@
-html{
+html {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -6,13 +6,15 @@ html{
   font-size: 10px;
   background: #FFF;
 }
+
 body {
   font-size: 12px;
-  margin:0px;
-  padding:0px;
+  margin: 0px;
+  padding: 0px;
   background: #FFF;
 
 }
+
 .button {
   background-color: #4CAF50;
   border: none;
@@ -25,20 +27,24 @@ body {
   margin: 4px 2px;
   cursor: pointer;
 }
+
 table {
-    font-family: orbitron;
-    border-collapse: collapse;
-    font-size: 18px;
-    width: 85%;
-    margin-left:auto;
-    margin-right:auto;
+  font-family: orbitron;
+  border-collapse: collapse;
+  font-size: 18px;
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
 
 }
-td, th {
+
+td,
+th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 4px 5px;
 }
+
 th {
   padding-top: 1px;
   padding-bottom: 1px;
@@ -46,6 +52,7 @@ th {
   background-color: #32c5f4;
   color: white;
 }
+
 tr:nth-child(even) {
   background-color: #dddddd;
 }
@@ -56,50 +63,55 @@ tr:nth-child(even) {
   size: auto;
   margin: 0;
 }
+
 @media print {
   #printPageButton {
-      display: none;
+    display: none;
   }
+
   * {
-      -webkit-print-color-adjust:exact;
+    -webkit-print-color-adjust: exact;
   }
+
   table {
     font-family: orbitron;
     border-collapse: collapse;
     font-size: 18px;
     width: 85%;
-    margin-left:auto; 
-    margin-right:auto;
+    margin-left: auto;
+    margin-right: auto;
   }
-   .roomsign .center{
-           margin-top:40px;
-           margin-bottom:50px;
-           display:block;
-           width:100%;
-           float:left;
-   }
+
+  .roomsign .center {
+    margin-top: 40px;
+    margin-bottom: 50px;
+    display: block;
+    width: 100%;
+    float: left;
+  }
 
 
 }
-.single_record{
+
+.single_record {
   page-break-after: always;
 }
 
 
-    .roomsign{
-		width: 19cm;
-		height: 27cm;
-		background:url(../images/RoomSign.png) no-repeat;
-		background-size:100% 100%;
-		clear:both;
-		page-break-before:always;
-		margin:15px auto 0;
-   } 
-   
-   .roomsign .center{
-	   margin-top:40px;
-	   margin-bottom:50px;
-	   display:block;
-	   width:100%;
-	   float:left;
-   }
+.roomsign {
+  width: 19cm;
+  height: 27cm;
+  background: url(../images/RoomSign.png) no-repeat;
+  background-size: 100% 100%;
+  clear: both;
+  page-break-before: always;
+  margin: 15px auto 0;
+}
+
+.roomsign .center {
+  margin-top: 40px;
+  margin-bottom: 50px;
+  display: block;
+  width: 100%;
+  float: left;
+}

@@ -26,5 +26,5 @@ where r.event_id = $EVENTID and v5.field_value = 'speler' and v2.field_value LIK
     $result = $UPLINK->query($sql);
     $EVENTIDSarray = $result;
     return $EVENTIDSarray;
-};
-
+}
+;

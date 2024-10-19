@@ -7,6 +7,7 @@ $APP["loginpage"] = "/component/users/?view=login";
 
 include_once('../db.php');
 include_once("../_includes/functions.global.php");
+include_once("../_includes/functions.playercap.php");
 include_once("../_includes/joomla.php");
 include_once('./current-players.php');
 
@@ -87,7 +88,6 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
   (r.published in (0,1) AND r.payment_method = 'os_offline'))
   GROUP BY soort_inschrijving.field_value";
   $res3 = $UPLINK->query($sql3);
-
   $sql5 = "SELECT faction.faction as faction, COUNT(*) as count
 from joomla.jml_eb_registrants r
 join joomla.jml_eb_field_values charname on (charname.registrant_id = r.id and charname.field_id = 21 )
@@ -159,12 +159,26 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
     <table>
       <tr>
         <th width="10%">Faction</th>
-        <th width="10%">Aantal Deelneemers</th>
+        <th width="10%">Aantal Deelneemers op evenement</th>
       </tr>
       <?php while ($row3 = mysqli_fetch_array($res5)) {
       echo "<tr>";
       echo '<td>' . ucwords($row3['faction']) . "</td>";
         echo '<td>' . $row3['count'] . "</td>";
+        echo '</tr>';
+      }?>
+    </table>
+    <table>
+      <tr>
+        <th width="10%">Faction</th>
+        <th width="10%">Active Characters (since <?php echo player_cap_count_from();?>)</th>
+      </tr>
+      <?php 
+      $faction_caps = get_active_factions();
+      while ($faction_cap_row = mysqli_fetch_array($faction_caps)) {
+      echo "<tr>";
+      echo '<td><a href="./player_cap/player_cap.php?faction=' . $faction_cap_row['faction'] . '">' . ucwords($faction_cap_row['faction']) . "</a></td>";
+        echo '<td>' . $faction_cap_row['count'] . "</td>";
         echo '</tr>';
       }?>
     </table>
@@ -217,7 +231,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
   echo '<th width="20%">IC Name</th>';
   echo '<th width="15%">Soort Inschrijf</th>';
   echo '<th width="15%">Factie</th>';
-  echo '<th class="inschrijf_datum" width="10%">Inschrif Datum</th>';
+  echo '<th class="inschrijf_datum" width="10%">Inschrijf Datum</th>';
   echo '<th width="25%">Handtekening</th>';
   echo '<th width="10%">Foto Opt-Out</th>';
 

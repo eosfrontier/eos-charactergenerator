@@ -226,6 +226,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
     echo "<font size=5>Detail</font>";
     echo "<table>";
     echo "<th>Name</th><th>Allergie</th><th>Dieet</th><th>Other Allergies</th>";
+
     $sql = "SELECT replace(replace(replace(v2.field_value,'[',''),']',','),\"Allium(ui,prei,knoflook,bieslook,etc)\", \"Allium(ui;prei;knoflook;bieslook;etc)\") as diet, concat(r.first_name,' ', COALESCE(tussenvoegsel.field_value,' '), ' ', r.last_name) as name, 
     v3.field_value as other from joomla.jml_eb_registrants r
       join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
