@@ -23,23 +23,27 @@ require './buildtable.php';
         ?>
         <table>
             <?php
-            foreach ($buildings as $building){
+            foreach ($buildings as $building) {
                 $building_sleepers = BreakdownByBuilding($sleepers, $building);
                 $b_count = count($building_sleepers);
-                // echo "<td>";
+                echo '<td style="vertical-align:top;">';
                 echo "<H2>" . str_replace('tweede gebouw', 'Zonnedauw', $building) . " - ($b_count)</H2>";
-                $rooms = GetRooms($sleepers,$building);
-                foreach ($rooms as $room){
-                    $room_sleepers = BreakdownByRoom($sleepers,$building,$room);
-                    $count = count($room_sleepers);
+                $rooms = GetRooms($sleepers, $building);
+                foreach ($rooms as $room) {
+                    $room_sleepers = BreakdownByRoom($sleepers, $building, $room);
+                    $room_array = array();
+                    foreach ($room_sleepers as $key => $val) {
+                        array_push($room_array, array('Name' => $val['Name']));
+                    }
+                    $count = count($room_array);
                     echo "<H3>Room $room - ($count) </H3>";
-                arrayToTable($room_sleepers);
+                    arrayToTable($room_array);
                 }
                 echo "<br>";
-                // echo "</td>";
+                echo "</td>";
             }
             ?>
-        </table>    
+        </table>
     </div>
 </body>
 

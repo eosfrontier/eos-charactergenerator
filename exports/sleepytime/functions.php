@@ -1,40 +1,42 @@
 <?php
 $IS_NOT_CANCELLED = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR 
 (r.published in (0,1) AND r.payment_method = 'os_offline'))";
-function arrayToTable($array){
+function arrayToTable($array)
+{
     echo '<table border="2">';
     echo "<thead><tr>";
 
-    foreach (array_keys($array[0]) as $header){
+    foreach (array_keys($array[0]) as $header) {
         echo "<th>$header</th>";
     }
     echo "</tr></thead>";
     echo "<tbody>";
-    foreach($array as $items)
-    {
+    foreach ($array as $items) {
         echo "<tr>";
-        foreach($items as $key => $value) {
+        foreach ($items as $key => $value) {
             echo "<td>$value</td>";
         }
     }
     echo "</tbody></table>";
-};
-function buildSleeperRow($result) {
-    $array_results=array();
+}
+;
+function buildSleeperRow($result)
+{
+    $array_results = array();
     while ($row = mysqli_fetch_array($result)) {
         $building = $row['building'];
-        if ( $building == "Bastion" ){
+        if ($building == "Bastion") {
             $room = $row['bastion_room'];
-        }
-        elseif ( $building == "tweede gebouw" ){
+        } elseif ($building == "tweede gebouw") {
             $room = $row['tweede_room'];
         }
-        array_push($array_results,array("Name"=>$row['name'], "Building"=>$building, "Room"=>$room, "Food Location"=>$row['food_loc']));
-     }
-     return $array_results;
+        array_push($array_results, array("Name" => $row['name'], "Building" => $building, "Room" => $room, "Food Location" => $row['food_loc']));
+    }
+    return $array_results;
 }
 
-function BreakdownByBuilding($input_array, $building){
+function BreakdownByBuilding($input_array, $building)
+{
     $array = array_filter($input_array, function ($item) use ($building) {
         if (stripos($item['Building'], $building) !== false) {
             return true;
@@ -42,54 +44,58 @@ function BreakdownByBuilding($input_array, $building){
         return false;
     });
     $result = array();
-    foreach ($array as $item){
-        array_push($result, array('Name'=>$item['Name'],'Room'=>$item['Room']));
+    foreach ($array as $item) {
+        array_push($result, array('Name' => $item['Name'], 'Room' => $item['Room']));
     }
     return $result;
 }
 
-function GetBuildings($sleepers){
-    $new_arr=array();
-    foreach($sleepers as $key => $val) {
-        array_push($new_arr,$val['Building']);
+function GetBuildings($sleepers)
+{
+    $new_arr = array();
+    foreach ($sleepers as $key => $val) {
+        array_push($new_arr, $val['Building']);
     }
     return array_unique($new_arr);
 }
 
-function GetRooms($input_array, $building){
+function GetRooms($input_array, $building)
+{
     $array = array_filter($input_array, function ($item) use ($building) {
         if (stripos($item['Building'], $building) !== false) {
             return true;
         }
         return false;
     });
-    foreach ($array as $key=>$val){
+    foreach ($array as $key => $val) {
         $new_arr[] = $val['Room'];
     }
     return array_unique($new_arr);
 }
 
-function BreakdownByRoom($input_array, $building, $room){
+function BreakdownByRoom($input_array, $building, $room)
+{
     $array_building = array_filter($input_array, function ($item) use ($building) {
-        if (stripos($item['Building'], $building) !== false ) {
+        if (stripos($item['Building'], $building) !== false) {
             return true;
         }
         return false;
     });
     $array = array_filter($array_building, function ($item) use ($room) {
-        if (stripos($item['Room'], $room) !== false ) {
+        if (($item['Room']) == $room) {
             return true;
         }
         return false;
     });
     $result = array();
-    foreach ($array as $item){
-        array_push($result, array('Name'=>$item['Name'],'Room'=>$item['Room']));
+    foreach ($array as $item) {
+        array_push($result, array('Name' => $item['Name'], 'Room' => $item['Room']));
     }
     return $result;
 }
 
-function JoshArrayDump($array){
+function JoshArrayDump($array)
+{
     print '<pre>';
     print_r($array);
     print '</pre>';
