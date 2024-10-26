@@ -24,8 +24,10 @@ require './buildtable.php';
         <table>
             <?php
             foreach ($buildings as $building){
+                $building_sleepers = BreakdownByBuilding($sleepers, $building);
+                $b_count = count($building_sleepers);
                 // echo "<td>";
-                echo "<H2>" . str_replace('tweede gebouw', 'Zonnedauw', $building) . "</H2>";
+                echo "<H2>" . str_replace('tweede gebouw', 'Zonnedauw', $building) . " - ($b_count)</H2>";
                 $rooms = GetRooms($sleepers,$building);
                 foreach ($rooms as $room){
                     $room_sleepers = BreakdownByRoom($sleepers,$building,$room);
