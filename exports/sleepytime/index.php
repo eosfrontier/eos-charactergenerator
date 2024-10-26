@@ -12,7 +12,7 @@ require './buildtable.php';
     <meta charset="utf-8">
 
     <title>Sleepytime</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/participants.css">
     <link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900" rel="stylesheet">
 </head>
 
