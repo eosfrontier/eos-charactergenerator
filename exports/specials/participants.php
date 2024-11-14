@@ -9,7 +9,7 @@ include_once('../../db.php');
 include_once("../../_includes/functions.global.php");
 
 include_once('../current-players.php');
-
+$SPECIALEVENTID = 22;
 ?>
 <!DOCTYPE html>
 <html>
@@ -125,16 +125,14 @@ from joomla.jml_eb_registrants r
 join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 101)
 left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
 left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 100)
-where soort_inschrijving.field_value = 'Speler' AND r.event_id = $SPECIALEVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-(r.published in (0,1) AND r.payment_method = 'os_offline'))
+where soort_inschrijving.field_value = 'Speler' AND r.event_id = $SPECIALEVENTID and $notCancelled
 UNION
 select r.id, r.first_name as oc_fn, tussenvoegsel.field_value as oc_tv,
 r.last_name as oc_ln, NULL as ic_name, soort_inschrijving.field_value as type
 from joomla.jml_eb_registrants r
 left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
 left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 100)
-WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $SPECIALEVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-(r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY type, ic_name, oc_fn";
+WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $SPECIALEVENTID and $notCancelled ORDER BY type, ic_name, oc_fn";
   $res = $UPLINK->query($sql);
   $row_count = mysqli_num_rows($res);
   echo '<button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button>';

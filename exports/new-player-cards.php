@@ -1,6 +1,8 @@
 <?php
 // config variable.
 include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
+include($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/_includes/functions.global.php');
+
 $UPLINK->set_charset("utf8mb4");
 ini_set('default_charset', 'UTF-8');
 header('Content-Type: text/html; charset=UTF-8');
@@ -16,9 +18,7 @@ $sqlpart1 = "SELECT c.character_name, r.email as email, c.faction ,c.ICC_number,
                 join jml_users u ON (c.accountID = u.id) 
                 WHERE 
                 newplayer.field_value = 'Yes' AND
-                 r.event_id = $EVENTID AND v2.field_value = 'Speler' AND 
-                ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-                (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+                 r.event_id = $EVENTID AND v2.field_value = 'Speler' AND $notCancelled";
                 if (isset($NPCCards))
                 $sqlpart2 = " UNION SELECT character_name, NULL as email, faction, ICC_number, card_id, characterID, aantal_events, bastion_clearance from ecc_characters WHERE (characterID in ($NPCCards) AND card_id is NULL)";
               else

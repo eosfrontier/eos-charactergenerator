@@ -104,8 +104,7 @@ include_once('current-players.php');
   from joomla.jml_eb_registrants r
   left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 55)
   WHERE r.event_id = $EVENTID AND v4.field_value='No'
-  AND ((r.published = 1 AND (r.payment_method = 'os_ideal'
-  OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+  AND $notCancelled";
   $res = $UPLINK->query($sql);
   $row = mysqli_fetch_array($res);
 
@@ -118,8 +117,7 @@ include_once('current-players.php');
     join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
     left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 55)
     WHERE r.event_id = $EVENTID
-    AND ((r.published = 1 AND (r.payment_method = 'os_ideal'
-    OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER by result");
+    AND $notCancelled ORDER by result");
 
   $res_pdo = $stmt->execute();
   $results = $stmt->fetchAll();
@@ -183,8 +181,7 @@ include_once('current-players.php');
   from joomla.jml_eb_registrants r
   left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 55)
   WHERE r.event_id = $EVENTID AND v4.field_value='Yes'
-  AND ((r.published = 1 AND (r.payment_method = 'os_ideal'
-  OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+  AND $notCancelled";
   $res = $UPLINK->query($sql);
   $row = mysqli_fetch_array($res);
 
@@ -199,8 +196,7 @@ include_once('current-players.php');
   left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 57)
   left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
   WHERE r.event_id = $EVENTID
-  AND ((r.published = 1 AND (r.payment_method = 'os_ideal'
-  OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER by name");
+  AND $notCancelled ORDER by name");
   $res_pdo2 = $stmt2->execute();
   $results2 = $stmt2->fetchAll();
 
@@ -211,8 +207,7 @@ include_once('current-players.php');
   //       left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
   //       left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
   //       WHERE r.event_id = $EVENTID
-  //       AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR 
-  //       (r.published in (0,1) AND r.payment_method = 'os_offline'))  ORDER BY diet desc;";
+  //       AND $notCancelled  ORDER BY diet desc;";
   
   foreach ($results2 as $row) {
     echo "<tr><td>" . $row['name'] . "</td>";

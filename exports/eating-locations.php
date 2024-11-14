@@ -109,8 +109,7 @@ left join joomla.jml_eb_field_values slaaplocatie on (slaaplocatie.registrant_id
 left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
 left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 16)
 left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 14)
-where ifnull(eetlocatie.field_value,slaaplocatie.field_value) = '$building' AND v4.field_value = 'Speler' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-(r.published in (0,1) AND r.payment_method = 'os_offline'))
+where ifnull(eetlocatie.field_value,slaaplocatie.field_value) = '$building' AND v4.field_value = 'Speler' AND r.event_id = $EVENTID and $notCancelled
 UNION
 select r.id, ifnull(eetlocatie.field_value,coalesce(figu_slaap.field_value,sl_slaap.field_value)) as building, r.first_name as oc_fn, v3.field_value as oc_tv, 
   r.last_name as oc_ln, NULL as ic_name, eetlocatie.field_value as eetlocatie_override 
@@ -120,8 +119,7 @@ select r.id, ifnull(eetlocatie.field_value,coalesce(figu_slaap.field_value,sl_sl
   left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 16)
   left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
   left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
-  WHERE ifnull(eetlocatie.field_value,\"tweede gebouw\") = '$building' AND soort_inschrijving.field_value != 'Speler' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-  (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY oc_fn";
+  WHERE ifnull(eetlocatie.field_value,\"tweede gebouw\") = '$building' AND soort_inschrijving.field_value != 'Speler' AND r.event_id = $EVENTID and $notCancelled ORDER BY oc_fn";
   $res = $UPLINK->query($sql);
   $row_count = mysqli_num_rows($res);
   echo '<button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button>';
@@ -161,8 +159,7 @@ select r.id, ifnull(eetlocatie.field_value,coalesce(figu_slaap.field_value,sl_sl
   left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
   left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 16)
   left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 14)
-  where ifnull(eetlocatie.field_value,slaaplocatie.field_value) = '$building' AND v4.field_value = 'Speler' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-  (r.published in (0,1) AND r.payment_method = 'os_offline'))
+  where ifnull(eetlocatie.field_value,slaaplocatie.field_value) = '$building' AND v4.field_value = 'Speler' AND r.event_id = $EVENTID and $notCancelled
   UNION
   select r.id, ifnull(eetlocatie.field_value,coalesce(figu_slaap.field_value,sl_slaap.field_value)) as building, r.first_name as oc_fn, v3.field_value as oc_tv, 
   r.last_name as oc_ln, NULL as ic_name, eetlocatie.field_value as eetlocatie_override 
@@ -172,8 +169,7 @@ select r.id, ifnull(eetlocatie.field_value,coalesce(figu_slaap.field_value,sl_sl
   left join joomla.jml_eb_field_values v3 on (v3.registrant_id = r.id and v3.field_id = 16)
   left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
   left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
-  WHERE ifnull(eetlocatie.field_value,\"tweede gebouw\") = '$building' AND soort_inschrijving.field_value != 'Speler' AND r.event_id = $EVENTID and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR
-  (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY oc_fn";
+  WHERE ifnull(eetlocatie.field_value,\"tweede gebouw\") = '$building' AND soort_inschrijving.field_value != 'Speler' AND r.event_id = $EVENTID and $notCancelled ORDER BY oc_fn";
   $res = $UPLINK->query($sql);
   $row_count = mysqli_num_rows($res);
   echo '<font size="5">Eating Locations for ' . $row2['title'] . '</font> - '

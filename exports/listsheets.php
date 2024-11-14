@@ -1,4 +1,5 @@
 <?php
+$notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
 
 // BEGIN PLAYER COUNT QUERY
 $sql = "SELECT SUM(totalchars) as totalchars, faction, building FROM (
@@ -8,7 +9,7 @@ $sql = "SELECT SUM(totalchars) as totalchars, faction, building FROM (
               join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 36) /* Building */
               join ecc_characters c1 on c1.characterID = SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1)
               where v2.field_value = 'Speler' AND r.event_id = $EVENTID  AND  v3.field_value NOT LIKE 'medische%' AND `faction` LIKE '$_FACTION' AND v3.field_value = '$_BUILDING'
-            and ((r.published = 1 AND (r.payment_method = 'os_ideal' or r.payment_method='os_paypal')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))
+            and $notCancelled
           UNION ALL
           SELECT count(SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1)) as totalchars, c1.faction, LEFT(v6.field_value,LOCATE(',',v6.field_value) - 1)  as building from jml_eb_registrants r
           join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)/*Character Name*/
@@ -17,7 +18,7 @@ $sql = "SELECT SUM(totalchars) as totalchars, faction, building FROM (
         join ecc_characters c1 on c1.characterID = SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1)
         left join joomla.jml_eb_field_values v6 on (v6.registrant_id = r.id and v6.field_id = 71)
           where v2.field_value = 'Speler' AND r.event_id = $EVENTID  AND  v3.field_value LIKE 'medische%' AND `faction` LIKE '$_FACTION'  AND LEFT(v6.field_value,LOCATE(',',v6.field_value) - 1) = '$_BUILDING'
-         and ((r.published = 1 AND (r.payment_method = 'os_ideal' or r.payment_method='os_paypal')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))
+         and $notCancelled
           ) t1;";
 
 $res = $UPLINK->query($sql);
@@ -82,7 +83,7 @@ $sql = "SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1)
 	      join jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 14)
         join ecc_characters c1 on c1.characterID = SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1)
         join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 36) /* Building */
-        where v2.field_value = 'Speler' AND r.event_id = $EVENTID  and characterID <> 257 AND v3.field_value = '$_BUILDING' AND `faction` LIKE '$_FACTION' and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))
+        where v2.field_value = 'Speler' AND r.event_id = $EVENTID  and characterID <> 257 AND v3.field_value = '$_BUILDING' AND `faction` LIKE '$_FACTION' and $notCancelled
         UNION
         SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1) as characterID, c1.character_name, c1.faction, c1.sheet_status, c1.print_status from jml_eb_registrants r
         join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
@@ -90,7 +91,7 @@ $sql = "SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1)
         join ecc_characters c1 on c1.characterID = SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1)
         join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 36) /* Building */
         left join joomla.jml_eb_field_values v6 on (v6.registrant_id = r.id and v6.field_id = 71) /*ROOM*/
-        where v2.field_value = 'Speler' AND r.event_id = $EVENTID  and characterID <> 257 AND v3.field_value LIKE 'medische%' AND LEFT(v6.field_value,LOCATE(',',v6.field_value) - 1) = '$_BUILDING' AND `faction` LIKE '$_FACTION' and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))
+        where v2.field_value = 'Speler' AND r.event_id = $EVENTID  and characterID <> 257 AND v3.field_value LIKE 'medische%' AND LEFT(v6.field_value,LOCATE(',',v6.field_value) - 1) = '$_BUILDING' AND `faction` LIKE '$_FACTION' and $notCancelled
           ORDER BY character_name
           LIMIT " . (int) $limitFirst . " , " . (int) $perPage . " ";
 $res = $UPLINK->query($sql);
