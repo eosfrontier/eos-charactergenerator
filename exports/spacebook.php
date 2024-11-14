@@ -1,5 +1,7 @@
 <?php
 include_once('current-players.php');
+include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
+
 $notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
 ?>
 
@@ -7,7 +9,7 @@ $notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payme
 <html lang="en" dir="ltr">
 
 <head>
-  <meta charset="utf-8">
+  <!-- <meta charset="utf-8"> -->
   <title></title>
 
   <!-- 336 width  192 height -->
