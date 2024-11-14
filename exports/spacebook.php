@@ -57,7 +57,7 @@ $notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payme
           }
           
           echo "<div style=\"padding: 5px; float: left; height: 86px; width: 100%;\">"
-            . "<img src=\"../img/passphoto/" . $row['characterID'] . ".jpg\" style=\"height: 80px; width: 80px; float: left; border-radius: 100%;\" />"
+            . '<a href="../img/passphoto/' . $row['characterID'] . '.jpg"><img src="../img/passphoto/' . $row['characterID'] . '.jpg" style=\"height: 80px; width: 80px; float: left; border-radius: 100%;\" /></a>'
 
             . "<p style=\"position: relative; padding-left: 5px;\">"
             . "<strong>" . ucfirst($row['character_name']) . "</strong>"
@@ -102,8 +102,7 @@ $notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payme
           }
 
           echo "<div style=\"padding: 5px; float: left; height: 86px; width: 100%;\">"
-            . "<img src=\"../img/passphoto/" . $row['characterID'] . ".jpg\" style=\"height: 80px; width: 80px; float: left; border-radius: 100%;\" alt=\"x\"/>"
-
+            . '<a href="../img/passphoto/' . $row['characterID'] . '.jpg"><img src="../img/passphoto/' . $row['characterID'] . '.jpg" style=\"height: 80px; width: 80px; float: left; border-radius: 100%;\" /></a>'
             . "<p style=\"position: relative; padding-left: 5px;\">"
             . "<strong>" . ucfirst($row['character_name']) . "</strong>"
             . "<br/>" . ucfirst($row['rank'])
