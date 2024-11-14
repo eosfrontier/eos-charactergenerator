@@ -32,9 +32,6 @@ $notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payme
   <div class="" style="max-width: 700px;">
 
     <?php
-
-    include_once('../db.php');
-
     $sql = "SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1) as characterID, c1.character_name, c1.faction, c1.rank
 				from jml_eb_registrants r
 				join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
@@ -51,20 +48,22 @@ $notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payme
         echo "<table>";
         while ($row = mysqli_fetch_assoc($res)) {
 
-          if ($count == 0) {
-            echo "<div style=\"float: left; margin: 5px; border: 1px solid #222; width: 336px; height: 192px;\">";
-            $count = 1;
+          if ($count == 0) { ?>
+           <div style="float: left; margin: 5px; border: 1px solid #222; width: 336px; height: 192px;">
+          <?php $count = 1;
           }
-          
-          echo "<div style=\"padding: 5px; float: left; height: 86px; width: 100%;\">"
-            . '<a href="../img/passphoto/' . $row['characterID'] . '.jpg"><img src="../img/passphoto/' . $row['characterID'] . '.jpg" style="height: 80px; width: 80px; float: left; border-radius: 100%;"></a>'
-            . "<p style=\"position: relative; padding-left: 5px;\">"
-            . "<strong>" . ucfirst($row['character_name']) . "</strong>"
-            . "<br/>" . ucfirst($row['rank'])
-            . "<br/>" . ucfirst($row['faction'])
-            . "</p>"
-
-            . "</div>";
+          ?>
+          <div style="padding: 5px; float: left; height: 86px; width: 100%;">
+          <a href="../img/passphoto/<?php echo $row['characterID'];?>.jpg">
+            <img src="../img/passphoto/<?php echo $row['characterID'];?>.jpg" style="height: 86px; width: 86px; float: left; border-radius: 100%;">
+          </a>
+          <p style="position: right; padding-left: 5px;">
+          <strong><?php echo ucfirst($row['character_name']);?></strong>
+          <br/><?php echo ucfirst($row['rank']);?>
+          <br/><?php echo ucfirst($row['faction']);?>
+          </p>
+        </div>
+        <?php
 
           if ($count == 2) {
             echo "</div>";
@@ -74,7 +73,6 @@ $notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payme
           }
         }
         echo "</table>";
-        // echo "</div>";
       }
     }
 
@@ -100,16 +98,18 @@ $notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payme
             $count = 1;
           }
 
-          echo "<div style=\"padding: 5px; float: left; height: 86px; width: 100%;\">"
-            . '<a href="../img/passphoto/' . $row['characterID'] . '.jpg"><img src="../img/passphoto/' . $row['characterID'] . '.jpg" style="height: 80px; width: 80px; float: left; border-radius: 100%;" /></a>'
-            . "<p style=\"position: relative; padding-left: 5px;\">"
-            . "<strong>" . ucfirst($row['character_name']) . "</strong>"
-            . "<br/>" . ucfirst($row['rank'])
-            . "<br/>" . ucfirst($row['faction'])
-            . "</p>"
-
-            . "</div>";
-
+          ?>
+          <div style="padding: 5px; float: left; height: 86px; width: 100%;">
+          <a href="../img/passphoto/<?php echo $row['characterID'];?>.jpg">
+            <img src="../img/passphoto/<?php echo $row['characterID'];?>.jpg" style="height: 80px; width: 80px; float: left; border-radius: 100%;">
+          </a>
+          <p style="position: right; padding-left: 5px;">
+          <strong><?php echo ucfirst($row['character_name']);?></strong>
+          <br/><?php echo ucfirst($row['rank']);?>
+          <br/><?php echo ucfirst($row['faction']);?>
+          </p>
+        </div>
+        <?php
           if ($count == 2) {
             echo "</div>";
             $count = 0;
@@ -119,7 +119,6 @@ $notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payme
         }
         echo "</table>";
 
-        // echo "</div>";
       }
     }
 
