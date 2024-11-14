@@ -1,6 +1,4 @@
 <?php
-include($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/_includes/functions.global.php');
-
 
 function ar_getEventIDs()
 {
