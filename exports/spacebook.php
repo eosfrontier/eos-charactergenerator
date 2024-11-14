@@ -1,12 +1,15 @@
 <?php
 include_once('current-players.php');
+include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
+
+$notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
 ?>
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
 <head>
-  <meta charset="utf-8">
+  <!-- <meta charset="utf-8"> -->
   <title></title>
 
   <!-- 336 width  192 height -->
@@ -29,9 +32,6 @@ include_once('current-players.php');
   <div class="" style="max-width: 700px;">
 
     <?php
-
-    include_once('../db.php');
-
     $sql = "SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1) as characterID, c1.character_name, c1.faction, c1.rank
 				from jml_eb_registrants r
 				join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
@@ -48,21 +48,22 @@ include_once('current-players.php');
         echo "<table>";
         while ($row = mysqli_fetch_assoc($res)) {
 
-          if ($count == 0) {
-            echo "<div style=\"float: left; margin: 5px; border: 1px solid #222; width: 336px; height: 192px;\">";
-            $count = 1;
+          if ($count == 0) { ?>
+           <div style="float: left; margin: 5px; border: 1px solid #222; width: 336px; height: 192px;">
+          <?php $count = 1;
           }
-          
-          echo "<div style=\"padding: 5px; float: left; height: 86px; width: 100%;\">"
-            . "<img src=\"../img/passphoto/" . $row['characterID'] . ".jpg\" style=\"height: 80px; width: 80px; float: left; border-radius: 100%;\" />"
-
-            . "<p style=\"position: relative; padding-left: 5px;\">"
-            . "<strong>" . ucfirst($row['character_name']) . "</strong>"
-            . "<br/>" . ucfirst($row['rank'])
-            . "<br/>" . ucfirst($row['faction'])
-            . "</p>"
-
-            . "</div>";
+          ?>
+          <div style="padding: 5px; float: left; height: 86px; width: 100%;">
+          <a href="../img/passphoto/<?php echo $row['characterID'];?>.jpg">
+            <img src="../img/passphoto/<?php echo $row['characterID'];?>.jpg" style="height: 86px; width: 86px; float: left; border-radius: 100%;">
+          </a>
+          <p style="position: right; padding-left: 5px;">
+          <strong><?php echo ucfirst($row['character_name']);?></strong>
+          <br/><?php echo ucfirst($row['rank']);?>
+          <br/><?php echo ucfirst($row['faction']);?>
+          </p>
+        </div>
+        <?php
 
           if ($count == 2) {
             echo "</div>";
@@ -72,16 +73,16 @@ include_once('current-players.php');
           }
         }
         echo "</table>";
-        // echo "</div>";
       }
     }
 
     $sql = "SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1) as characterID, c1.character_name, c1.faction, c1.rank
 				from jml_eb_registrants r
-				join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
-				join ecc_characters c1 on c1.characterID = SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1)
-				where (r.event_id = $EVENTID and $notCancelled) 
-				AND (c1.rank NOT LIKE '%Conclav%' AND c1.rank NOT LIKE '%Governor of%') ORDER by c1.faction, c1.character_name 	;";
+				left join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
+				left join ecc_characters c1 on c1.characterID = SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1)
+				join joomla.jml_eb_field_values soort on (soort.registrant_id = r.id and soort.field_id = 14) /* Soort inschrijving */
+				where soort.field_value = 'Speler' AND r.event_id = $EVENTID and $notCancelled 
+        AND (c1.rank IS NULL OR c1.rank = '' OR (c1.rank NOT LIKE 'Conclave%' AND c1.rank NOT LIKE 'Governor%'));";
     $res = $UPLINK->query($sql);
 
     if ($res) {
@@ -97,17 +98,18 @@ include_once('current-players.php');
             $count = 1;
           }
 
-          echo "<div style=\"padding: 5px; float: left; height: 86px; width: 100%;\">"
-            . "<img src=\"../img/passphoto/" . $row['characterID'] . ".jpg\" style=\"height: 80px; width: 80px; float: left; border-radius: 100%;\" alt=\"x\"/>"
-
-            . "<p style=\"position: relative; padding-left: 5px;\">"
-            . "<strong>" . ucfirst($row['character_name']) . "</strong>"
-            . "<br/>" . ucfirst($row['rank'])
-            . "<br/>" . ucfirst($row['faction'])
-            . "</p>"
-
-            . "</div>";
-
+          ?>
+          <div style="padding: 5px; float: left; height: 86px; width: 100%;">
+          <a href="../img/passphoto/<?php echo $row['characterID'];?>.jpg">
+            <img src="../img/passphoto/<?php echo $row['characterID'];?>.jpg" style="height: 80px; width: 80px; float: left; border-radius: 100%;">
+          </a>
+          <p style="position: right; padding-left: 5px;">
+          <strong><?php echo ucfirst($row['character_name']);?></strong>
+          <br/><?php echo ucfirst($row['rank']);?>
+          <br/><?php echo ucfirst($row['faction']);?>
+          </p>
+        </div>
+        <?php
           if ($count == 2) {
             echo "</div>";
             $count = 0;
@@ -117,7 +119,6 @@ include_once('current-players.php');
         }
         echo "</table>";
 
-        // echo "</div>";
       }
     }
 
