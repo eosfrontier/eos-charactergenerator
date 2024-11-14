@@ -92,8 +92,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
     left join joomla.jml_eb_field_values slaaplocatie on (slaaplocatie.registrant_id = r.id and slaaplocatie.field_id = 36)
     left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
     WHERE r.event_id = $EVENTID AND ifnull(eetlocatie.field_value,slaaplocatie.field_value) = '$building'
-    AND ((r.published = 1 AND (r.payment_method = 'os_ideal' 
-    OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline')) ORDER BY diet;";
+    AND $notCancelled ORDER BY diet;";
   $res = $UPLINK->query($sql);
 
   $all_allergies = '';
@@ -128,8 +127,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
       left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
       left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
       WHERE r.event_id = $EVENTID AND ifnull(eetlocatie.field_value,slaaplocatie.field_value) = '$building' AND (ifnull(eetlocatie.field_value,'$building')  = '$building' OR soort_inschrijving.field_value = 'Speler')
-      AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR 
-      (r.published in (0,1) AND r.payment_method = 'os_offline'))  ORDER BY diet desc;";
+      AND $notCancelled ORDER BY diet desc;";
     $res = $UPLINK->query($sql);
     while ($row = mysqli_fetch_array($res)) {
       echo "<tr><td>" . $row['name'] . "</td>";
@@ -187,18 +185,14 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
     left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
     left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
     WHERE r.event_id = $EVENTID AND ifnull(eetlocatie.field_value,slaaplocatie.field_value) = '$building' AND (ifnull(eetlocatie.field_value,'$building')  = '$building' OR soort_inschrijving.field_value = 'Speler')
-    AND ((r.published = 1 AND (r.payment_method = 'os_ideal' 
-    OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline')) 
+    AND $notCancelled
     UNION
     select r.id, replace(replace(v2.field_value,'[',''),']',',') as diet 
     from joomla.jml_eb_registrants r
     join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
     left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
     left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
-    WHERE r.event_id = $EVENTID  AND ifnull(eetlocatie.field_value,'tweede gebouw') != 'Bastion' AND soort_inschrijving.field_value != 'Speler'
-    AND ((r.published = 1 AND (r.payment_method = 'os_ideal' 
-    OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline')) 
-    ORDER BY diet;";
+    WHERE r.event_id = $EVENTID  AND ifnull(eetlocatie.field_value,'tweede gebouw') != 'Bastion' AND soort_inschrijving.field_value != 'Speler' AND $notCancelled ORDER BY diet;";
     $res = $UPLINK->query($sql);
 
     $all_allergies = '';
@@ -236,8 +230,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
       left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
       left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
       WHERE  r.event_id = $EVENTID AND ifnull(eetlocatie.field_value,slaaplocatie.field_value) = '$building' AND soort_inschrijving.field_value = 'Speler'
-      AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR 
-      (r.published in (0,1) AND r.payment_method = 'os_offline')) 
+      AND $notCancelled
       UNION
       SELECT replace(replace(replace(v2.field_value,'[',''),']',','),\"Allium(ui,prei,knoflook,bieslook,etc)\", \"Allium(ui;prei;knoflook;bieslook;etc)\") as diet, concat(r.first_name,' ', COALESCE(tussenvoegsel.field_value,' '), ' ',r.last_name) as name, 
       v3.field_value as other from joomla.jml_eb_registrants r
@@ -246,10 +239,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
       left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
       left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
       left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
-      WHERE r.event_id = $EVENTID AND ifnull(eetlocatie.field_value,'tweede gebouw') != 'Bastion' AND soort_inschrijving.field_value != 'Speler'
-      AND ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR 
-      (r.published in (0,1) AND r.payment_method = 'os_offline'))
-      ORDER BY diet desc;";
+      WHERE r.event_id = $EVENTID AND ifnull(eetlocatie.field_value,'tweede gebouw') != 'Bastion' AND soort_inschrijving.field_value != 'Speler' AND $notCancelled ORDER BY diet desc;";
     $res = $UPLINK->query($sql);
     while ($row = mysqli_fetch_array($res)) {
       echo "<tr><td>" . $row['name'] . "</td>";

@@ -1,6 +1,5 @@
 <?php
 
-
 function ar_getEventIDs()
 {
     global $_CONFIG, $UPLINK;

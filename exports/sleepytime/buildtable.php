@@ -18,7 +18,7 @@ $spelers = <<<SQL
     left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 38) /*TweedeGebouwSlaapKamers*/
     left join joomla.jml_eb_field_values food_loc on (food_loc.registrant_id = r.id and food_loc.field_id = 58)
     where v5.field_value = 'Speler' AND r.event_id = $EVENTID
-    AND $IS_NOT_CANCELLED AND (med.field_value = 'No' OR med.field_value IS NULL);
+    AND $notCancelled AND (med.field_value = 'No' OR med.field_value IS NULL);
     SQL;
 $res_spelers = $UPLINK->query($spelers);
 $sleepers = array_merge($sleepers, buildSleeperRow($res_spelers));
@@ -40,7 +40,7 @@ $figus_sls = <<<SQL
     left join joomla.jml_eb_field_values med_room on (med_room.registrant_id = r.id and med_room.field_id = 71)
     left join joomla.jml_eb_field_values medicsleep on (medicsleep.registrant_id = r.id and medicsleep.field_id = 71)
     where r.event_id = $EVENTID and (v5.field_value = 'Figurant' or v5.field_value = 'Spelleider') and  (med_room.field_value IS NULL) 
-    and $IS_NOT_CANCELLED;
+    and $notCancelled;
     SQL;
 $res_figus_sls = $UPLINK->query($figus_sls);
 $sleepers = array_merge($sleepers, buildSleeperRow($res_figus_sls));
@@ -63,9 +63,8 @@ $med_sleepers = <<<SQL
     left join joomla.jml_eb_field_values med_figu on (med_figu.registrant_id = r.id AND med_figu.field_id = 93)
     left join joomla.jml_eb_field_values food_loc on (food_loc.registrant_id = r.id and food_loc.field_id = 58)
     where med_room.field_value LIKE 'Bastion%' AND r.event_id = $EVENTID
-    and $IS_NOT_CANCELLED
+    and $notCancelled
     UNION
-
     -- This TSQL Statement grabs data for medical sleepers in the tweede gebouw
     SELECT r.id, COALESCE(
     (SELECT character_name from ecc_characters WHERE ecc_characters.characterID = substring_index(v1.field_value, ' - ', -1)),
@@ -82,7 +81,7 @@ $med_sleepers = <<<SQL
     left join joomla.jml_eb_field_values med_figu on (med_figu.registrant_id = r.id AND med_figu.field_id = 93)
     left join joomla.jml_eb_field_values food_loc on (food_loc.registrant_id = r.id and food_loc.field_id = 58)
     where med_room.field_value LIKE 'tweede gebouw%' AND r.event_id = $EVENTID
-    and $IS_NOT_CANCELLED;
+    and $notCancelled;
     SQL;
 $res_med_sleepers = $UPLINK->query($med_sleepers);
 $sleepers = array_merge($sleepers, buildSleeperRow($res_med_sleepers));

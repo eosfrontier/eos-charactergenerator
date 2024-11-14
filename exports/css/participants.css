@@ -1,4 +1,8 @@
 @media screen {
+  select#eventid {
+    font-size: 20px;
+  }
+
   table.main td:nth-last-child(-n + 2) {
     display: none
   }
@@ -129,8 +133,38 @@ a.deactivateButton {
   display: none;
 }
 
+#selecteventid {
+  font-size: 20px !important;
+}
+
 
 @media print {
+  @page {
+    size: auto;
+    /* auto is the initial value */
+    margin: 2mm 4mm 0mm 0mm;
+    /* this affects the margin in the printer settings */
+  }
+
+  table.main thead {
+    display: table-header-group;
+  }
+
+  tr:nth-child(even) {
+    background-color: #d4cdcd;
+    color: black;
+    text-decoration: none;
+  }
+
+  tr:nth-child(odd) {
+    color: black;
+    text-decoration: none;
+  }
+
+  #pageHeader_noPrint {
+    display: none;
+  }
+
   #event_chooser {
     display: none;
   }
@@ -175,13 +209,23 @@ a.deactivateButton {
   }
 
   .playername {
-    color: black;
+    color: black !important;
+    text-decoration: none;
+  }
+
+  select#eventid {
+    font-size: 20px;
+    /* for Firefox */
+    -moz-appearance: none;
+    /* for Safari, Chrome, Opera */
+    -webkit-appearance: none;
+    /* everything else */
+    appearance: none;
   }
 
   .inschrijf_datum {
     display: none;
   }
-
 
   * {
     box-sizing: border-box;
@@ -202,6 +246,14 @@ a.deactivateButton {
     width: 95%;
     margin-left: auto;
     margin-right: auto;
+    /* page-break-inside: avoid; */
+    border-spacing: 0;
+    border-width: 0
+  }
+
+  th {
+    color: white;
+    background-color: #000;
   }
 
   td,
@@ -214,5 +266,14 @@ a.deactivateButton {
 
   .single_record {
     page-break-after: always;
+  }
+
+  #pageFooter {
+    display: table-footer-group;
+  }
+
+  #pageFooter:after {
+    counter-increment: page;
+    content: counter(page);
   }
 }
