@@ -13,23 +13,33 @@ $row2 = mysqli_fetch_array($res2);
 
 #Get all participants
 $sql = "SELECT r.id as id, r.first_name as oc_fn, r.register_date, r.email as email, tussenvoegsel.field_value as oc_tv,
-  r.last_name as oc_ln, faction.character_name as ic_name, soort_inschrijving.field_value as type, faction.faction as faction, foto.field_value as foto
+  r.last_name as oc_ln, faction.character_name as ic_name, soort_inschrijving.field_value as type, faction.faction as faction, 
+  foto.field_value as foto, 
+  coalesce(SUBSTRING_INDEX(bastion.field_value, ' ', 1 ), SUBSTRING_INDEX(fob.field_value, ' ', 1 ), SUBSTRING_INDEX(substring_index(substring_index(medSlaap.field_value,',',-1), ' - ', 1), ' ', 1 )) as room
   from joomla.jml_eb_registrants r
   left join joomla.jml_eb_field_values charname on (charname.registrant_id = r.id and charname.field_id = 21 )
   left join joomla.ecc_characters faction ON (faction.characterID = substring_index(charname.field_value,' - ',-1))
   left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
   left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
   left join joomla.jml_eb_field_values foto on (foto.registrant_id = r.id and foto.field_id = 105)
+  left join joomla.jml_eb_field_values bastion on (bastion.registrant_id = r.id and bastion.field_id = 37) /* BastionSlaapkamer */
+  left join joomla.jml_eb_field_values fob on (fob.registrant_id = r.id and fob.field_id = 38) /*TweedeGebouwSlaapKamers*/
+  left join joomla.jml_eb_field_values medSlaap on (medSlaap.registrant_id = r.id and medSlaap.field_id = 71) /* Medical Sleepers */
   where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event and $notCancelled
   UNION
   select r.id as id, r.first_name as oc_fn, r.register_date, r.email as email, tussenvoegsel.field_value as oc_tv,
-  r.last_name as oc_ln, NULL as ic_name, soort_inschrijving.field_value as type, NULL as faction, foto.field_value as foto
+  r.last_name as oc_ln, NULL as ic_name, soort_inschrijving.field_value as type, NULL as faction, foto.field_value as foto,
+  coalesce(slSlaap.field_value, figuSlaap.field_value, fob.field_value, SUBSTRING_INDEX(trim(substring_index(substring_index(medSlaap.field_value,',',-1), ' - ', 1)),' ', 1 )) AS room
   from joomla.jml_eb_registrants r
   left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
   left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
   left join joomla.jml_eb_field_values foto on (foto.registrant_id = r.id and foto.field_id = 105)
-
-  WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $selected_event and $notCancelled ORDER BY $tableSort";
+  left join joomla.jml_eb_field_values slSlaap on (slSlaap.registrant_id = r.id and slSlaap.field_id = 73)
+  left join joomla.jml_eb_field_values figuSlaap on (figuSlaap.registrant_id = r.id and figuSlaap.field_id = 72)
+  left join joomla.jml_eb_field_values fob on (fob.registrant_id = r.id and fob.field_id = 38)
+  left join joomla.jml_eb_field_values medSlaap on (medSlaap.registrant_id = r.id and medSlaap.field_id = 71) /* Medical Sleepers */
+  WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $selected_event and $notCancelled 
+  ORDER BY $tableSort";
 $res = $UPLINK->query($sql);
 $row_count = mysqli_num_rows($res);
 
@@ -89,3 +99,5 @@ $sponsor = mysqli_fetch_array($res_sponsor);
               join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 102)
 				      WHERE  r.event_id = 26 AND $notCancelled;";
       $donations = mysqli_fetch_array($UPLINK->query($sql_donations));
+
+     

@@ -152,10 +152,10 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       <option value="Keuken Crew" <?php echo $email == 'Keuken Crew' ? 'selected' : ''; ?>>Keuken Crew</option>
     </select>
     <?php
-    $sql4 = "SELECT r.email as email from joomla.jml_eb_registrants r
-    left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
-    where soort_inschrijving.field_value LIKE '$email' AND r.event_id = $selected_event and $notCancelled";
-    $res4 = $UPLINK->query($sql4);
+     $sql4 = "SELECT r.email as email from joomla.jml_eb_registrants r
+     left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
+     where soort_inschrijving.field_value LIKE '$email' AND r.event_id = $selected_event and $notCancelled";
+     $res4 = $UPLINK->query($sql4);
     $emails = '';
     while ($row4 = mysqli_fetch_array($res4)) {
       $emails = $emails . $row4['email'] . ';';
@@ -173,10 +173,13 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       <option value="ic_name desc" <?php if ($tableSort === 'ic_name desc') echo 'selected' ?>>IC Naam (Aflopend)</option>
       <option value="type asc" <?php if ($tableSort === 'type asc') echo 'selected' ?>>Soort Inschrijf (Oplopend)</option>
       <option value="type desc" <?php if ($tableSort === 'type desc') echo 'selected' ?>>Soort Inschrijf (Aflopend)</option>
+      <option value="room asc" <?php if ($tableSort === 'room desc') echo 'selected' ?>>Room (Oplopend)</option>
+      <option value="room desc" <?php if ($tableSort === 'room asc') echo 'selected' ?>>Room (Aflopend)</option>
       <option value="register_date asc" <?php if ($tableSort === 'register_date asc') echo 'selected' ?>>Inschrijf Datum(Oplopend)</option>
       <option value="register_date desc" <?php if ($tableSort === 'register_date desc') echo 'selected' ?>>InschrijfDatum (Aflopend)</option>
       <option value="type desc, faction asc, oc_fn asc" <?php if ($tableSort === 'type desc, faction asc, oc_fn asc') echo 'selected' ?>>Factie(Oplopend)</option>
       <option value="type desc, faction desc, oc_fn asc" <?php if ($tableSort === 'type desc, faction desc, oc_fn asc') echo 'selected' ?>>Factie (Aflopend)</option>
+      
 
     </select>
   </div>
@@ -188,28 +191,33 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       <th width="15%">Soort Inschrijf</th>
       <th width="15%">Factie</th>
       <th class="inschrijf_datum" width="10%">Inschrijf Datum</th>
+      <th>Room</th>
       <th width="25%">Handtekening</th>
       <th width="10%">Foto Opt-Out</th>
     </thead>
   <?php
-  while ($row = mysqli_fetch_array($res)) {
-    echo "<tr>" . "<td>";
-    echo "<a class='playername' href='participant_detail.php?participant_id=" . $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
-    echo "</td>";
-    echo '<td>' . $row['ic_name'] . "</td>";
-    echo '<td>' . $row['type'] . "</td>";
-    echo '<td>' . ucwords($row['faction']) . "</td>";
-    echo '<td class="inschrijf_datum">' . $row['register_date'] . "</td>";
-    echo '<td height="40px">&nbsp;</td>';
-    if (strpos($row['foto'],'afmelden') != false) {
-    echo '<td height="40px">Yes</td>';
+
+  ///START MAIN TABLE
+
+    while ($row = mysqli_fetch_array($res)) {
+        echo "<tr>" . "<td>";
+        echo "<a class='playername' href='participant_detail.php?participant_id=" . $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
+        echo "</td>";
+        echo '<td>' . $row['ic_name'] . "</td>";
+        echo '<td>' . $row['type'] . "</td>";
+        echo '<td>' . ucwords($row['faction']) . "</td>";
+        echo '<td class="inschrijf_datum">' . $row['register_date'] . "</td>";
+        echo '<td>'.$row['room'].'</td>';
+        echo '<td height="40px">&nbsp;</td>';
+      if (strpos($row['foto'],'afmelden') != false) {
+        echo '<td height="40px">Yes</td>';
+      }
+      else {
+        echo '<td height="40px">&nbsp;</td>';
+      }
+        echo "</tr>";
     }
-    else {
-    echo '<td height="40px">&nbsp;</td>';
-    }
-    echo "</tr>";
-  }
-  echo "</table>";
+    echo "</table>";
   ?>
   </div>
 </body>

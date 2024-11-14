@@ -65,7 +65,6 @@ $med_sleepers = <<<SQL
     where med_room.field_value LIKE 'Bastion%' AND r.event_id = $EVENTID
     and $notCancelled
     UNION
-
     -- This TSQL Statement grabs data for medical sleepers in the tweede gebouw
     SELECT r.id, COALESCE(
     (SELECT character_name from ecc_characters WHERE ecc_characters.characterID = substring_index(v1.field_value, ' - ', -1)),
