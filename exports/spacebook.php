@@ -79,10 +79,11 @@ $notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payme
 
     $sql = "SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1) as characterID, c1.character_name, c1.faction, c1.rank
 				from jml_eb_registrants r
-				join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
-				join ecc_characters c1 on c1.characterID = SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1)
-				where (r.event_id = $EVENTID and $notCancelled) 
-				AND (c1.rank NOT LIKE '%Conclav%' AND c1.rank NOT LIKE '%Governor of%') ORDER by c1.faction, c1.character_name 	;";
+				left join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21)
+				left join ecc_characters c1 on c1.characterID = SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1)
+				join joomla.jml_eb_field_values soort on (soort.registrant_id = r.id and soort.field_id = 14) /* Soort inschrijving */
+				where soort.field_value = 'Speler' AND r.event_id = $EVENTID and $notCancelled 
+        AND (c1.rank IS NULL OR c1.rank = '' OR (c1.rank NOT LIKE 'Conclave%' AND c1.rank NOT LIKE 'Governor%'));";
     $res = $UPLINK->query($sql);
 
     if ($res) {
