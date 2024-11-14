@@ -8,6 +8,8 @@ $DB = 'my_database';
 
 // create the mysqli connection.
 $UPLINK = mysqli_connect($HOST, $USER, $PASS, $DB);
+$UPLINK->set_charset("utf8mb4");
+
 //Create the PDO Connection
 db::$conn = new PDO('mysql:host=' . $HOST . ';dbname=' . $DB . ';charset=utf8mb4', $USER, $PASS);
 
