@@ -86,6 +86,17 @@ include_once('current-players.php');
         display: none;
       }
 
+      @page {
+        size: auto;
+        /* auto is the initial value */
+        margin: 2mm 4mm 0mm 0mm;
+        /* this affects the margin in the printer settings */
+      }
+
+      table.main thead {
+        display: table-header-group;
+      }
+
       * {
         -webkit-print-color-adjust: exact;
       }
@@ -186,8 +197,8 @@ include_once('current-players.php');
   $row = mysqli_fetch_array($res);
 
   echo '<h2><strong>Deelnemers met dieetbeperkingen of allergenen:</strong>' . $row['restrictions'] . '</h2>';
-  echo "<table width='100%'>";
-  echo "<th>Name</th><th>Allergie</th><th>Dieet</th><th>Other Allergies</th>";
+  echo "<table class='main' width='100%'>";
+  echo "<thead><th>Name</th><th>Allergie</th><th>Dieet</th><th>Other Allergies</th></thead>";
 
   $stmt2 = db::$conn->prepare("SELECT concat(r.first_name,' ', COALESCE(tussenvoegsel.field_value,' '), ' ',r.last_name) as name, replace( replace(v2.field_value, ']',''), '[', '') as result,
   v3.field_value as other
