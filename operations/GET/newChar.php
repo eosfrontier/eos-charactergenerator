@@ -65,6 +65,12 @@ $factions = array('aquila','dugo','ekanesh','pendzal','sona');
 
     $printresult .= '<div id="fct_pendzal" class="formitem dialog factionblurb">'
       . '<h2 class="center-xs"><i class="far fa-lightbulb"></i>&nbsp;Pendzal</h2>'
+      . '<div class="alert">'
+      . '<span class="closebtn" onclick="this.parentElement.style.display=\'none\';">&times;</span>'
+      . '<h3>⚠️WARNING⚠️</h3>There is a currently a new-player stop on the Pendzal Faction. 
+        <br>If you would like to play a new character on an upcoming event, we recommend you choose a different faction.
+        <br><br>While you are welcome to create a Pendzal Character in the Character Generator, it will not be approved for play on an event until such a time as the new-player stop has been removed. As of this moment, there is no estimate on when that will happen. <br>If you have any questions, you may e-mail <a id="alert-link" href="mailto:spelleider@eosfrontier.space"  target="_blank">spelleider@eosfrontier.space</a>.'
+      . '</div>'
       . '<p>Uncountable clans break up the Pendzal planetary borders with their own territories but work together '
       . 'when they have to. Personal freedom of choice is an inviolable human right to these engineers at heart, and '
       . 'they fought their way out of the Aquila and Dugo in bitter separation wars to gain the recognition they deserved.</p>'
