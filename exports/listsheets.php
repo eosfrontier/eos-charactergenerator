@@ -1,5 +1,4 @@
 <?php
-$notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
 
 // BEGIN PLAYER COUNT QUERY
 $sql = "SELECT SUM(totalchars) as totalchars, faction, building FROM (
@@ -121,7 +120,7 @@ if ($res) {
 
         echo "<tr>"
             . "<td>#" . $row['characterID'] . "</td>"
-            . "<td>" . $row['character_name'] . "</td><td>" . $faction . "</td><td>" . $xSTATUS . "</td>"
+            . "<td>" . $row['character_name'] . "</td><td>" . $row['faction'] . "</td><td>" . $xSTATUS . "</td>"
             // ."<td><a href=\"".$APP['header']."/exports/printsheet.php?characterID=".$row['characterID']."\" target=\"_new\"><button>Sheets</button></a></td>"
             . "<td><button onclick=\"window.open('{$APP["header"]}/exports/printsheet.php?characterID={$row['characterID']}','sheets','width=1280,height=1000');\">View Sheet</button></td></tr>";
         unset($xSTATUS);
