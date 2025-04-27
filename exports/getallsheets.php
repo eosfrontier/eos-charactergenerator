@@ -118,7 +118,6 @@
       $skillArr = getCharacterSkills($row['characterID']);
       $expUsed = calcUsedExp(EMS_echo($skillArr), $faction);
       $expTotal = calcTotalExp($row['aantal_events']);
-      $augmentations = filterSkillAugs(getImplants($value['characterID']));
       //MySQL Query to Check for Bonus research token skill
       $sql3 = "SELECT charID FROM ecc_char_skills WHERE (skill_id = 31305 AND charID = " . $row['characterID'] . ");";
       $res3 = $UPLINK->query($sql3);
@@ -194,7 +193,8 @@
 
       echo "<div style=\"width: 30%; float: left;\">";
 
-      if ($augmentations != "") {
+      $augmentations = filterSkillAugs(getImplants($value['characterID'],'true'));
+      if ($augmentations != null ) {
         echo "<font size='4'><strong>Augmentations</strong></font></br>";
         echo "<table style=\"border: 0; width: 90%;\">";
         echo "<tr style=\"background-color: #CCC;\">"

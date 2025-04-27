@@ -100,32 +100,39 @@ function calcUsedExp($charSkillArr = array(), $faction = null)
   return $result;
 }
 
-function getImplants($charID)
+function getImplants($charID, $skillImplantsOnly = null)
 {
 
   global $jid, $UPLINK;
 
   $return = false;
+  if ($skillImplantsOnly == 'true') {
+    $skillCheck = "AND type <> 'flavour'";
+  }
+  else {
+    $skillCheck = null;
+  }
 
   $sql = "SELECT i.modifierID,i.charID,i.accountID,i.type,i.skillgroup_level,i.skillgroup_siteindex,i.status,i.description,s.name, s2.skill_id
     FROM ecc_char_implants i
     LEFT JOIN ecc_skills_groups s ON i.skillgroup_siteindex = s.siteindex
     LEFT join ecc_skills_allskills s2 on (s.primaryskill_id = s2.parent AND i.skillgroup_level = s2.level)
-    WHERE `accountID` = '" . (int)$jid . "'
-    AND `charID` = '" . (int)$charID . "' ";
+    WHERE accountID = " . (int)$jid . " $skillCheck AND charID = " . (int)$charID . ";";
 
   $res = $UPLINK->query($sql);
-
-
-  while ($row = mysqli_fetch_assoc($res)) {
-
-    // fill rows
-    foreach ($row as $key => $value) {
-      $return[$row['modifierID']][$key] = $value;
+  $row_count = mysqli_num_rows($res);
+  if ($row_count > 0)  {
+    while ($row = mysqli_fetch_assoc($res)) {
+      // fill rows
+      foreach ($row as $key => $value) {
+        $return[$row['modifierID']][$key] = $value;
+      }
     }
+    return $return;
   }
-
-  return $return;
+  else {
+    return null;
+  }
 }
 
 function getCharacterIDsforEvent($_EVENTID)
