@@ -17,7 +17,7 @@ $sqlpart1 = "SELECT c.character_name, r.email as email, c.faction ,c.ICC_number,
                 join ecc_characters c ON (c.characterID = SUBSTRING_INDEX(v1.field_value,' - ',-1))
                 join jml_users u ON (c.accountID = u.id) 
                 WHERE 
-                newplayer.field_value = 'Yes' AND
+                c.card_id IS NULL AND
                  r.event_id = $EVENTID AND v2.field_value = 'Speler' AND $notCancelled";
                 if (isset($NPCCards))
                 $sqlpart2 = " UNION SELECT character_name, NULL as email, faction, ICC_number, card_id, characterID, aantal_events, bastion_clearance from ecc_characters WHERE (characterID in ($NPCCards) AND card_id is NULL)";
