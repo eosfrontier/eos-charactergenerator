@@ -84,18 +84,23 @@ if (isset($_POST['action'])) {
     header("Content-Disposition: attachment; filename=\"$fileName\""); 
     header("Content-Type:  text/csv"); 
  
-    $flag = false; 
-    foreach($data as $row) { 
-    if(!$flag) { 
+    $flag = false;
+    echo chr(0xEF) . chr(0xBB) . chr(0xBF);
+    $file = fopen('php://output', 'w+');
+    $bom = chr(0xEF) . chr(0xBB) . chr(0xBF);
+    fputs($file, $bom);
+    foreach ($data as $row) {
+      if (!$flag) {
         // display column names as first row 
-        echo implode(",", array_keys($row)) . "\n"; 
-        $flag = true; 
-    } 
-    // filter data 
-    array_walk($row, 'filterData'); 
-    echo implode(",", array_values($row)) . "\n"; 
-  } 
-exit;
+        fputs($file, implode(",", array_keys($row)) . "\n");
+        $flag = true;
+      }
+      // filter data 
+      array_walk($row, 'filterData');
+      fputs($file, implode(",", array_values($row)) . "\n");
+    }
+    fclose($file);
+    exit;
 }
 
 }

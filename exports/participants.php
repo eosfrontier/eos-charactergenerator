@@ -222,11 +222,12 @@ if (isset($_POST['action'])) {
     }
     echo "<input type=\"text\" class=\"hidden-text\" value=\"$emails\" id=\"myInput\">";
     ?>
-    <button class="button" onclick="copyTo()">Copy Participant E-mails</button><br><br>
+    <button class="button" onclick="copyTo()">Copy Participant E-mails</button>&nbsp;
+    <form method="post">
+      <input type="submit" name="action" class="button" value="Export to CSV" />
+    </form><br><br>
   </div>
-  <form method="post">
-    <input type="submit" name="action" class="button" value="Export to CSV" />
-  </form>
+
   <div id="SortBy">Sorteer op:
     <select id="sort_table" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;" onchange="location.href = '/eoschargen/exports/participants.php?<?php echo 'selected_event=' . $selected_event; ?>&<?php if (isset($_GET["email"])) {
            echo 'email=' . $_GET["email"] . '&';
