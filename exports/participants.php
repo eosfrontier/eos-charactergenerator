@@ -22,6 +22,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
   header('Status: 303 Moved Temporarily', false, 303);
   header('Location: ../');
 }
+$tableSort = !empty($_GET['sort']) ? $_GET['sort'] : 'register_date desc';
 
 if (isset($_POST['action'])) {
         if ($_POST['action'] == 'Export to CSV') {
@@ -93,7 +94,6 @@ if (isset($_POST['action'])) {
 
 <body>
   <?php
-  $tableSort = !empty($_GET['sort']) ? $_GET['sort'] : 'register_date desc';
   require './participants-sql.php';
 
   $event_title = $row2['title'];
