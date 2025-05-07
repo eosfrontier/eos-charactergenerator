@@ -13,6 +13,7 @@ include_once('./current-players.php');
 
 ini_set('default_charset', 'UTF-8');
 header('Content-Type: text/html; charset=UTF-8');
+$UPLINK->set_charset("utf8mb4");
 
 if (isset($_GET['selected_event'])) {
   $selected_event = $_GET['selected_event'];
@@ -44,7 +45,7 @@ if (isset($_POST['action'])) {
       }
       array_push($data, array(
         "OC Name" => $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'],
-        "IC Name" => $row['character_name'],
+        "IC Name" => $row['ic_name'],
         "Factie" => $row['faction'],
         "Soort inschrijf" => $row['type'],
         "Building" => $building,

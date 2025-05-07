@@ -1,6 +1,5 @@
 <?php
 
-$UPLINK->set_charset("utf8mb4");
 
 #Get List of all events
 $sql_all_events = "SELECT e.id, e.title FROM jml_eb_events e
