@@ -248,9 +248,9 @@ if (isset($_POST['action'])) {
         <option value="type desc" <?php if ($tableSort === 'type desc')
         echo 'selected' ?>>Soort Inschrijf (Aflopend)
         </option>
-        <option value="room asc" <?php if ($tableSort === 'room desc')
+        <option value="room asc" <?php if ($tableSort === 'room + 0 desc')
         echo 'selected' ?>>Room (Oplopend)</option>
-        <option value="room desc" <?php if ($tableSort === 'room asc')
+        <option value="room desc" <?php if ($tableSort === 'room + 0 asc')
         echo 'selected' ?>>Room (Aflopend)</option>
         <option value="register_date asc" <?php if ($tableSort === 'register_date asc')
         echo 'selected' ?>>Inschrijf
