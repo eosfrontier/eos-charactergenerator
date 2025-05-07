@@ -43,8 +43,8 @@ if (isset($_POST['action'])) {
         $building = "Zonnedauw";
       }
       array_push($data, array(
-        "OC Name" => $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'],
-        "IC Name" => $row['ic_name'],
+        "OC Name" => utf8_decode($row['oc_fn']) . " " . utf8_decode($row['oc_tv']) . " " . utf8_decode($row['oc_ln']),
+        "IC Name" => utf8_decode($row['ic_name']),
         "Factie" => ucfirst($row['faction']),
         "Soort inschrijf" => $row['type'],
         "Building" => $building,
