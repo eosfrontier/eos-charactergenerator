@@ -11,8 +11,6 @@ include_once("../_includes/functions.playercap.php");
 include_once("../_includes/joomla.php");
 include_once('./current-players.php');
 
-ini_set('default_charset', 'UTF-8');
-header('Content-Type: text/html; charset=UTF-8');
 $UPLINK->set_charset("utf8mb4");
 
 if (isset($_GET['selected_event'])) {
@@ -66,7 +64,7 @@ if (isset($_POST['action'])) {
 
     // Headers for download 
     header("Content-Disposition: attachment; filename=\"$fileName\"");
-    header("Content-Type:  text/csv");
+    header("Content-Type:  text/csv; charset=UTF-8");
 
     $flag = false;
     foreach ($data as $row) {
