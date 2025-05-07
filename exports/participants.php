@@ -111,6 +111,12 @@ if (isset($_POST['action'])) {
   require './participants-sql.php';
 
   $event_title = $row2['title'];
+  ?>
+  &nbsp;
+  <form method="post">
+    <input type="submit" name="action" class="button" value="Export to CSV" />
+  </form>
+  <?php
   echo "<div id='printButton'>";
   echo "<button class=\"button\" id=\"printPageButton\" style=\"width: 100px;\" onClick=\"window.print();\">Print</button> <font color='red'>IMPORTANT: Before clicking print, change sorting to OC Naam (oplopend)!</font>
   </div>";
@@ -222,10 +228,7 @@ if (isset($_POST['action'])) {
     }
     echo "<input type=\"text\" class=\"hidden-text\" value=\"$emails\" id=\"myInput\">";
     ?>
-    <button class="button" onclick="copyTo()">Copy Participant E-mails</button>&nbsp;
-    <form method="post">
-      <input type="submit" name="action" class="button" value="Export to CSV" />
-    </form><br><br>
+    <button class="button" onclick="copyTo()">Copy Participant E-mails</button><br><br>
   </div>
 
   <div id="SortBy">Sorteer op:
