@@ -163,6 +163,9 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
     ?>
     <button class="button" onclick="copyTo()">Copy Participant E-mails</button><br><br>
   </div>
+  <form method="post">
+    <input type="submit" name="action" class="button" value="Export to CSV" />
+  </form>
   <div id="SortBy">Sorteer op:
     <select id="sort_table" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;" onchange="location.href = '/eoschargen/exports/participants.php?<?php echo 'selected_event=' . $selected_event; ?>&<?php if (isset($_GET["email"])) {
            echo 'email=' . $_GET["email"] . '&';
@@ -197,9 +200,6 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
 
 
       </select>
-      <form method="post">
-        <input type="submit" name="action" class="button" value="Export to CSV" />
-      </form>
     </div>
 
     <table class="main">
@@ -216,49 +216,51 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       <?php
 
       ///START MAIN TABLE
-      if ($_POST['action'] == 'Export to CSV') {
-        $data = array();
-        while ($row = mysqli_fetch_array($res)) {
-          if (strpos($row['foto'], 'afmelden') != false) {
-            $photoconsent = "Yes";
-          } else {
-            $photoconsent = "";
+      if (isset($_POST['action'])) {
+        if ($_POST['action'] == 'Export to CSV') {
+          $data = array();
+          while ($row = mysqli_fetch_array($res)) {
+            if (strpos($row['foto'], 'afmelden') != false) {
+              $photoconsent = "Yes";
+            } else {
+              $photoconsent = "";
+            }
+            array_push($data, array(
+              "OC Name" => $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'],
+              "IC Name" => $row['character_name'],
+              "Factie" => $row['faction'],
+              "Soort inschrijf" => $row['type'],
+              "Room" => $row['room'],
+              "Foto Opt-Out" => $photoconsent
+            ));
           }
-          array_push($data, array(
-            "OC Name" => $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'],
-            "IC Name" => $row['character_name'],
-            "Factie" => $row['faction'],
-            "Soort inschrijf" => $row['type'],
-            "Room" => $row['room'],
-            "Foto Opt-Out" => $photoconsent
-          ));
-        }
-        function filterData(&$str)
-        {
-          $str = preg_replace("/\t/", "\\t", $str);
-          $str = preg_replace("/\r?\n/", "\\n", $str);
-          if (strstr($str, '"'))
-            $str = '"' . str_replace('"', '""', $str) . '"';
-        }
-        // Excel file name for download 
-        $fileName = "registrant-export-" . date('Y-m-d H.i.s', time()) . ".csv";
-
-        // Headers for download 
-        header("Content-Disposition: attachment; filename=\"$fileName\"");
-        header("Content-Type:  text/csv");
-
-        $flag = false;
-        foreach ($data as $row) {
-          if (!$flag) {
-            // display column names as first row 
-            echo implode(",", array_keys($row)) . "\n";
-            $flag = true;
+          function filterData(&$str)
+          {
+            $str = preg_replace("/\t/", "\\t", $str);
+            $str = preg_replace("/\r?\n/", "\\n", $str);
+            if (strstr($str, '"'))
+              $str = '"' . str_replace('"', '""', $str) . '"';
           }
-          // filter data 
-          array_walk($row, 'filterData');
-          echo implode(",", array_values($row)) . "\n";
+          // Excel file name for download 
+          $fileName = "registrant-export-" . date('Y-m-d H.i.s', time()) . ".csv";
+
+          // Headers for download 
+          header("Content-Disposition: attachment; filename=\"$fileName\"");
+          header("Content-Type:  text/csv");
+
+          $flag = false;
+          foreach ($data as $row) {
+            if (!$flag) {
+              // display column names as first row 
+              echo implode(",", array_keys($row)) . "\n";
+              $flag = true;
+            }
+            // filter data 
+            array_walk($row, 'filterData');
+            echo implode(",", array_values($row)) . "\n";
+          }
+          exit;
         }
-        exit;
       }
       while ($row = mysqli_fetch_array($res)) {
         echo "<tr>" . "<td>";
