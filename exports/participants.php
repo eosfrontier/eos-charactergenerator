@@ -23,6 +23,55 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
   header('Location: ../');
 }
 
+require './participants-sql.php';
+
+
+if (isset($_POST['action'])) {
+  if ($_POST['action'] == 'Export to CSV') {
+    $data = array();
+    while ($row = mysqli_fetch_array($res)) {
+      if (strpos($row['foto'], 'afmelden') != false) {
+        $photoconsent = "Yes";
+      } else {
+        $photoconsent = "";
+      }
+      array_push($data, array(
+        "OC Name" => $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'],
+        "IC Name" => $row['character_name'],
+        "Factie" => $row['faction'],
+        "Soort inschrijf" => $row['type'],
+        "Room" => $row['room'],
+        "Foto Opt-Out" => $photoconsent
+      ));
+    }
+    function filterData(&$str)
+    {
+      $str = preg_replace("/\t/", "\\t", $str);
+      $str = preg_replace("/\r?\n/", "\\n", $str);
+      if (strstr($str, '"'))
+        $str = '"' . str_replace('"', '""', $str) . '"';
+    }
+    // Excel file name for download 
+    $fileName = "registrant-export-" . date('Y-m-d H.i.s', time()) . ".csv";
+
+    // Headers for download 
+    header("Content-Disposition: attachment; filename=\"$fileName\"");
+    header("Content-Type:  text/csv");
+
+    $flag = false;
+    foreach ($data as $row) {
+      if (!$flag) {
+        // display column names as first row 
+        echo implode(",", array_keys($row)) . "\n";
+        $flag = true;
+      }
+      // filter data 
+      array_walk($row, 'filterData');
+      echo implode(",", array_values($row)) . "\n";
+    }
+    exit;
+  }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -47,7 +96,6 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
 <body>
   <?php
   $tableSort = !empty($_GET['sort']) ? $_GET['sort'] : 'register_date desc';
-  require './participants-sql.php';
 
   $event_title = $row2['title'];
   echo "<div id='printButton'>";
@@ -216,52 +264,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       <?php
 
       ///START MAIN TABLE
-      if (isset($_POST['action'])) {
-        if ($_POST['action'] == 'Export to CSV') {
-          $data = array();
-          while ($row = mysqli_fetch_array($res)) {
-            if (strpos($row['foto'], 'afmelden') != false) {
-              $photoconsent = "Yes";
-            } else {
-              $photoconsent = "";
-            }
-            array_push($data, array(
-              "OC Name" => $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'],
-              "IC Name" => $row['character_name'],
-              "Factie" => $row['faction'],
-              "Soort inschrijf" => $row['type'],
-              "Room" => $row['room'],
-              "Foto Opt-Out" => $photoconsent
-            ));
-          }
-          function filterData(&$str)
-          {
-            $str = preg_replace("/\t/", "\\t", $str);
-            $str = preg_replace("/\r?\n/", "\\n", $str);
-            if (strstr($str, '"'))
-              $str = '"' . str_replace('"', '""', $str) . '"';
-          }
-          // Excel file name for download 
-          $fileName = "registrant-export-" . date('Y-m-d H.i.s', time()) . ".csv";
-
-          // Headers for download 
-          header("Content-Disposition: attachment; filename=\"$fileName\"");
-          header("Content-Type:  text/csv");
-
-          $flag = false;
-          foreach ($data as $row) {
-            if (!$flag) {
-              // display column names as first row 
-              echo implode(",", array_keys($row)) . "\n";
-              $flag = true;
-            }
-            // filter data 
-            array_walk($row, 'filterData');
-            echo implode(",", array_values($row)) . "\n";
-          }
-          exit;
-        }
-      }
+      
       while ($row = mysqli_fetch_array($res)) {
         echo "<tr>" . "<td>";
         echo "<a class='playername' href='participant_detail.php?participant_id=" . $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
