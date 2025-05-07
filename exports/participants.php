@@ -67,20 +67,19 @@ if (isset($_POST['action'])) {
     header("Content-Type:  text/csv; charset=-8");
 
     $flag = false;
-    
-    echo chr(0xEF) . chr(0xBB) . chr(0xBF);
-    $file = fopen($filename, 'w+');
+
+    $file = fopen('php://output', 'w+');
     $bom = chr(0xEF) . chr(0xBB) . chr(0xBF);
     fputs($file, $bom);
     foreach ($data as $row) {
       if (!$flag) {
         // display column names as first row 
-        fputs($file,implode(",", array_keys($row)) . "\n");
+        fputs($file, implode(",", array_keys($row)) . "\n");
         $flag = true;
       }
       // filter data 
       array_walk($row, 'filterData');
-      fputs($file,implode(",", array_values($row)) . "\n");
+      fputs($file, implode(",", array_values($row)) . "\n");
     }
     fclose($file);
     exit;
