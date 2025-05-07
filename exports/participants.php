@@ -30,6 +30,7 @@ $tableSort = !empty($_GET['sort']) ? $_GET['sort'] : 'register_date desc';
 
 if (isset($_POST['action'])) {
   if ($_POST['action'] == 'Export to CSV') {
+    $tableSort = 'room asc, oc_fn asc';
     require './participants-sql.php';
     $data = array();
     while ($row = mysqli_fetch_array($res)) {
@@ -46,7 +47,7 @@ if (isset($_POST['action'])) {
       array_push($data, array(
         "OC Name" => $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'],
         "IC Name" => $row['ic_name'],
-        "Factie" => $row['faction'],
+        "Factie" => ucfirst($row['faction']),
         "Soort inschrijf" => $row['type'],
         "Building" => $building,
         "Room" => $row['room'],
