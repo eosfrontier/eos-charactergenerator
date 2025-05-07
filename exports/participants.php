@@ -43,8 +43,8 @@ if (isset($_POST['action'])) {
         $building = "Zonnedauw";
       }
       array_push($data, array(
-        "OC Name" => utf8_decode($row['oc_fn']) . " " . utf8_decode($row['oc_tv']) . " " . utf8_decode($row['oc_ln']),
-        "IC Name" => utf8_decode($row['ic_name']),
+        "OC Name" => $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'],
+        "IC Name" => $row['ic_name'],
         "Factie" => ucfirst($row['faction']),
         "Soort inschrijf" => $row['type'],
         "Building" => $building,
@@ -77,6 +77,10 @@ if (isset($_POST['action'])) {
       array_walk($row, 'filterData');
       echo implode(",", array_values($row)) . "\n";
     }
+    echo chr(0xEF) . chr(0xBB) . chr(0xBF);
+    $file = fopen('php://output', 'w');
+    fputs($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+    fclose($file);
     exit;
   }
 }
