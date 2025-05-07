@@ -25,6 +25,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
 
 if (isset($_POST['action'])) {
         if ($_POST['action'] == 'Export to CSV') {
+          require './participants-sql.php';
           $data = array();
           while ($row = mysqli_fetch_array($res)) {
             if (strpos($row['foto'], 'afmelden') != false) {
