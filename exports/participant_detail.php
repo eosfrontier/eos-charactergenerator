@@ -5,10 +5,10 @@ $APP = array();
 
 $APP["loginpage"] = "/component/users/?view=login";
 
-include_once ('../db.php');
-include_once ("../_includes/functions.global.php");
-include_once ("../_includes/joomla.php");
-include_once ('./current-players.php');
+include_once('../db.php');
+include_once("../_includes/functions.global.php");
+include_once("../_includes/joomla.php");
+include_once('./current-players.php');
 
 
 
@@ -237,19 +237,21 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
     </tr>
     <tr>
       <td width="20%"><strong>Telefoonnummer:</strong> </td>
-      <td><?php echo $row['phone']; ?></td>
+      <td><?php echo "<a href='tel:" . $row['phone'] . ">" . $row['phone'] . "</a>"; ?></td>
     </tr>
     <tr>
       <td width="20%"><strong>adres:</strong> </td>
-      <td><?php 
-        if (!in_array("32", $jgroups, true)) { echo "<font color='red'>You must be bestuur to retrieve this info.<br> If you need this info, please ask a member of the board to access this record for you.</font>";}
-        else {
-        echo $row['address'] . "<br>"; 
-        if ($row['address2'] != ''){
-          echo $row ['address2'] . "<br>";
+      <td><?php
+      if (!in_array("32", $jgroups, true)) {
+        echo "<font color='red'>You must be bestuur to retrieve this info.<br> If you need this info, please ask a member of the board to access this record for you.</font>";
+      } else {
+        echo $row['address'] . "<br>";
+        if ($row['address2'] != '') {
+          echo $row['address2'] . "<br>";
         }
         echo $row['zip'] . " " . $row['city'] . "<br>";
-        echo $row['country'];}
+        echo $row['country'];
+      }
       ?></td>
     </tr>
   </table>
@@ -279,7 +281,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
     </tr>
     <tr>
       <td width="20%"><strong><strong>Noodgevalen Telefoonnummer:</strong> </td>
-      <td><?php echo $row['noodgevallen_telefoonnummer']; ?></td>
+      <td><?php echo "<a href='tel:" . $row['noodgevallen_telefoonnummer'] . ">" . $row['noodgevallen_telefoonnummer'] . "</a>"; ?></td>
     </tr>
     <tr>
       <td width="20%"><strong>Medische aandoeningen indien relevant:</strong> </td>

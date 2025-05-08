@@ -1,5 +1,5 @@
 <?php
-$notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+
 function arrayToTable($array)
 {
     echo '<table border="2">';

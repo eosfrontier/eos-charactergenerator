@@ -1,4 +1,6 @@
 <?php
+
+
 #Get List of all events
 $sql_all_events = "SELECT e.id, e.title FROM jml_eb_events e
 LEFT JOIN joomla.jml_eb_event_categories cats ON (cats.event_id = e.id)
@@ -81,23 +83,22 @@ $res_sponsor = $UPLINK->query($sql_sponsor);
 $sponsor = mysqli_fetch_array($res_sponsor);
 
 ##Tally up the sponsor tickets purchased
-      $total_sponsor_tickets_purchased = "SELECT SUM(total_amount) from jml_eb_registrants r
+$total_sponsor_tickets_purchased = "SELECT SUM(total_amount) from jml_eb_registrants r
           WHERE r.event_id = 24 AND $notCancelled";
-      ###Sponsor tickets on F16 only cost €15, and were only good for €15 discounts, so we deduct 15 times the number of tickets used
-      $fifteen_sponsor_tickets_used= "SELECT COUNT(r.id) * 15.00 as count from jml_eb_registrants r
+###Sponsor tickets on F16 only cost €15, and were only good for €15 discounts, so we deduct 15 times the number of tickets used
+$fifteen_sponsor_tickets_used = "SELECT COUNT(r.id) * 15.00 as count from jml_eb_registrants r
           join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 103)
           WHERE v3.field_value = 'Yes' AND r.event_id = 23 AND $notCancelled";
-      ###Sponsor tickets on F17 and onward were worth €20, so we deduct €20 times the number of tickets used
-      $twenty_sponsor_tickets_used="SELECT COUNT(r.id) * 20.00 as count from jml_eb_registrants r
+###Sponsor tickets on F17 and onward were worth €20, so we deduct €20 times the number of tickets used
+$twenty_sponsor_tickets_used = "SELECT COUNT(r.id) * 20.00 as count from jml_eb_registrants r
           join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 103)
           WHERE v3.field_value = 'Yes' AND r.event_id != 23 AND $notCancelled";
-      ###Now we deduct the number of used tickets determined using the last two queries from the total amount spent
-      $sql_sponsor_tickets_remain = "SELECT (($total_sponsor_tickets_purchased) - ($fifteen_sponsor_tickets_used) - ($twenty_sponsor_tickets_used))/20 as tickets_remaining";
-      $res_sponsor_tickets_remain = $UPLINK->query($sql_sponsor_tickets_remain);
-      $remaining_tickets = mysqli_fetch_array($res_sponsor_tickets_remain);
-      $sql_donations = "SELECT sum(v3.field_value) AS total_donations from jml_eb_registrants r
+###Now we deduct the number of used tickets determined using the last two queries from the total amount spent
+$sql_sponsor_tickets_remain = "SELECT (($total_sponsor_tickets_purchased) - ($fifteen_sponsor_tickets_used) - ($twenty_sponsor_tickets_used))/20 as tickets_remaining";
+$res_sponsor_tickets_remain = $UPLINK->query($sql_sponsor_tickets_remain);
+$remaining_tickets = mysqli_fetch_array($res_sponsor_tickets_remain);
+$sql_donations = "SELECT sum(v3.field_value) AS total_donations from jml_eb_registrants r
               join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 102)
 				      WHERE  r.event_id = 26 AND $notCancelled;";
-      $donations = mysqli_fetch_array($UPLINK->query($sql_donations));
+$donations = mysqli_fetch_array($UPLINK->query($sql_donations));
 
-     

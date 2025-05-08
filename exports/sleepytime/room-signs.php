@@ -1,6 +1,7 @@
 <?php
         header("Content-Type: text/html; charset=ISO-8859-1");
         include_once ($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
+        include("../../_includes/functions.global.php");
         require './buildtable.php';
         ?>
 <!doctype html>
@@ -15,7 +16,7 @@
 
 <body>
     <div>
-        
+
         <?php
         $buildings = GetBuildings($sleepers);
         foreach ($buildings as $building){

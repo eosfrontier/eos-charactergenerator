@@ -350,4 +350,13 @@ foreach ($romans as $key => $value) {
 return $result;
 }
 
-$notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))";
+$notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline') OR (r.published = 1 AND r.payment_method = ''))";
+
+
+function playerStopAlert($faction){
+  $alert = '<div class="alert">'
+      . '<span class="closebtn" onclick="this.parentElement.style.display=\'none\';">&times;</span>'
+      . "<h3>⚠️WARNING⚠️</h3>There is a currently a new-player stop on the $faction Faction. <br>If you would like to play a new character on an upcoming event, we recommend you choose a different faction. <br><br>While you are welcome to create a Pendzal Character in the Character Generator, it will not be approved for play on an event until such a time as the new-player stop has been removed. As of this moment, there is no estimate on when that will happen. <br>If you have any questions, you may e-mail <a id='alert-link' href='mailto:spelleider@eosfrontier.space'  target='_blank'>spelleider@eosfrontier.space</a>."
+      . '</div>';
+      return $alert;
+}

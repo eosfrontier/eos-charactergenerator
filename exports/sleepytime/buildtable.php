@@ -18,7 +18,7 @@ $spelers = <<<SQL
     left join joomla.jml_eb_field_values v4 on (v4.registrant_id = r.id and v4.field_id = 38) /*TweedeGebouwSlaapKamers*/
     left join joomla.jml_eb_field_values food_loc on (food_loc.registrant_id = r.id and food_loc.field_id = 58)
     where v5.field_value = 'Speler' AND r.event_id = $EVENTID
-    AND $notCancelled AND (med.field_value = 'No' OR med.field_value IS NULL);
+    AND $notCancelled AND (med.field_value LIKE 'No%' OR med.field_value IS NULL);
     SQL;
 $res_spelers = $UPLINK->query($spelers);
 $sleepers = array_merge($sleepers, buildSleeperRow($res_spelers));

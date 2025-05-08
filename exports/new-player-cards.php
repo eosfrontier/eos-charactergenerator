@@ -17,7 +17,7 @@ $sqlpart1 = "SELECT c.character_name, r.email as email, c.faction ,c.ICC_number,
                 join ecc_characters c ON (c.characterID = SUBSTRING_INDEX(v1.field_value,' - ',-1))
                 join jml_users u ON (c.accountID = u.id) 
                 WHERE 
-                newplayer.field_value = 'Yes' AND
+                c.card_id IS NULL AND
                  r.event_id = $EVENTID AND v2.field_value = 'Speler' AND $notCancelled";
                 if (isset($NPCCards))
                 $sqlpart2 = " UNION SELECT character_name, NULL as email, faction, ICC_number, card_id, characterID, aantal_events, bastion_clearance from ecc_characters WHERE (characterID in ($NPCCards) AND card_id is NULL)";
@@ -84,18 +84,23 @@ if (isset($_POST['action'])) {
     header("Content-Disposition: attachment; filename=\"$fileName\""); 
     header("Content-Type:  text/csv"); 
  
-    $flag = false; 
-    foreach($data as $row) { 
-    if(!$flag) { 
+    $flag = false;
+    echo chr(0xEF) . chr(0xBB) . chr(0xBF);
+    $file = fopen('php://output', 'w+');
+    $bom = chr(0xEF) . chr(0xBB) . chr(0xBF);
+    fputs($file, $bom);
+    foreach ($data as $row) {
+      if (!$flag) {
         // display column names as first row 
-        echo implode(",", array_keys($row)) . "\n"; 
-        $flag = true; 
-    } 
-    // filter data 
-    array_walk($row, 'filterData'); 
-    echo implode(",", array_values($row)) . "\n"; 
-  } 
-exit;
+        fputs($file, implode(",", array_keys($row)) . "\n");
+        $flag = true;
+      }
+      // filter data 
+      array_walk($row, 'filterData');
+      fputs($file, implode(",", array_values($row)) . "\n");
+    }
+    fclose($file);
+    exit;
 }
 
 }
