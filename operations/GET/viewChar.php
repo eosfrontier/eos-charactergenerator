@@ -55,7 +55,6 @@ if (is_array($sheetArr['characters'])) {
                     . '<button type="button" class="button bar blue" name="button"><i class="fas fa-microchip"></i>&nbsp;Implants/Symbionts</button>'
                     . '</a>'
                     . '</div></div>'; //end first row
-
                 // start second row
                 $printresult .= '<div class="row">'
                 .'<div class="box33">'

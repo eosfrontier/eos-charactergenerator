@@ -240,6 +240,7 @@ echo '<h1>Diet/Allergy report for ' . $row['title'] . ' - ' . $building . ' <img
       left join joomla.jml_eb_field_values eetlocatie on (eetlocatie.registrant_id = r.id and eetlocatie.field_id = 58)
       left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
       WHERE r.event_id = $EVENTID AND ifnull(eetlocatie.field_value,'tweede gebouw') != 'Bastion' AND soort_inschrijving.field_value != 'Speler' AND $notCancelled ORDER BY diet desc;";
+
     $res = $UPLINK->query($sql);
     while ($row = mysqli_fetch_array($res)) {
       echo "<tr><td>" . $row['name'] . "</td>";
