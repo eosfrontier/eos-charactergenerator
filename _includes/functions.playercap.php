@@ -26,6 +26,7 @@ function player_cap_count_from() {
 }
 
 function get_active_factions() {
+  $notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline') OR (r.published = 1 AND r.payment_method = ''))";
   global $UPLINK;
   $events = get_player_cap_events();
   $sql = "SELECT faction, COUNT(faction) as count FROM ecc_characters 
@@ -33,7 +34,7 @@ function get_active_factions() {
   SELECT DISTINCT substring_index(jml_eb_field_values.field_value,' - ',-1) 
   FROM jml_eb_registrants r
   JOIN jml_eb_field_values ON (r.id = jml_eb_field_values.registrant_id AND jml_eb_field_values.field_id='21')
-  WHERE r.published = 1 AND r.event_id IN ($events)
+  WHERE $notCancelled AND r.event_id IN ($events)
   )
   GROUP BY faction;";
   $res = $UPLINK->query($sql);
@@ -41,6 +42,7 @@ function get_active_factions() {
 }
 
 function get_active_players($faction) {
+  $notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline') OR (r.published = 1 AND r.payment_method = ''))";
   global $UPLINK;
   $events = get_player_cap_events();
   $sql = "SELECT characterID, character_name, faction FROM ecc_characters 
@@ -48,7 +50,7 @@ function get_active_players($faction) {
   SELECT DISTINCT substring_index(jml_eb_field_values.field_value,' - ',-1) 
   FROM jml_eb_registrants r
   JOIN jml_eb_field_values ON (r.id = jml_eb_field_values.registrant_id AND jml_eb_field_values.field_id='21')
-  WHERE r.published = 1 AND r.event_id IN ($events))
+  WHERE $notCancelled AND r.event_id IN ($events))
   ORDER BY character_name;";
   $res = $UPLINK->query($sql);
   return $res;
@@ -63,12 +65,13 @@ function get_active_player($id) {
 }
 
 function get_latest_event_player($id) {
-  global $UPLINK;
+  $notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline') OR (r.published = 1 AND r.payment_method = ''))";
+    global $UPLINK;
   $events = get_player_cap_events();
   $sql = "SELECT MAX(event_id) AS last_event_id
   FROM jml_eb_registrants r
   JOIN jml_eb_field_values ON (r.id = jml_eb_field_values.registrant_id AND jml_eb_field_values.field_id='21')
-  WHERE r.published = 1 AND r.event_id IN ($events) AND substring_index(jml_eb_field_values.field_value,' - ',-1) = $id";
+  WHERE $notCancelled AND r.event_id IN ($events) AND substring_index(jml_eb_field_values.field_value,' - ',-1) = $id";
   $res = $UPLINK->query($sql);
   $row = mysqli_fetch_assoc($res);
   $last_event = $row['last_event_id'];
