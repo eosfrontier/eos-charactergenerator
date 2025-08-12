@@ -198,9 +198,9 @@ include_once('current-players.php');
 
   echo '<h2><strong>Deelnemers met dieetbeperkingen of allergenen:</strong>' . $row['restrictions'] . '</h2>';
   echo "<table class='main' width='100%'>";
-  echo "<thead><th>Name</th><th>Allergie</th><th>Dieet</th><th>Other Allergies</th></thead>";
+  echo "<thead><th>Name</th><th>E-Mail</th> </th><th>Allergie</th><th>Dieet</th><th>Other Allergies</th></thead>";
 
-  $stmt2 = db::$conn->prepare("SELECT concat(r.first_name,' ', COALESCE(tussenvoegsel.field_value,' '), ' ',r.last_name) as name, replace( replace(v2.field_value, ']',''), '[', '') as result,
+  $stmt2 = db::$conn->prepare("SELECT concat(r.first_name,' ', COALESCE(tussenvoegsel.field_value,' '), ' ',r.last_name) as name, email, replace( replace(v2.field_value, ']',''), '[', '') as result,
   v3.field_value as other
   from joomla.jml_eb_registrants r
   join joomla.jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 56)
@@ -222,6 +222,7 @@ include_once('current-players.php');
   
   foreach ($results2 as $row) {
     echo "<tr><td>" . $row['name'] . "</td>";
+    echo "<td>". $row['email']."</td>";
     //Store the item in an array for
     $item = str_replace('"', '', $row['result']);
     $item = str_replace('\\/', '/', $item);
