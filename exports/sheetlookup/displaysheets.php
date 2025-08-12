@@ -3,10 +3,16 @@
 require_once $_SERVER["DOCUMENT_ROOT"] . "/eoschargen/_includes/config.php";
 require_once $APP["root"] . "/_includes/functions.global.php";
 require_once $APP["root"] . '/exports/current-players.php';
+require_once $APP["root"] . '/_includes/joomla.php';
 
 (string) $_FACTION = (isset($_GET['faction']) && $_GET['faction'] != "" ? $_GET['faction'] : '%');
 (string) $_BUILDING = (isset($_GET['building']) && $_GET['building'] != "" ? $_GET['building'] : 'Bastion');
 
+
+if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
+  header('Status: 303 Moved Temporarily', false, 303);
+  header('Location: ../..');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
