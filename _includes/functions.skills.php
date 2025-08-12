@@ -110,17 +110,16 @@ function filterSkillAugs($augmentationArray = null)
   if (isset($augmentationArray) && $augmentationArray != "") {
 
     $return = array();
-
+    
     foreach ($augmentationArray as $augment) {
-      if ($augment['status'] == 'active') {
-        if ($augment["skillgroup_level"] > 0 && $augment['type'] != "flavour") {
+        if ($augment['status'] == 'active' && $augment["skillgroup_level"] > 0 && $augment['type'] != "flavour") {
           $return[$augment['modifierID']] = array();
+          $return[$augment['modifierID']]['skill_id'] = $augment["skill_id"];
           $return[$augment['modifierID']]['name'] = $augment["name"];
           $return[$augment['modifierID']]['skillgroup_siteindex'] = $augment["skillgroup_siteindex"];
           $return[$augment['modifierID']]['level'] = $augment["skillgroup_level"];
           $return[$augment['modifierID']]['type'] = $augment["type"];
         }
-      }
     }
   }
 

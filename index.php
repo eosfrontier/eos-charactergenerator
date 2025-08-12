@@ -9,7 +9,9 @@ if (!isset($_SESSION)) {
   session_start();
 }
 
-if (isset($_POST['newchar']) && $_POST['newchar'] != "") {require './operations/POST/newChar.php';}
+if (isset($_POST['newchar']) && $_POST['newchar'] != "") {
+  require './operations/POST/newChar.php';
+}
 ?>
 
 <div class="wsleft cell"></div>
@@ -18,18 +20,26 @@ if (isset($_POST['newchar']) && $_POST['newchar'] != "") {require './operations/
   <div class="content">
     <br />
     <?php
-      $printresult = "";
-      //Trigger the new character screen
-      if (isset($_GET['newChar'])) {require './operations/GET/newChar.php';}
-      //Activate a character
-      else if (isset($_GET['activate']) && $_GET['activate'] != "") {require './operations/GET/activate.php';}
-      //View a character
-      else if (isset($_GET['viewChar']) && $_GET['viewChar'] != "") {require './operations/GET/viewChar.php';}
-      //List your characters
-      else {require './operations/GET/listChars.php';}
+    $printresult = "";
+    //Trigger the new character screen
+    if (isset($_GET['newChar'])) {
+      require './operations/GET/newChar.php';
+    }
+    //Activate a character
+    else if (isset($_GET['activate']) && $_GET['activate'] != "") {
+      require './operations/GET/activate.php';
+    }
+    //View a character
+    else if (isset($_GET['viewChar']) && $_GET['viewChar'] != "") {
+      require './operations/GET/viewChar.php';
+    }
+    //List your characters
+    else {
+      require './operations/GET/listChars.php';
+    }
 
-      echo $printresult;
-      unset($printresult);
+    echo $printresult;
+    unset($printresult);
     ?>
 
     <div class="row">

@@ -44,9 +44,14 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
           echo "<div id=\"charStatus\" class=\"hidden\" style=\"display: none;\">" . $character['status'] . "</div>";
 
           // calc skills
+          if (isset($character['born_faction']) && ($character['born_faction'] != '')) {
+            $faction = $character['born_faction'];
+          } else {
+            $faction = $character['faction'];
+          }
           $exp = array();
           $exp['exp_total'] = calcTotalExp($character['aantal_events']);
-          $exp['exp_used'] = calcUsedExp(EMS_echo($character['skills']), $character['faction']);
+          $exp['exp_used'] = calcUsedExp(EMS_echo($character['skills']), $faction);
 
           if (isset($_POST['skillform']) && $_POST['skillform'] != "") {
             // first, we check if this character is actually alive. Oh bother.
@@ -59,7 +64,7 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
             foreach ($_POST['skillform']['skill'] as $SKid => $SKlevel) {
 
               $sql = "INSERT INTO `ecc_char_skills` (`skill_id`, `charID`) VALUES (
-                      '" . (int)$SKid . "',
+                      '" . (int) $SKid . "',
                       '" . mysqli_real_escape_string($UPLINK, $_GET['viewChar']) . "'
                     );";
               $res = $UPLINK->query($sql) or trigger_error(mysqli_error($UPLINK));
@@ -71,7 +76,7 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
         }
 
         // faction skills [strong/weak]
-        $factionMod = getFactionModifiers($character['faction']);
+        $factionMod = getFactionModifiers($faction);
         $augmentations = getImplants($_GET['viewChar']);
         $augmentations = filterSkillAugs($augmentations);
 
@@ -83,9 +88,14 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
 
         // Character Banner
         if (EMS_echo($character['character_name']) != "") {
-          $printresult .= "<h1><strong>skills:</strong>&nbsp;" . $character['character_name'] . " - " . $character['faction'] . "</h1>";
+          if (isset($character['born_faction']) && ($character['born_faction'] != '')) {
+            $displayFaction = $character['faction'] . " (Originally: " . $character['born_faction'] . ")";
+          } else {
+            $displayFaction = $character['faction'];
+          }
+          $printresult .= "<h1><strong>skills:</strong>&nbsp;" . $character['character_name'] . " - " . $displayFaction . "</h1>";
         } else {
-          $printresult .= "<h1><strong>skills:</strong>&nbsp;[character name] - " . $character['faction'] . "</h1>";
+          $printresult .= "<h1><strong>skills:</strong>&nbsp;[character name] - " . $displayFaction . "</h1>";
         }
 
         // exp bar && Back button
@@ -110,7 +120,7 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
           . "<i class=\"fas fa-save\"></i>&nbsp;Save"
           . "</a>";
         // }
-
+    
         $printresult .= "</span>"
           . "</div>"
           . "</div>"
@@ -126,16 +136,16 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
 
           // is the CHARACTER in design mode, AND is the character SHEET?
           // if($characterSheet['status'] == 'ontwerp') {
-
+    
           foreach ($skillGroupArr as $skillGroup) {
 
             $printresult .= "<div id=\"sg_" . $skillGroup['primaryskill_id'] . "\" class=\"skillgroup formitem\">";
 
             $xCLASS = "";
-            if (isset($factionMod[(int)$skillGroup['primaryskill_id']]) && $factionMod[(int)$skillGroup['primaryskill_id']] != "") {
-              if ($factionMod[(int)$skillGroup['primaryskill_id']]['type'] == 'strong') {
+            if (isset($factionMod[(int) $skillGroup['primaryskill_id']]) && $factionMod[(int) $skillGroup['primaryskill_id']] != "") {
+              if ($factionMod[(int) $skillGroup['primaryskill_id']]['type'] == 'strong') {
                 $xCLASS = 'class="strong" ';
-              } else if ($factionMod[(int)$skillGroup['primaryskill_id']]['type'] == 'weak') {
+              } else if ($factionMod[(int) $skillGroup['primaryskill_id']]['type'] == 'weak') {
                 $xCLASS = 'class="weak" ';
               }
             }
@@ -159,15 +169,15 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
                 . " onclick=\"toggleSkillBoxes(this);\""
                 . " name=\"skillform[skill][" . $skills['skill_id'] . "]\""
                 . " class=\"skillcheck\""
-                . " value=\"" . (int)$skills['level'] . "\""
+                . " value=\"" . (int) $skills['level'] . "\""
                 . " data-index=\"" . $skillGroup['siteindex'] . "\" "
                 . " data-siteindex=\"" . $skills['skill_index'] . "\""
-                . " data-level=\"" . (int)$skills['level'] . "\""
-                . " data-skillgroup=\"" . (int)$skillGroup['primaryskill_id'] . "\" ";
+                . " data-level=\"" . (int) $skills['level'] . "\""
+                . " data-skillgroup=\"" . (int) $skillGroup['primaryskill_id'] . "\" ";
 
               if ($skills['level'] == 1) {
-                if (isset($factionMod[(int)$skillGroup['primaryskill_id']]) && $factionMod[(int)$skillGroup['primaryskill_id']] != "") {
-                  $printresult .= " data-expmodifier=\"" . $factionMod[(int)$skillGroup['primaryskill_id']]['cost_modifier'] . "\" ";
+                if (isset($factionMod[(int) $skillGroup['primaryskill_id']]) && $factionMod[(int) $skillGroup['primaryskill_id']] != "") {
+                  $printresult .= " data-expmodifier=\"" . $factionMod[(int) $skillGroup['primaryskill_id']]['cost_modifier'] . "\" ";
                 }
               }
 
@@ -206,11 +216,11 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
                         . " onclick=\"toggleSkillBoxes(this);\""
                         . " name=\"skillform[skill][" . $Xspecialty['skill_id'] . "]\""
                         . " class=\"skillcheck specialty\""
-                        . " value=\"" . (int)$Xspecialty['level'] . "\""
+                        . " value=\"" . (int) $Xspecialty['level'] . "\""
                         . " data-parentID=\"" . $skillGroup['primaryskill_id'] . "\""
                         . " data-siteindex=\"" . $Xspecialty['skill_index'] . "\" "
-                        . " data-level=\"" . (int)$Xspecialty['level'] . "\""
-                        . " data-skillgroup=\"" . (int)$specialty['primaryskill_id'] . "\" ";
+                        . " data-level=\"" . (int) $Xspecialty['level'] . "\""
+                        . " data-skillgroup=\"" . (int) $specialty['primaryskill_id'] . "\" ";
 
 
                       if (isset($character['skills'][$Xspecialty['skill_index']]) && $character['skills'][$Xspecialty['skill_index']] != "") {
@@ -224,7 +234,7 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
 
                     $printRes2 .= "</div>"; //flex 1
                     $printRes2 .= "</div>"; // end of 'specialty row'
-
+    
                     unset($getSpecialty);
                   }
                 }
@@ -238,7 +248,7 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
 
             $printresult .= "</div>"; //flex1
             $printresult .= "</div>"; // end of skill row
-
+    
             $augResult = 0;
             $printAugs = "";
 
@@ -262,12 +272,12 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
 
 
           // } else {
-
+    
           // STATUS  NIET IN ONTWERP MODUS
-
+    
 
           // }
-
+    
 
           $printresult .= "</div>"
             . "<div class=\"half\">";
@@ -303,14 +313,14 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
         } else {
 
           // error sheet is er niet?
-
+    
         }
       } else {
         // error 451 because JID is lacking
       }
     }
     // }
-
+    
     echo $printresult;
 
     ?>

@@ -41,10 +41,10 @@ function updateCharacterInfo($params = array(), $charID = 0)
   global $jid, $UPLINK;
 
   // is charID set?
-  if (isset($charID) && (int)$charID !== 0) {
+  if (isset($charID) && (int) $charID !== 0) {
 
     // check if charID belongs to the active account.
-    $sql = "SELECT characterID, accountID FROM `ecc_characters` WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int)$charID) . "' AND accountID = '" . mysqli_real_escape_string($UPLINK, (int)$jid) . "' LIMIT 1";
+    $sql = "SELECT characterID, accountID FROM `ecc_characters` WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int) $charID) . "' AND accountID = '" . mysqli_real_escape_string($UPLINK, (int) $jid) . "' LIMIT 1";
     $res = $UPLINK->query($sql);
 
     if ($res && mysqli_num_rows($res) == 1) {
@@ -60,8 +60,8 @@ function updateCharacterInfo($params = array(), $charID = 0)
 
           $sql = "UPDATE `ecc_characters`
             SET `character_name` = '" . mysqli_real_escape_string($UPLINK, $input) . "'
-            WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int)$charID) . "'
-            AND accountID = '" . mysqli_real_escape_string($UPLINK, (int)$jid) . "'
+            WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int) $charID) . "'
+            AND accountID = '" . mysqli_real_escape_string($UPLINK, (int) $jid) . "'
             LIMIT 1";
           $update = $UPLINK->query($sql) or trigger_error(mysqli_error($UPLINK));
         }
@@ -72,8 +72,8 @@ function updateCharacterInfo($params = array(), $charID = 0)
 
           $sql = "UPDATE `ecc_characters`
             SET `ic_birthday` = '" . mysqli_real_escape_string($UPLINK, $input) . "'
-            WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int)$charID) . "'
-            AND accountID = '" . mysqli_real_escape_string($UPLINK, (int)$jid) . "'
+            WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int) $charID) . "'
+            AND accountID = '" . mysqli_real_escape_string($UPLINK, (int) $jid) . "'
             LIMIT 1";
           $update = $UPLINK->query($sql) or trigger_error(mysqli_error($UPLINK));
         }
@@ -84,8 +84,8 @@ function updateCharacterInfo($params = array(), $charID = 0)
 
           $sql = "UPDATE `ecc_characters`
             SET `birthplanet` = '" . mysqli_real_escape_string($UPLINK, $input) . "'
-            WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int)$charID) . "'
-            AND accountID = '" . mysqli_real_escape_string($UPLINK, (int)$jid) . "'
+            WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int) $charID) . "'
+            AND accountID = '" . mysqli_real_escape_string($UPLINK, (int) $jid) . "'
             LIMIT 1";
           $update = $UPLINK->query($sql) or trigger_error(mysqli_error($UPLINK));
         }
@@ -96,8 +96,8 @@ function updateCharacterInfo($params = array(), $charID = 0)
 
           $sql = "UPDATE `ecc_characters`
             SET `homeplanet` = '" . mysqli_real_escape_string($UPLINK, $input) . "'
-            WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int)$charID) . "'
-            AND accountID = '" . mysqli_real_escape_string($UPLINK, (int)$jid) . "'
+            WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int) $charID) . "'
+            AND accountID = '" . mysqli_real_escape_string($UPLINK, (int) $jid) . "'
             LIMIT 1";
           $update = $UPLINK->query($sql) or trigger_error(mysqli_error($UPLINK));
         }
@@ -126,8 +126,8 @@ function parseSheetStatus($statusCode)
 
       $SPLIT = explode("_", $statusCode);
 
-      $return['code'] = (int)$SPLIT[0];
-      $return['last_sheet'] = (int)$SPLIT[1];
+      $return['code'] = (int) $SPLIT[0];
+      $return['last_sheet'] = (int) $SPLIT[1];
     } else {
 
       $return['code'] = $statusCode;
@@ -135,7 +135,7 @@ function parseSheetStatus($statusCode)
     }
   } else {
 
-    $return['code'] = (int)0;
+    $return['code'] = (int) 0;
     $return['last_sheet'] = "none";
   }
 
@@ -154,7 +154,7 @@ function getCharacterSheets()
 
   if (isset($UPLINK) && isset($jid) && $jid != "") {
 
-    $sql = "SELECT * FROM ecc_characters WHERE accountID = '" . (int)$jid . "'";
+    $sql = "SELECT * FROM ecc_characters WHERE accountID = '" . (int) $jid . "'";
     $res = $UPLINK->query($sql);
 
     if ($res) {
@@ -271,7 +271,7 @@ function check4dead($charID)
 {
   global $UPLINK;
 
-  $sql = "SELECT status FROM `ecc_characters` WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int)$charID) . "' AND status = 'deceased'";
+  $sql = "SELECT status FROM `ecc_characters` WHERE characterID = '" . mysqli_real_escape_string($UPLINK, (int) $charID) . "' AND status = 'deceased'";
   $res = $UPLINK->query($sql);
 
   if (mysqli_num_rows($res) > 0) {
@@ -298,8 +298,8 @@ function sanitize_spaces($input = null)
 function huizingfilter($input = null)
 {
 
-  $triggers    = array('http', 'tps:/', 'tp:/', "src=", "src =", '<', '>', '><', '.js', '@S', '@s', 'GOTO ', 'DBCC ');
-  $error       = false;
+  $triggers = array('http', 'tps:/', 'tp:/', "src=", "src =", '<', '>', '><', '.js', '@S', '@s', 'GOTO ', 'DBCC ');
+  $error = false;
 
   foreach ($triggers as $trigger) { // loops through the huizing-huizingtriggertriggertrigger
     if (stripos($input, $trigger) !== false) {
@@ -319,4 +319,44 @@ function huizingfilter($input = null)
 function EMS_echo(&$var, $else = '')
 {
   return isset($var) && $var ? $var : $else;
+
+}
+
+function roman_to_integer($roman) {
+  $romans = array(
+    'M' => 1000,
+    'CM' => 900,
+    'D' => 500,
+    'CD' => 400,
+    'C' => 100,
+    'XC' => 90,
+    'L' => 50,
+    'XL' => 40,
+    'X' => 10,
+    'IX' => 9,
+    'V' => 5,
+    'IV' => 4,
+    'I' => 1,
+);
+
+$result = 0;
+
+foreach ($romans as $key => $value) {
+    while (strpos($roman, $key) === 0) {
+        $result += $value;
+        $roman = substr($roman, strlen($key));
+    }
+}
+return $result;
+}
+
+$notCancelled = "((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline') OR (r.published = 1 AND r.payment_method = ''))";
+
+
+function playerStopAlert($faction){
+  $alert = '<div class="alert">'
+      . '<span class="closebtn" onclick="this.parentElement.style.display=\'none\';">&times;</span>'
+      . "<h3>⚠️WARNING⚠️</h3>There is a currently a new-player stop on the $faction Faction. <br>If you would like to play a new character on an upcoming event, we recommend you choose a different faction. <br><br>While you are welcome to create a Pendzal Character in the Character Generator, it will not be approved for play on an event until such a time as the new-player stop has been removed. As of this moment, there is no estimate on when that will happen. <br>If you have any questions, you may e-mail <a id='alert-link' href='mailto:spelleider@eosfrontier.space'  target='_blank'>spelleider@eosfrontier.space</a>."
+      . '</div>';
+      return $alert;
 }

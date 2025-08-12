@@ -100,29 +100,63 @@ function calcUsedExp($charSkillArr = array(), $faction = null)
   return $result;
 }
 
-function getImplants($charID)
+function getImplants($charID, $skillImplantsOnly = null)
 {
 
   global $jid, $UPLINK;
 
   $return = false;
-
-  $sql = "SELECT i.modifierID,i.charID,i.accountID,i.type,i.skillgroup_level,i.skillgroup_siteindex,i.status,i.description,s.name
-    FROM ecc_char_implants i
-    LEFT JOIN ecc_skills_groups s ON i.skillgroup_siteindex = s.siteindex
-    WHERE `accountID` = '" . (int)$jid . "'
-    AND `charID` = '" . (int)$charID . "' ";
-
-  $res = $UPLINK->query($sql);
-
-
-  while ($row = mysqli_fetch_assoc($res)) {
-
-    // fill rows
-    foreach ($row as $key => $value) {
-      $return[$row['modifierID']][$key] = $value;
-    }
+  if ($skillImplantsOnly == 'true') {
+    $skillCheck = "AND type <> 'flavour'";
+  }
+  else {
+    $skillCheck = null;
   }
 
-  return $return;
+  $sql = "SELECT i.modifierID,i.charID,i.accountID,i.type,i.skillgroup_level,i.skillgroup_siteindex,i.status,i.description,s.name, s2.skill_id
+    FROM ecc_char_implants i
+    LEFT JOIN ecc_skills_groups s ON i.skillgroup_siteindex = s.siteindex
+    LEFT join ecc_skills_allskills s2 on (s.primaryskill_id = s2.parent AND i.skillgroup_level = s2.level)
+    WHERE accountID = " . (int)$jid . " $skillCheck AND charID = " . (int)$charID . ";";
+
+  $res = $UPLINK->query($sql);
+  $row_count = mysqli_num_rows($res);
+  if ($row_count > 0)  {
+    while ($row = mysqli_fetch_assoc($res)) {
+      // fill rows
+      foreach ($row as $key => $value) {
+        $return[$row['modifierID']][$key] = $value;
+      }
+    }
+    return $return;
+  }
+  else {
+    return null;
+  }
+}
+
+function getCharacterIDsforEvent($_EVENTID)
+{
+  $stmt=db::$conn->prepare("SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1) as characterID from jml_eb_registrants r
+    join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 21) /*Character Name*/
+    join jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 14) /*Soort Inschrijving*/
+    join ecc_characters c1 on c1.characterID = SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1) /*Character ID*/
+    where v2.field_value = 'Speler' AND r.event_id = $_EVENTID  and characterID <> 257 and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))
+    ORDER BY character_name");
+  $res = $stmt->execute();
+  $aCharacters = $stmt->fetchAll();
+  return $aCharacters;
+}
+
+function getCharacterIDsforSpecialEvent($_EVENTID)
+{
+  $stmt=db::$conn->prepare("SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1) as characterID from jml_eb_registrants r
+    join jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 101) /*Character Name*/
+    join jml_eb_field_values v2 on (v2.registrant_id = r.id and v2.field_id = 100) /*Soort Inschrijving*/
+    join ecc_characters c1 on c1.characterID = SUBSTRING_INDEX(SUBSTRING_INDEX(v1.field_value,' - ',2),' - ',-1) /*Character ID*/
+    where v2.field_value = 'Speler' AND r.event_id = $_EVENTID  and characterID <> 257 and ((r.published = 1 AND (r.payment_method = 'os_ideal' OR r.payment_method = 'os_paypal' OR r.payment_method = 'os_bancontact')) OR (r.published in (0,1) AND r.payment_method = 'os_offline'))
+    ORDER BY character_name");
+  $res = $stmt->execute();
+  $aCharacters = $stmt->fetchAll();
+  return $aCharacters;
 }

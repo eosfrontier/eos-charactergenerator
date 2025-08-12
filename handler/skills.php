@@ -57,10 +57,10 @@ if (isset($_POST['getSpecialtySkills']) && $_POST['getSpecialtySkills'] != "") {
           . " onclick=\"toggleSkillBoxes(this);\""
           . " name=\"skillform[skill][" . $Xspecialty['skill_id'] . "]\""
           . " class=\"skillcheck specialty\""
-          . " value=\"" . (int)$Xspecialty['level'] . "\""
+          . " value=\"" . (int) $Xspecialty['level'] . "\""
           . " data-siteindex=\"" . $Xspecialty['skill_index'] . "\" "
-          . " data-level=\"" . (int)$Xspecialty['level'] . "\""
-          . " data-skillgroup=\"" . (int)$row['primaryskill_id'] . "\"/>&nbsp;";
+          . " data-level=\"" . (int) $Xspecialty['level'] . "\""
+          . " data-skillgroup=\"" . (int) $row['primaryskill_id'] . "\"/>&nbsp;";
       }
       $printresult[$row['primaryskill_id']][] .= "</div></div>"; //flex 1
 
