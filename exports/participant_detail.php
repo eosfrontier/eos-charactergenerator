@@ -140,7 +140,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       </tr>
       <tr>
         <td width="20%"><strong>Factie:</strong> </td>
-        <td><?php echo $row['faction']; ?></td>
+        <td><?php echo ucfirst($row['faction']); ?></td>
       </tr>
     </table>
     <?php
