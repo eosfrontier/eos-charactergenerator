@@ -35,137 +35,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       navigator.clipboard.writeText(copyText.value);
     }
   </script>
-  <style type="text/css">
-    /* @media screen {
-      table td:nth-last-child(-n + 2) {
-        display: none
-      }
-
-      table th:nth-last-child(-n + 2) {
-        display: none
-      }
-    } */
-
-    body {
-      background: #262e3e;
-      color: white;
-    }
-
-    table {
-      font-family: arial, sans-serif;
-      border-collapse: collapse;
-      width: 100%;
-      color: white;
-    }
-
-    td,
-    th {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 2px 4px;
-      font-size: 16px;
-    }
-
-    @media screen {
-      tr:nth-child(even) {
-        background-color: #555555;
-        color: white;
-      }
-
-      tr:nth-child(odd) {
-        color: white;
-      }
-    }
-
-    .button {
-      background-color: #4CAF50;
-      border: none;
-      color: white;
-      padding: 15px 32px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-    }
-
-    .backButton {
-      background-color: rgb(247 54 9);
-      border: none;
-      color: white;
-      padding: 15px 32px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-    }
-
-    .hidden-text {
-      display: none;
-    }
-
-    @media print {
-      #printPageButton {
-        display: none;
-      }
-
-      #CopyEmailButton {
-        display: none;
-      }
-
-      #SortBy {
-        display: none;
-      }
-
-      .row {
-        display: flex;
-        margin-left: -5px;
-        margin-right: -5px;
-      }
-
-      .column {
-        flex: 50%;
-        padding: 5px;
-      }
-
-
-      * {
-        box-sizing: border-box;
-        -webkit-print-color-adjust: exact;
-      }
-
-      body {
-        background-color: #fff;
-        color: #000;
-        font-size: 10px;
-      }
-
-      table {
-        color: #000;
-        border-collapse: collapse;
-        padding: 1px 5px;
-        font-size: 8px;
-        width: 95%;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      td,
-      th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 0px 0px;
-        font-size: 10px;
-      }
-
-      .single_record {
-        page-break-after: always;
-      }
-    }
-  </style>
+ <link rel="stylesheet" href="css/participants.css">
 </head>
 
 <body>
@@ -237,7 +107,11 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
     </tr>
     <tr>
       <td width="20%"><strong>Telefoonnummer:</strong> </td>
-      <td><?php echo "<a href='tel:" . $row['phone'] . ">" . $row['phone'] . "</a>"; ?></td>
+      <td><font color='cyan'><a href='tel:
+		<?php echo $row['phone'];?>
+	'> 
+		<?php echo  $row['phone'];?>
+	</a></font></td>
     </tr>
     <tr>
       <td width="20%"><strong>adres:</strong> </td>
@@ -266,7 +140,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       </tr>
       <tr>
         <td width="20%"><strong>Factie:</strong> </td>
-        <td><?php echo $row['faction']; ?></td>
+        <td><?php echo ucfirst($row['faction']); ?></td>
       </tr>
     </table>
     <?php
@@ -281,7 +155,11 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
     </tr>
     <tr>
       <td width="20%"><strong><strong>Noodgevalen Telefoonnummer:</strong> </td>
-      <td><?php echo "<a href='tel:" . $row['noodgevallen_telefoonnummer'] . ">" . $row['noodgevallen_telefoonnummer'] . "</a>"; ?></td>
+      <td><a href='tel:
+	<?php echo $row['noodgevallen_telefoonnummer']; ?>
+	'>
+	<?php echo $row['noodgevallen_telefoonnummer']; ?>
+	</a></td>
     </tr>
     <tr>
       <td width="20%"><strong>Medische aandoeningen indien relevant:</strong> </td>
