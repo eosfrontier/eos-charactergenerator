@@ -35,7 +35,8 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       navigator.clipboard.writeText(copyText.value);
     }
   </script>
-  <style type="text/css">
+ <link rel="stylesheet" href="css/participants.css">
+<!--  <style type="text/css">
     /* @media screen {
       table td:nth-last-child(-n + 2) {
         display: none
@@ -165,7 +166,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
         page-break-after: always;
       }
     }
-  </style>
+  </style>-->
 </head>
 
 <body>
@@ -237,7 +238,11 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
     </tr>
     <tr>
       <td width="20%"><strong>Telefoonnummer:</strong> </td>
-      <td><?php echo "<a href='tel:" . $row['phone'] . ">" . $row['phone'] . "</a>"; ?></td>
+      <td><font color='cyan'><a href='tel:
+		<?php echo $row['phone'];?>
+	'> 
+		<?php echo  $row['phone'];?>
+	</a></font></td>
     </tr>
     <tr>
       <td width="20%"><strong>adres:</strong> </td>
