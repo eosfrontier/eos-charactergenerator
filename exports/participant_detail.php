@@ -111,7 +111,8 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
 		<?php echo formatPhoneNumber($row['phone'],$row['country']);?>
 	'>
 		<?php echo  formatPhoneNumber($row['phone'],$row['country']);?>
-	</a></font></td>
+	</a></font>
+	<?php #if (substr($row['phone'], 0, strlen("0")) === "0"){echo potato;}?> </td>
     </tr>
     <tr>
       <td width="20%"><strong>adres:</strong> </td>
