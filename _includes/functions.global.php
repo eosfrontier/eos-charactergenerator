@@ -360,3 +360,36 @@ function playerStopAlert($faction){
       . '</div>';
       return $alert;
 }
+
+function formatPhoneNumber($phone, $country = '')
+{
+    if (substr($phone, 0, 1) === "+") {
+        $formattedPhone = $phone;
+    } else {
+        if ($country === 'Belgium') {
+            $prefix = "0032";
+            if (substr($phone, 0, strlen($prefix)) === $prefix) {
+                $formattedPhone = "+32" . substr($phone, strlen($prefix));
+            }
+            $prefix = "00";
+            if (substr($phone, 0, strlen($prefix)) === $prefix) {
+                $formattedPhone = "+32(0)" . substr($phone, strlen($prefix));
+            }
+
+        } else if ($country === 'Netherlands') {
+            $prefix = "0031";
+            $prefix2 = "00";
+            $prefix3 = "0";
+            if (substr($phone, 0, strlen($prefix)) === $prefix) {
+                $formattedPhone = "+31" . substr($phone, strlen($prefix));
+            } else if (substr($phone, 0, strlen($prefix2)) === $prefix2) {
+                $formattedPhone = "+31(0)" . substr($phone, strlen($prefix2));
+            } elseif (substr($phone, 0, strlen($prefix3)) === "0") {
+                $formattedPhone = "+31(0)" . substr($phone, strlen($prefix3));
+            } else {
+                $formattedPhone = $phone;
+            }
+        }
+    }
+    return $formattedPhone;
+}

@@ -108,10 +108,11 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
     <tr>
       <td width="20%"><strong>Telefoonnummer:</strong> </td>
       <td><font color='cyan'><a href='tel:
-		<?php echo $row['phone'];?>
-	'> 
-		<?php echo  $row['phone'];?>
-	</a></font></td>
+		<?php echo formatPhoneNumber($row['phone'],$row['country']);?>
+	'>
+		<?php echo  formatPhoneNumber($row['phone'],$row['country']);?>
+	</a></font>
+	<?php #if (substr($row['phone'], 0, strlen("0")) === "0"){echo potato;}?> </td>
     </tr>
     <tr>
       <td width="20%"><strong>adres:</strong> </td>
@@ -156,9 +157,9 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
     <tr>
       <td width="20%"><strong><strong>Noodgevalen Telefoonnummer:</strong> </td>
       <td><a href='tel:
-	<?php echo $row['noodgevallen_telefoonnummer']; ?>
+	<?php echo formatPhoneNumber($row['noodgevallen_telefoonnummer'],$row['country']); ?>
 	'>
-	<?php echo $row['noodgevallen_telefoonnummer']; ?>
+	<?php echo formatPhoneNumber($row['noodgevallen_telefoonnummer'],$row['country']); ?>
 	</a></td>
     </tr>
     <tr>
