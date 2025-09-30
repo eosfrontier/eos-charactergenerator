@@ -1,4 +1,4 @@
-<?php
+\<?php
 mysqli_set_charset($UPLINK, 'utf8');
 
 // show errorpage function
@@ -360,3 +360,33 @@ function playerStopAlert($faction){
       . '</div>';
       return $alert;
 }
+
+function formatPhoneNumber($phone, $country = '')
+{
+        if (substr($phone, 0, 1) === "+") {
+                $formattedPhone = $phone;
+        } else {
+                $prefix = "00";
+                if (substr($phone, 0, strlen($prefix)) === $prefix) {
+                        if ($country === 'Belgium') {
+                                $prefix = "0032";
+                                if (substr($phone, 0, strlen($prefix)) === $prefix) {
+                                        $formattedPhone = "+32" . substr($phone, strlen($prefix));
+                                }
+				$prefix = "00";
+                                if (substr($phone, 0, strlen($prefix)) === $prefix) {
+                                        $formattedPhone = "+32(0)" . substr($phone, strlen($prefix));
+                                }
+
+                        }
+                } else {
+                        $prefix = "06";
+                        if (substr($phone, 0, strlen($prefix)) === $prefix) {
+                                $formattedPhone = "+31(0)6" . substr($phone, strlen($prefix));
+                        }
+                }
+
+        }
+        return $formattedPhone;
+}
+
