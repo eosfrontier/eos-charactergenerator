@@ -155,7 +155,11 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
     </tr>
     <tr>
       <td width="20%"><strong><strong>Noodgevalen Telefoonnummer:</strong> </td>
-      <td><?php echo "<a href='tel:" . $row['noodgevallen_telefoonnummer'] . ">" . $row['noodgevallen_telefoonnummer'] . "</a>"; ?></td>
+      <td><a href='tel:
+	<?php echo $row['noodgevallen_telefoonnummer']; ?>
+	'>
+	<?php echo $row['noodgevallen_telefoonnummer']; ?>
+	</a></td>
     </tr>
     <tr>
       <td width="20%"><strong>Medische aandoeningen indien relevant:</strong> </td>
