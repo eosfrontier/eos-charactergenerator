@@ -111,13 +111,13 @@ if (isset($_POST['action'])) {
   require './participants-sql.php';
 
   $event_title = $row2['title'];
+  echo "<div id='printButton'>";
   ?>
   &nbsp;
   <form method="post">
     <input type="submit" name="action" class="button" value="Export to CSV" />
   </form>
   <?php
-  echo "<div id='printButton'>";
   echo "<button class=\"button\" id=\"printPageButton\" style=\"width: 100px;\" onClick=\"window.print();\">Print</button> <font color='red'>IMPORTANT: Before clicking print, change sorting to OC Naam (oplopend)!</font>
   </div>";
   echo '<font size="5">Participants for ';
