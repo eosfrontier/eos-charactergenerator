@@ -74,11 +74,11 @@ $sql_pending_old = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amoun
 $res_pending_old = $UPLINK->query($sql_pending_old);
 $pending_old = mysqli_fetch_array($res_pending_old);
 
-#Calculate sponsor tickets
+#Calculate sponsor tickets used on selected event
 ## First count the number of registrants who have used sponsor tickets this event
 $sql_sponsor = "SELECT COUNT(r.id) as count from jml_eb_registrants r
     join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 103)
-    WHERE v3.field_value = 'Yes' AND r.event_id = $EVENTID AND $notCancelled";
+    WHERE v3.field_value = 'Yes' AND r.event_id = $selected_event AND $notCancelled";
 $res_sponsor = $UPLINK->query($sql_sponsor);
 $sponsor = mysqli_fetch_array($res_sponsor);
 
