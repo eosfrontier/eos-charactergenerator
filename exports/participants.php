@@ -162,7 +162,7 @@ if (isset($_POST['action'])) {
         echo '<td>Pending Payments (' . $event_title . ')</td> <td>€' . round($pending['amount'], 2) . '</td>';
         echo '</tr>';
         echo '<tr>';
-        echo '<td>Number of Sponsor Tickets used this event:</td> <td>' . $sponsor['count'] . '</td>';
+        echo '<td>Number of Sponsor Tickets used on ' . $event_title . ':</td> <td>' . $sponsor['count'] . '</td>';
         echo '</tr>';
         echo '<tr>';
         echo '<td>Number of Sponsor Tickets remaining:</td> <td>' . intval($remaining_tickets['tickets_remaining']) . '</td>';
