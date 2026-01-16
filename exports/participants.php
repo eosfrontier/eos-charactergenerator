@@ -1,8 +1,6 @@
 <?php
-// globals
-// config variable.
+include_once("../_includes/config.php");
 $APP = array();
-
 $APP["loginpage"] = "/component/users/?view=login";
 
 include_once('../db.php');
@@ -121,12 +119,15 @@ if (isset($_POST['action'])) {
   echo "<button class=\"button\" id=\"printPageButton\" style=\"width: 100px;\" onClick=\"window.print();\">Print</button> <font color='red'>IMPORTANT: Before clicking print, change sorting to OC Naam (oplopend)!</font>
   </div>";
   echo '<font size="5">Participants for ';
+  $is_set_params = '';
+  if (isset($_GET["email"])) {
+    $is_set_params = $is_set_params . 'email=' . $_GET["email"] . '&';
+  };
+  if (isset($_GET["sort"])) {
+    $is_set_params = $is_set_params . 'sort=' . $_GET["sort"] . '&';
+  }
   ?>
-  <select name="eventid" id="eventid" onchange="location.href = '/eoschargen/exports/participants.php?&<?php if (isset($_GET["email"])) {
-    echo 'email=' . $_GET["email"] . '&';
-  } ?><?php if (isset($_GET["sort"])) {
-     echo 'sort=' . $_GET["sort"] . '&';
-   } ?>&selected_event=' + this.value; ">
+  <select name="eventid" id="eventid" onchange="location.href = '/eoschargen/exports/participants.php?&<?php echo $is_set_params; ?>selected_event=' + this.value; ">
     <?php while ($row_all_events = mysqli_fetch_array($res_all_events)) {
       if ($row_all_events['id'] == $selected_event) {
         $event_select = 'selected';
@@ -207,20 +208,44 @@ if (isset($_POST['action'])) {
   </div>
   <?php $email = !empty($_GET['email']) ? $_GET['email'] : '%%'; ?>
   <div id="CopyEmailButton">
+    <?php
+    $email_is_set_params = '';
+    if (isset($_GET["sort"])) {
+      echo 'sort=' . $_GET["sort"] . '&';
+    }
+    ?>
     Type of E-mail Addresses to Copy:
-    <select id="email_types" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;" onchange="location.href = '/eoschargen/exports/participants.php?<?php echo 'selected_event=' . $selected_event; ?>&<?php if (isset($_GET["sort"])) {
-           echo 'sort=' . $_GET["sort"] . '&';
-         } ?>email=' + this.value; ">
+    <select id="email_types" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;" onchange="location.href = '/eoschargen/exports/participants.php?<?php echo 'selected_event=' . $selected_event; ?>&<?php echo $email_is_set_params; ?>email=' + this.value; ">
       <option value="%%" <?php echo $email == '%%' ? 'selected' : ''; ?>>Alles</option>
-      <option value="Speler" <?php echo $email == 'Speler' ? 'selected' : ''; ?>>Speler</option>
-      <option value="Figurant" <?php echo $email == 'Figurant' ? 'selected' : ''; ?>>Figurant</option>
-      <option value="Spelleider" <?php echo $email == 'Spelleider' ? 'selected' : ''; ?>>Spelleider</option>
-      <option value="Keuken Crew" <?php echo $email == 'Keuken Crew' ? 'selected' : ''; ?>>Keuken Crew</option>
+      <?php
+      $seen_types = [];
+      if ($res3 && $res3->num_rows > 0) {
+        // Reset the result pointer to the start (in case it was used elsewhere)
+        $res3->data_seek(0);
+
+        while ($row = $res3->fetch_assoc()) {
+          $current_type = $row['type'];
+
+          // Only proceed if we haven't seen this type yet and it's not empty
+          if (!empty($current_type) && !in_array($current_type, $seen_types)) {
+
+            // Add this type to our "seen" list so it doesn't repeat
+            $seen_types[] = $current_type;
+
+            // Escape for HTML safety
+            $safe_type = htmlspecialchars($current_type);
+            echo '<option value="' . $safe_type . '"';
+            echo $email == $safe_type ? 'selected' : '';
+            echo '>' . $safe_type . '</option>';
+          }
+        }
+      }
+      ?>
     </select>
     <?php
     $sql4 = "SELECT r.email as email from joomla.jml_eb_registrants r
-     left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
-     where soort_inschrijving.field_value LIKE '$email' AND r.event_id = $selected_event and $notCancelled";
+        left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
+        where soort_inschrijving.field_value LIKE '$email' AND r.event_id = $selected_event and $notCancelled";
     $res4 = $UPLINK->query($sql4);
     $emails = '';
     while ($row4 = mysqli_fetch_array($res4)) {
@@ -233,74 +258,74 @@ if (isset($_POST['action'])) {
 
   <div id="SortBy">Sorteer op:
     <select id="sort_table" style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;" onchange="location.href = '/eoschargen/exports/participants.php?<?php echo 'selected_event=' . $selected_event; ?>&<?php if (isset($_GET["email"])) {
-           echo 'email=' . $_GET["email"] . '&';
-         } ?>sort=' + this.value; ">
+                                                                                                                                                                                                                echo 'email=' . $_GET["email"] . '&';
+                                                                                                                                                                                                              } ?>sort=' + this.value; ">
       <option value="oc_fn asc" <?php if ($tableSort === 'oc_fn asc')
-        echo 'selected' ?>> OC Naam (Oplopend)</option>
-        <option value="oc_fn desc" <?php if ($tableSort === 'oc_fn desc')
-        echo 'selected' ?>>OC Naam (Aflopend)</option>
-        <option value="ic_name asc" <?php if ($tableSort === 'ic_name asc')
-        echo 'selected' ?>>IC Naam (Oplopend)</option>
-        <option value="ic_name desc" <?php if ($tableSort === 'ic_name desc')
-        echo 'selected' ?>>IC Naam (Aflopend)</option>
-        <option value="type asc" <?php if ($tableSort === 'type asc')
-        echo 'selected' ?>>Soort Inschrijf (Oplopend)</option>
-        <option value="type desc" <?php if ($tableSort === 'type desc')
-        echo 'selected' ?>>Soort Inschrijf (Aflopend)
-        </option>
-        <option value="room asc" <?php if ($tableSort === 'room + 0 desc')
-        echo 'selected' ?>>Room (Oplopend)</option>
-        <option value="room desc" <?php if ($tableSort === 'room + 0 asc')
-        echo 'selected' ?>>Room (Aflopend)</option>
-        <option value="register_date asc" <?php if ($tableSort === 'register_date asc')
-        echo 'selected' ?>>Inschrijf
-          Datum(Oplopend)</option>
-        <option value="register_date desc" <?php if ($tableSort === 'register_date desc')
-        echo 'selected' ?>>InschrijfDatum
-          (Aflopend)</option>
-        <option value="type desc, faction asc, oc_fn asc" <?php if ($tableSort === 'type desc, faction asc, oc_fn asc')
-        echo 'selected' ?>>Factie(Oplopend)</option>
-        <option value="type desc, faction desc, oc_fn asc" <?php if ($tableSort === 'type desc, faction desc, oc_fn asc')
-        echo 'selected' ?>>Factie (Aflopend)</option>
+                                  echo 'selected' ?>> OC Naam (Oplopend)</option>
+      <option value="oc_fn desc" <?php if ($tableSort === 'oc_fn desc')
+                                    echo 'selected' ?>>OC Naam (Aflopend)</option>
+      <option value="ic_name asc" <?php if ($tableSort === 'ic_name asc')
+                                    echo 'selected' ?>>IC Naam (Oplopend)</option>
+      <option value="ic_name desc" <?php if ($tableSort === 'ic_name desc')
+                                      echo 'selected' ?>>IC Naam (Aflopend)</option>
+      <option value="type asc" <?php if ($tableSort === 'type asc')
+                                  echo 'selected' ?>>Soort Inschrijf (Oplopend)</option>
+      <option value="type desc" <?php if ($tableSort === 'type desc')
+                                  echo 'selected' ?>>Soort Inschrijf (Aflopend)
+      </option>
+      <option value="room asc" <?php if ($tableSort === 'room + 0 desc')
+                                  echo 'selected' ?>>Room (Oplopend)</option>
+      <option value="room desc" <?php if ($tableSort === 'room + 0 asc')
+                                  echo 'selected' ?>>Room (Aflopend)</option>
+      <option value="register_date asc" <?php if ($tableSort === 'register_date asc')
+                                          echo 'selected' ?>>Inschrijf
+        Datum(Oplopend)</option>
+      <option value="register_date desc" <?php if ($tableSort === 'register_date desc')
+                                            echo 'selected' ?>>InschrijfDatum
+        (Aflopend)</option>
+      <option value="type desc, faction asc, oc_fn asc" <?php if ($tableSort === 'type desc, faction asc, oc_fn asc')
+                                                          echo 'selected' ?>>Factie(Oplopend)</option>
+      <option value="type desc, faction desc, oc_fn asc" <?php if ($tableSort === 'type desc, faction desc, oc_fn asc')
+                                                            echo 'selected' ?>>Factie (Aflopend)</option>
 
 
-      </select>
-    </div>
+    </select>
+  </div>
 
-    <table class="main">
-      <thead>
-        <th width="20%">OC Name</th>
-        <th width="20%">IC Name</th>
-        <th width="15%">Soort Inschrijf</th>
-        <th width="15%">Factie</th>
-        <th class="inschrijf_datum" width="10%">Inschrijf Datum</th>
-        <th>Room</th>
-        <th width="25%">Handtekening</th>
-        <th width="10%">Foto Opt-Out</th>
-      </thead>
-      <?php
+  <table class="main">
+    <thead>
+      <th width="20%">OC Name</th>
+      <th width="20%">IC Name</th>
+      <th width="15%">Soort Inschrijf</th>
+      <th width="15%">Factie</th>
+      <th class="inschrijf_datum" width="10%">Inschrijf Datum</th>
+      <th>Room</th>
+      <th width="25%">Handtekening</th>
+      <th width="10%">Foto Opt-Out</th>
+    </thead>
+    <?php
 
-      ///START MAIN TABLE
-      
-      while ($row = mysqli_fetch_array($res)) {
-        echo "<tr>" . "<td>";
-        echo "<a class='playername' href='participant_detail.php?participant_id=" . $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
-        echo "</td>";
-        echo '<td>' . $row['ic_name'] . "</td>";
-        echo '<td>' . $row['type'] . "</td>";
-        echo '<td>' . ucwords($row['faction']) . "</td>";
-        echo '<td class="inschrijf_datum">' . $row['register_date'] . "</td>";
-        echo '<td>' . $row['room'] . '</td>';
+    ///START MAIN TABLE
+
+    while ($row = mysqli_fetch_array($res)) {
+      echo "<tr>" . "<td>";
+      echo "<a class='playername' href='participant_detail.php?participant_id=" . $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
+      echo "</td>";
+      echo '<td>' . $row['ic_name'] . "</td>";
+      echo '<td>' . $row['type'] . "</td>";
+      echo '<td>' . ucwords($row['faction']) . "</td>";
+      echo '<td class="inschrijf_datum">' . $row['register_date'] . "</td>";
+      echo '<td>' . $row['room'] . '</td>';
+      echo '<td height="40px">&nbsp;</td>';
+      if (strpos($row['foto'], 'afmelden') != false) {
+        echo '<td height="40px">Yes</td>';
+      } else {
         echo '<td height="40px">&nbsp;</td>';
-        if (strpos($row['foto'], 'afmelden') != false) {
-          echo '<td height="40px">Yes</td>';
-        } else {
-          echo '<td height="40px">&nbsp;</td>';
-        }
-        echo "</tr>";
       }
-      echo "</table>";
-      ?>
+      echo "</tr>";
+    }
+    echo "</table>";
+    ?>
     </div>
 </body>
 

@@ -20,4 +20,6 @@ $APP["root"] = $_SERVER["DOCUMENT_ROOT"] . $APP["header"];
 // define the login page to redirect to if there is no $jid set/inherited.
 $APP["loginpage"] = "/return-to-chargen";
 
-// $jid = 451;
+class db {
+    public static $conn;
+}
