@@ -29,7 +29,7 @@ $tableSort = !empty($_GET['sort']) ? $_GET['sort'] : 'register_date desc';
 require './participants-sql.php';
 if (isset($_POST['action'])) {
   if ($_POST['action'] == 'Export to CSV') {
-    $tableSort = 'room + 0 asc, oc_fn asc';
+    $tableSort = 'oc_fn asc';
     require './participants-sql.php';
     $data = array();
     while ($row = mysqli_fetch_array($res)) {
@@ -38,18 +38,11 @@ if (isset($_POST['action'])) {
       } else {
         $photoconsent = "";
       }
-      if (preg_match("/[a-z]/i", $row['room'])) {
-        $building = "Bastion";
-      } else {
-        $building = "Zonnedauw";
-      }
       array_push($data, array(
         "OC Name" => $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'],
         "IC Name" => $row['ic_name'],
         "Factie" => ucfirst($row['faction']),
         "Soort inschrijf" => $row['type'],
-        "Building" => $building,
-        "Room" => $row['room'],
         "Foto Opt-Out" => $photoconsent
       ));
     }
