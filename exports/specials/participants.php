@@ -124,14 +124,14 @@ $SPECIALEVENTID = 22;
 from joomla.jml_eb_registrants r
 join joomla.jml_eb_field_values v1 on (v1.registrant_id = r.id and v1.field_id = 101)
 left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
-left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 100)
+left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 118)
 where soort_inschrijving.field_value = 'Speler' AND r.event_id = $SPECIALEVENTID and $notCancelled
 UNION
 select r.id, r.first_name as oc_fn, tussenvoegsel.field_value as oc_tv,
 r.last_name as oc_ln, NULL as ic_name, soort_inschrijving.field_value as type
 from joomla.jml_eb_registrants r
 left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
-left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 100)
+left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 118)
 WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $SPECIALEVENTID and $notCancelled ORDER BY type, ic_name, oc_fn";
   $res = $UPLINK->query($sql);
   $row_count = mysqli_num_rows($res);
