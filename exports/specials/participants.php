@@ -136,8 +136,40 @@ WHERE soort_inschrijving.field_value != 'Speler' AND r.event_id = $SPECIALEVENTI
   $res = $UPLINK->query($sql);
   $row_count = mysqli_num_rows($res);
   echo '<button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button>';
-  echo '<font size="5">Participants for ' . $row2['title'] . ' - '
-    . "($row_count participants)</font>";
+  #Participant selector row
+  $sql_all_events = "SELECT e.id, e.title FROM jml_eb_events e
+LEFT JOIN joomla.jml_eb_event_categories cats ON (cats.event_id = e.id)
+WHERE cats.category_id = 2 AND e.id <= $SPECIALEVENTID # 2 is specials and spinoffs
+ORDER By event_date;";
+  $res_all_events = $UPLINK->query($sql_all_events);
+  echo '<font size="5">Participants for ';
+  ?>
+  <select name="eventid" id="eventid" onchange="location.href = '/eoschargen/exports/specials/participants.php?&<?php
+                                                                                                                if (isset($_GET["email"])) {
+                                                                                                                  echo 'email=' . $_GET["email"] . '&';
+                                                                                                                };
+                                                                                                                if (isset($_GET["sort"])) {
+                                                                                                                  echo 'sort=' . $_GET["sort"] . '&';
+                                                                                                                }
+                                                                                                                ?>&selected_event=' + this.value; ">
+    <?php while ($row_all_events = mysqli_fetch_array($res_all_events)) {
+      if ($row_all_events['id'] == $selected_event) {
+        $event_select = 'selected';
+      } else {
+        $event_select = '';
+      }
+      if ($row_all_events['id'] == $EVENTID) {
+        $title = $row_all_events['title'] . " (Upcoming Event)";
+      } else {
+        $title = $row_all_events['title'];
+      }
+      echo '<option value="' . $row_all_events['id'] . '"' . $event_select . '>' . $title . "</option>";
+    } ?>
+  </select>
+  <?php
+  echo '- ' . "($row_count participants)</font><br>";
+  #end participant selection
+
   echo "<table>";
   echo '<th width="20%">OC Name</th>';
   echo '<th width="20%">IC Name</th>';
