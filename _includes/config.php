@@ -1,6 +1,5 @@
 <?php
-// include the db.php connection. This file is not available on my github for security reasons.
-// to make your own, see db.sample.php
+
 // config variable.
 $APP = array();
 
@@ -14,13 +13,9 @@ $APP["includes"] = array();
 // Dynamically retrieves the location of the application. for example: http://localhost/chargen/ == '/chargen'. If the application is in the ROOT, you can leave this blank.
 // Get the directory of the current script (e.g., "/eoschargen" or "/")
 $dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
-
 // If we are at the root, $dir will be "/" or ".". 
 // We clean it so root becomes an empty string or just a single slash.
 $APP["header"] = ($dir === '/' || $dir === '.') ? '' : $dir;
 // define the login page to redirect to if there is no $jid set/inherited.
 # $APP["loginpage"] = "/return-to-chargen"; Commented because we're using the declaration from joomla.php
-
-class db {
-    public static $conn;
-}
+$APP["root"] = __DIR__ . '/../';

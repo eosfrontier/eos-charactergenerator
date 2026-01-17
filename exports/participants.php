@@ -1,33 +1,22 @@
 <?php
-include_once("../_includes/config.php");
-$APP = array();
-#$APP["loginpage"] = "/return-to-registrants-list";
-
-include_once('../db.php');
-include_once("../_includes/functions.global.php");
+include_once __DIR__ . "/../_includes/includes.php";
 include_once("../_includes/functions.playercap.php");
-include_once("../_includes/joomla.php");
-include_once('./current-players.php');
+require './participants-sql.php';
 
 $UPLINK->set_charset("utf8mb4");
 
-if (isset($_GET['selected_event'])) {
-  $selected_event = $_GET['selected_event'];
-} else {
-  $selected_event = $EVENTID;
-}
+
 
 
 if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
   header('Status: 303 Moved Temporarily', false, 303);
   header('Location: ../');
 }
-$tableSort = !empty($_GET['sort']) ? $_GET['sort'] : 'register_date desc';
+
 
 if (isset($_POST['action'])) {
   if ($_POST['action'] == 'Export to CSV') {
     $tableSort = 'room + 0 asc, oc_fn asc';
-    require './participants-sql.php';
     $data = array();
     while ($row = mysqli_fetch_array($res)) {
       if (strpos($row['foto'], 'afmelden') != false) {
@@ -106,7 +95,6 @@ if (isset($_POST['action'])) {
 
 <body>
   <?php
-  require './participants-sql.php';
 
   $event_title = $row2['title'];
   echo "<div id='printButton'>";
@@ -206,7 +194,7 @@ if (isset($_POST['action'])) {
       } ?>
     </table>
   </div>
-  <?php $email = !empty($_GET['email']) ? $_GET['email'] : '%%'; ?>
+  <?php $email = $_GET['email'] ?? '%%';?>
   <div id="CopyEmailButton">
     <?php
     $email_is_set_params = '';

@@ -1,12 +1,6 @@
 <?php
-$APP = array();
-$APP["includes"] = array();
-$APP["header"] = "/eoschargen";
-$APP["root"] = $_SERVER["DOCUMENT_ROOT"] . $APP["header"];
-#$APP["loginpage"] = "/component/users/?view=login";
 
-include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
-include_once($APP["root"] . "/_includes/functions.global.php");
+
 include_once($APP["root"] . '/exports/current-players.php');
 ?>
 <!DOCTYPE html>

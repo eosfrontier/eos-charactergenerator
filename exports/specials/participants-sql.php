@@ -1,4 +1,7 @@
 <?php
+$tableSort = $_GET['sort'] ?? 'register_date desc';
+$selected_event = $_GET['selected_event'] ?? $SPECIALEVENTID;
+$email = $_GET['email'] ?? '%%';
 // 1. Initialize the list with your starting parent ID
 $categories_to_check = [2]; 
 $all_found_ids = [2];
@@ -66,6 +69,12 @@ where  soort_inschrijving.field_value IS NOT NULL AND r.event_id = $selected_eve
 GROUP BY soort_inschrijving.field_value";
 $res3 = $UPLINK->query($sql3);
 
+#Get email addresses
+$sql4 = "SELECT r.email as email from joomla.jml_eb_registrants r
+     left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 118)
+     where soort_inschrijving.field_value LIKE '$email' AND r.event_id = $selected_event and $notCancelled";
+      $res4 = $UPLINK->query($sql4);
+
 #Get count of factions
 $sql5 = "SELECT faction.faction as faction, COUNT(*) as count
 from joomla.jml_eb_registrants r
@@ -90,5 +99,3 @@ $sql_donations = "SELECT sum(v3.field_value) AS total_donations from jml_eb_regi
               join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 102)
 				      WHERE  r.event_id = $selected_event AND $notCancelled;";
 $donations = mysqli_fetch_array($UPLINK->query($sql_donations));
-
-    

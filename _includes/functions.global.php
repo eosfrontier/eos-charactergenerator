@@ -414,3 +414,33 @@ function formatPhoneNumber($phone, $country = '')
     }
     return $formattedPhone;
 }
+
+/**
+ * Generates a URL keeping current allowed params, with optional overrides.
+ *
+ * @param string $page The filename (e.g., 'profile.php')
+ * @param array $overrides Key/Value pairs to add or update (e.g., ['sort' => 'desc'])
+ * @param array $allowedKeys The $_GET keys we are allowed to carry over
+ * @return string
+ */
+function build_url($page = null, $overrides = [], $allowedKeys = ['email', 'sort']) {
+    // 1. If no page is provided, use current file (e.g., 'index.php')
+    if ($page === null) {
+        $page = basename($_SERVER['SCRIPT_NAME']);
+    }
+
+    // 2. Filter existing GET params
+    $filtered = array_intersect_key($_GET, array_flip($allowedKeys));
+
+    // 3. Merge overrides
+    $finalParams = array_replace($filtered, $overrides);
+
+    // 4. Remove nulls (cleanup)
+    $finalParams = array_filter($finalParams, fn($value) => $value !== null);
+
+    // 5. Build the query string
+    $queryString = http_build_query($finalParams);
+    
+    // 6. Return just the filename + query (e.g., "index.php?sort=asc")
+    return $page . ($queryString ? '?' . $queryString : '');
+}

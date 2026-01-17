@@ -1,4 +1,13 @@
 <?php
+
+function loginWithRedirect($redirectUrl)
+{
+  $redirectUrl = '&return=' . urlencode(base64_encode($redirectUrl));
+  $joomlaLoginUrl = 'index.php?option=com_users&view=login';
+  header("location: " . $joomlaLoginUrl . $redirectUrl);
+  exit();
+}
+
 if ($dev) {
     $jid = 747;
     $myobj = new \stdClass();
@@ -41,12 +50,5 @@ $array = array(
 );
 $jgroups = $array["groups"];
 
-$APP["loginpage"]="joomla";
+#$APP["loginpage"]="joomla";
 
-function loginWithRedirect($redirectUrl)
-{
-  $redirectUrl = '&return=' . urlencode(base64_encode($redirectUrl));
-  $joomlaLoginUrl = 'index.php?option=com_users&view=login';
-  header("location: " . $joomlaLoginUrl . $redirectUrl);
-  exit();
-}

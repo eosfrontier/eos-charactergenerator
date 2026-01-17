@@ -1,5 +1,7 @@
 <?php
-
+$tableSort = $_GET['sort'] ?? 'register_date desc';
+$selected_event = $_GET['selected_event'] ?? $EVENTID;
+$email = $_GET['email'] ?? '%%';
 
 #Get List of all events
 $sql_all_events = "SELECT e.id, e.title FROM jml_eb_events e
