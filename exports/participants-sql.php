@@ -56,6 +56,12 @@ where  soort_inschrijving.field_value IS NOT NULL AND r.event_id = $selected_eve
 GROUP BY soort_inschrijving.field_value";
 $res3 = $UPLINK->query($sql3);
 
+#Get the e-mail addressess
+$sql4 = "SELECT r.email as email from joomla.jml_eb_registrants r
+        left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
+        where soort_inschrijving.field_value LIKE '$email' AND r.event_id = $selected_event and $notCancelled";
+$res4 = $UPLINK->query($sql4);
+
 #Get count of factions
 $sql5 = "SELECT faction.faction as faction, COUNT(*) as count
 from joomla.jml_eb_registrants r

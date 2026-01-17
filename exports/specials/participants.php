@@ -222,7 +222,8 @@ if (isset($_POST['action'])) {
       <button class="button" onclick="copyTo()">Copy Participant E-mails</button><br><br>
     </div>
 
-    <div id="SortBy">Sorteer op:
+    <div id="SortBy">
+      Sorteer op:
       <?php
       $sortOptions = [
         'oc_fn asc'                         => 'OC Naam (Oplopend)',
@@ -241,48 +242,77 @@ if (isset($_POST['action'])) {
       ?>
       <select id="sort_table"
         style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;"
-        onchange="location.href = '<?php echo build_url(null, ['selected_event' => $selected_event, 'sort' => null]); ?>&sort=' + this.value;">
-        <?php foreach ($sortOptions as $value => $label):
-          $selected = ($tableSort === $value) ? 'selected' : '';
-        ?>
-          <option value="<?= $value ?>" <?= $selected ?>><?= $label ?></option>
+        onchange="location.href = '<?= build_url(null, ['selected_event' => $selected_event, 'sort' => null]) ?>&sort=' + this.value;">
+        <?php foreach ($sortOptions as $value => $label): ?>
+          <option value="<?= $value ?>" <?= ($tableSort === $value) ? 'selected' : '' ?>>
+            <?= $label ?>
+          </option>
         <?php endforeach; ?>
       </select>
     </div>
 
+    <?php
+    $mainTableBlueprint = [
+      'OC Name'         => [
+        'key'   => 'oc_full_name',
+        'width' => '20%',
+        'class' => '',
+        'link'  => 'participant_detail.php?participant_id='
+      ],
+      'IC Name'         => ['key' => 'ic_name',       'width' => '20%', 'class' => ''],
+      'Soort Inschrijf' => ['key' => 'type',          'width' => '15%', 'class' => ''],
+      'Factie'          => ['key' => 'faction_clean', 'width' => '15%', 'class' => ''],
+      'Inschrijf Datum' => ['key' => 'register_date', 'width' => '10%', 'class' => 'inschrijf_datum'],
+      'Handtekening'    => ['key' => 'signature',     'width' => '25%', 'class' => 'print-only'],
+      'Foto Opt-Out'    => ['key' => 'photo_status',  'width' => '10%', 'class' => 'print-only']
+    ];
+    ?>
+
     <table class="main">
       <thead>
-        <th width="20%">OC Name</th>
-        <th width="20%">IC Name</th>
-        <th width="15%">Soort Inschrijf</th>
-        <th width="15%">Factie</th>
-        <th class="inschrijf_datum" width="10%">Inschrijf Datum</th>
-        <th width="25%">Handtekening</th>
-        <th width="10%">Foto Opt-Out</th>
+        <tr>
+          <?php foreach ($mainTableBlueprint as $label => $config): ?>
+            <th width="<?= $config['width'] ?>" class="<?= $config['class'] ?>">
+              <?= $label ?>
+            </th>
+          <?php endforeach; ?>
+        </tr>
       </thead>
-      <?php
+      <tbody>
+        <?php while ($row = mysqli_fetch_array($res)):
+          // Data Prep
+          $row['oc_full_name']  = trim($row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln']);
+          $row['faction_clean'] = ucwords($row['faction'] ?? '');
+          $row['signature']     = '&nbsp;';
+          $row['photo_status']  = str_contains($row['foto'] ?? '', 'afmelden') ? 'Yes' : '&nbsp;';
+        ?>
+          <tr>
+            <?php foreach ($mainTableBlueprint as $config):
+              $key = $config['key'];
+              $val = $row[$key] ?? '';
+              $class = $config['class'] ?? '';
+            ?>
+              <td class="<?= $class ?>" style="<?= ($key === 'signature') ? 'height: 40px;' : '' ?>">
 
-      ///START MAIN TABLE
+                <?php if (isset($config['link'])): ?>
+                  <a class="playername" href="<?= $config['link'] . $row['id'] ?>">
+                    <?= htmlspecialchars((string)$val) ?>
+                  </a>
 
-      while ($row = mysqli_fetch_array($res)) {
-        echo "<tr>" . "<td>";
-        echo "<a class='playername' href='participant_detail.php?participant_id=" . $row['id'] . "'>" . $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'];
-        echo "</td>";
-        echo '<td>' . $row['ic_name'] . "</td>";
-        echo '<td>' . $row['type'] . "</td>";
-        echo '<td>' . ucwords($row['faction']) . "</td>";
-        echo '<td class="inschrijf_datum">' . $row['register_date'] . "</td>";
-        echo '<td height="40px">&nbsp;</td>';
-        if (strpos($row['foto'], 'afmelden') != false) {
-          echo '<td height="40px">Yes</td>';
-        } else {
-          echo '<td height="40px">&nbsp;</td>';
-        }
-        echo "</tr>";
-      }
-      echo "</table>";
-      ?>
-      </div>
+                <?php elseif ($key === 'signature' || $key === 'photo_status'): ?>
+                  <?= $val ?>
+
+                <?php else: ?>
+                  <?= htmlspecialchars((string)$val) ?>
+                <?php endif; ?>
+
+              </td>
+            <?php endforeach; ?>
+          </tr>
+        <?php endwhile; ?>
+      </tbody>
+    </table>
+    </div>
 </body>
 
 </html>

@@ -3,7 +3,7 @@ $tableSort = $_GET['sort'] ?? 'register_date desc';
 $selected_event = $_GET['selected_event'] ?? $SPECIALEVENTID;
 $email = $_GET['email'] ?? '%%';
 // 1. Initialize the list with your starting parent ID
-$categories_to_check = [2]; 
+$categories_to_check = [2];
 $all_found_ids = [2];
 
 // 2. Loop as long as there are IDs in our "to check" list
@@ -73,7 +73,7 @@ $res3 = $UPLINK->query($sql3);
 $sql4 = "SELECT r.email as email from joomla.jml_eb_registrants r
      left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 118)
      where soort_inschrijving.field_value LIKE '$email' AND r.event_id = $selected_event and $notCancelled";
-      $res4 = $UPLINK->query($sql4);
+$res4 = $UPLINK->query($sql4);
 
 #Get count of factions
 $sql5 = "SELECT faction.faction as faction, COUNT(*) as count

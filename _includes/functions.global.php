@@ -444,3 +444,9 @@ function build_url($page = null, $overrides = [], $allowedKeys = ['email', 'sort
     // 6. Return just the filename + query (e.g., "index.php?sort=asc")
     return $page . ($queryString ? '?' . $queryString : '');
 }
+// PHP < 8.0 doesn't have str_contains
+if (!function_exists('str_contains')) {
+    function str_contains($haystack, $needle) {
+        return $needle !== '' && mb_strpos($haystack, $needle) !== false;
+    }
+}
