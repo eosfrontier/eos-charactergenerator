@@ -18,7 +18,7 @@ $APP["header"] = "/eoschargen";
 $APP["root"] = $_SERVER["DOCUMENT_ROOT"] . $APP["header"];
 
 // define the login page to redirect to if there is no $jid set/inherited.
-$APP["loginpage"] = "/return-to-chargen";
+# $APP["loginpage"] = "/return-to-chargen"; Commented because we're using the declaration from joomla.php
 
 class db {
     public static $conn;

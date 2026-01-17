@@ -1,7 +1,7 @@
 <?php
 include_once("../_includes/config.php");
 $APP = array();
-$APP["loginpage"] = "/return-to-registrants-list";
+#$APP["loginpage"] = "/return-to-registrants-list";
 
 include_once('../db.php');
 include_once("../_includes/functions.global.php");
