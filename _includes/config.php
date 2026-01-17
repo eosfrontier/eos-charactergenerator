@@ -18,4 +18,12 @@ $dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
 $APP["header"] = ($dir === '/' || $dir === '.') ? '' : $dir;
 // define the login page to redirect to if there is no $jid set/inherited.
 # $APP["loginpage"] = "/return-to-chargen"; Commented because we're using the declaration from joomla.php
-$APP["root"] = __DIR__ . '/../';
+
+// __DIR__ returns the directory of THIS file (the root)
+// __DIR__ is .../project/_includes
+// dirname(__DIR__) moves up one level to .../project/
+define('APP_ROOT', dirname(__DIR__));
+
+// Web Path (for Browser/HTML)
+// This creates a path like "/eos-charactergenerator" 
+define('WEB_ROOT', str_replace($_SERVER['DOCUMENT_ROOT'], '', APP_ROOT));

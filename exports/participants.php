@@ -1,82 +1,26 @@
 <?php
 include_once __DIR__ . "/../_includes/includes.php";
-include_once  $APP["root"] . "/_includes/functions.playercap.php";
+include_once  APP_ROOT . "/_includes/functions.playercap.php";
 require './participants-sql.php';
-
 $UPLINK->set_charset("utf8mb4");
 
-
-
-
+// 1. Permissions & Redirects
 if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
-  header('Status: 303 Moved Temporarily', false, 303);
-  header('Location: ../');
+  header('Location: ../', true, 303);
+  exit;
+}
+// 2. CSV Export Logic (Memory Efficient)
+if (isset($_POST['action']) && $_POST['action'] === 'Export to CSV') {
+  exportParticipantsToCSV($res, 'oc_fn');
 }
 
-
-if (isset($_POST['action'])) {
-  if ($_POST['action'] == 'Export to CSV') {
-    $tableSort = 'room + 0 asc, oc_fn asc';
-    $data = array();
-    while ($row = mysqli_fetch_array($res)) {
-      if (strpos($row['foto'], 'afmelden') != false) {
-        $photoconsent = "Yes";
-      } else {
-        $photoconsent = "";
-      }
-      if (preg_match("/[a-z]/i", $row['room'])) {
-        $building = "Bastion";
-      } else {
-        $building = "Zonnedauw";
-      }
-      array_push($data, array(
-        "OC Name" => $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'],
-        "IC Name" => $row['ic_name'],
-        "Factie" => ucfirst($row['faction']),
-        "Soort inschrijf" => $row['type'],
-        "Building" => $building,
-        "Room" => $row['room'],
-        "Foto Opt-Out" => $photoconsent
-      ));
-    }
-    function filterData(&$str)
-    {
-      $str = preg_replace("/\t/", "\\t", $str);
-      $str = preg_replace("/\r?\n/", "\\n", $str);
-      if (strstr($str, '"'))
-        $str = '"' . str_replace('"', '""', $str) . '"';
-    }
-    // Excel file name for download 
-    $fileName = "registrant-export-" . date('Y-m-d H.i.s', time()) . ".csv";
-
-    // Headers for download 
-    header("Content-Disposition: attachment; filename=\"$fileName\"");
-    header("Content-Type:  text/csv; charset=-8");
-
-    $flag = false;
-    echo chr(0xEF) . chr(0xBB) . chr(0xBF);
-    $file = fopen('php://output', 'w+');
-    $bom = chr(0xEF) . chr(0xBB) . chr(0xBF);
-    fputs($file, $bom);
-    foreach ($data as $row) {
-      if (!$flag) {
-        // display column names as first row 
-        fputs($file, implode(",", array_keys($row)) . "\n");
-        $flag = true;
-      }
-      // filter data 
-      array_walk($row, 'filterData');
-      fputs($file, implode(",", array_values($row)) . "\n");
-    }
-    fclose($file);
-    exit;
-  }
-}
 ?>
+
+<!-- 3. The rest of the page-->
 <!DOCTYPE html>
 <html>
-
 <head>
+  <script src="../_includes/js/print.js" defer></script>
   <script>
     function copyTo() {
       // Get the text field
@@ -94,17 +38,14 @@ if (isset($_POST['action'])) {
 </head>
 
 <body>
-  <?php
-
-  $event_title = $row2['title'];
-  echo "<div id='printButton'>";
-  ?>
+  <?php $event_title = $row2['title'];?>
+  <div id='printButton'>
   &nbsp;
-  <form method="post">
-    <input type="submit" name="action" class="button" value="Export to CSV" />
-  </form>
-  <button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button>
-  <font color='red'>IMPORTANT: Before clicking print, change sorting to OC Naam (oplopend)!</font>
+  <a href="<?= build_url(null, ['sort' => 'oc_fn asc', 'print' => 'true']) ?>"
+    class="button"
+    style="width: 100px; text-decoration: none; display: inline-block;">
+    Print
+  </a>
   </div>
   <font size="5">Participants for
     <select name="eventid" id="eventid"
@@ -126,84 +67,87 @@ if (isset($_POST['action'])) {
     ?>
     <div class="grid" id="pageHeader_noPrint">
       <table>
-    <thead>
-        <tr>
+        <thead>
+          <tr>
             <th>Soort Inschrijf</th>
             <th>Aantal Deelnemers</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php while ($row2 = mysqli_fetch_array($res3)): ?>
+          </tr>
+        </thead>
+        <tbody>
+          <?php while ($row2 = mysqli_fetch_array($res3)): ?>
             <tr>
-                <td><?= htmlspecialchars($row2['type']) ?></td>
-                <td><?= $row2['count'] ?></td>
+              <td><?= htmlspecialchars($row2['type']) ?></td>
+              <td><?= $row2['count'] ?></td>
             </tr>
-        <?php endwhile; ?>
+          <?php endwhile; ?>
 
-        <?php if (in_array("32", $jgroups, true)): 
+          <?php if (in_array("32", $jgroups, true)):
             // Collect summary items into an array for a cleaner loop
             $summaries = [
-                ["Pending Payments ($event_title)", "€" . number_format($pending['amount'], 2)],
-                ["Number of Sponsor Tickets used on $event_title:", $sponsor['count']],
-                ["Number of Sponsor Tickets remaining:", intval($remaining_tickets['tickets_remaining'])],
-                ["Donations made this event:", "€" . number_format($donations['total_donations'], 2)]
+              ["Pending Payments ($event_title)", "€" . number_format($pending['amount'], 2)],
+              ["Number of Sponsor Tickets used on $event_title:", $sponsor['count']],
+              ["Number of Sponsor Tickets remaining:", intval($remaining_tickets['tickets_remaining'])],
+              ["Donations made this event:", "€" . number_format($donations['total_donations'], 2)]
             ];
 
             if (round($pending_old['amount'], 2) > 0 && $selected_event == $EVENTID) {
-                $summaries[] = ["Pending Payments (previous events)", "€" . number_format($pending_old['amount'], 2)];
+              $summaries[] = ["Pending Payments (previous events)", "€" . number_format($pending_old['amount'], 2)];
             }
-        ?>
-            <tr><td>&nbsp;</td><td></td></tr>
+          ?>
+            <tr>
+              <td>&nbsp;</td>
+              <td></td>
+            </tr>
             <?php foreach ($summaries as $item): ?>
-                <tr>
-                    <td><?= $item[0] ?></td>
-                    <td><?= $item[1] ?></td>
-                </tr>
+              <tr>
+                <td><?= $item[0] ?></td>
+                <td><?= $item[1] ?></td>
+              </tr>
             <?php endforeach; ?>
-        <?php endif; ?>
-    </tbody>
-</table>
+          <?php endif; ?>
+        </tbody>
+      </table>
 
-<table>
-    <thead>
-        <tr>
+      <table>
+        <thead>
+          <tr>
             <th width="50%">Faction</th>
             <th width="50%">Aantal Deelnemers op evenement</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php while ($row3 = mysqli_fetch_array($res5)): ?>
+          </tr>
+        </thead>
+        <tbody>
+          <?php while ($row3 = mysqli_fetch_array($res5)): ?>
             <tr>
-                <td><?= ucwords($row3['faction']) ?></td>
-                <td><?= $row3['count'] ?></td>
+              <td><?= ucwords($row3['faction']) ?></td>
+              <td><?= $row3['count'] ?></td>
             </tr>
-        <?php endwhile; ?>
-    </tbody>
-</table>
+          <?php endwhile; ?>
+        </tbody>
+      </table>
 
-<table>
-    <thead>
-        <tr>
+      <table>
+        <thead>
+          <tr>
             <th width="50%">Faction</th>
             <th width="50%">Active Characters (since <?= player_cap_count_from() ?>)</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php 
-        $faction_caps = get_active_factions();
-        while ($faction_cap_row = mysqli_fetch_array($faction_caps)): 
-        ?>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          $faction_caps = get_active_factions();
+          while ($faction_cap_row = mysqli_fetch_array($faction_caps)):
+          ?>
             <tr>
-                <td>
-                    <a href="./player_cap/player_cap.php?faction=<?= urlencode($faction_cap_row['faction']) ?>">
-                        <?= ucwords($faction_cap_row['faction']) ?>
-                    </a>
-                </td>
-                <td><?= $faction_cap_row['count'] ?></td>
+              <td>
+                <a href="./player_cap/player_cap.php?faction=<?= urlencode($faction_cap_row['faction']) ?>">
+                  <?= ucwords($faction_cap_row['faction']) ?>
+                </a>
+              </td>
+              <td><?= $faction_cap_row['count'] ?></td>
             </tr>
-        <?php endwhile; ?>
-    </tbody>
-</table>
+          <?php endwhile; ?>
+        </tbody>
+      </table>
     </div>
     <div id="CopyEmailButton">
       Type of E-mail Addresses to Copy:

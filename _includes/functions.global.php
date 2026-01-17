@@ -450,3 +450,49 @@ if (!function_exists('str_contains')) {
         return $needle !== '' && mb_strpos($haystack, $needle) !== false;
     }
 }
+
+/**
+ * Exports a participant MySQLi result set to a downloadable CSV.
+ * * @param mysqli_result $resultSet The query result to export
+ * @param string $prefix The start of the filename (e.g., 'registrant-export')
+ */
+function exportParticipantsToCSV($resultSet, $prefix = 'export') {
+    $fileName = $prefix . "-" . date('Y-m-d_His') . ".csv";
+
+    // Set headers for download
+    header("Content-Type: text/csv; charset=utf-8");
+    header("Content-Disposition: attachment; filename=\"$fileName\"");
+    
+    // Open output stream
+    $output = fopen('php://output', 'w');
+    
+    // Add UTF-8 BOM for Excel compatibility
+    fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+
+    $isHeaderWritten = false;
+    
+    // Reset result set pointer to the beginning
+    mysqli_data_seek($resultSet, 0);
+
+    while ($row = mysqli_fetch_array($resultSet)) {
+        // Data Transformation Layer
+        $csvRow = [
+            "OC Name"         => trim($row['oc_fn'] . " " . ($row['oc_tv'] ?? '') . " " . $row['oc_ln']),
+            "IC Name"         => $row['ic_name'] ?? '',
+            "Factie"          => ucfirst($row['faction'] ?? ''),
+            "Soort inschrijf" => $row['type'] ?? '',
+            "Foto Opt-Out"    => str_contains($row['foto'] ?? '', 'afmelden') ? "Yes" : ""
+        ];
+
+        // Write headers once based on the keys of the first row
+        if (!$isHeaderWritten) {
+            fputcsv($output, array_keys($csvRow));
+            $isHeaderWritten = true;
+        }
+
+        fputcsv($output, $csvRow);
+    }
+
+    fclose($output);
+    exit; // Stop execution so no HTML is appended to the CSV
+}

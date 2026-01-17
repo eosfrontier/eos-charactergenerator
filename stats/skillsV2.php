@@ -332,7 +332,7 @@ if (!isset($_GET['viewChar']) || $_GET['viewChar'] == "") {
 </div>
 
 <?php
-include_once($APP["root"] . "/footer.php");
+include_once APP_ROOT . "/footer.php";
 ?>
 <script type="text/javascript" src="<?= $APP['header'] ?>/_includes/js/functions.skills.js"></script>
 <?php

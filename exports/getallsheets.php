@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . "/../_includes/includes.php";
-include_once $APP["root"] . "/_includes/functions.sheet.php";
-include_once $APP["root"] . "/_includes/functions.skills.php";
+include_once APP_ROOT . "/_includes/functions.sheet.php";
+include_once APP_ROOT . "/_includes/functions.skills.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">

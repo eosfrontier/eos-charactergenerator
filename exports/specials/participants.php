@@ -1,70 +1,26 @@
 <?php
 include_once __DIR__ . "/../../_includes/includes.php";
-include_once  $APP["root"] . "/_includes/functions.playercap.php";
+include_once  APP_ROOT . "/_includes/functions.playercap.php";
 require './participants-sql.php';
 $UPLINK->set_charset("utf8mb4");
 
-
+// 1. Permissions & Redirects
 if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
-  header('Status: 303 Moved Temporarily', false, 303);
-  header('Location: ../');
+  header('Location: ../', true, 303);
+  exit;
 }
-if (isset($_POST['action'])) {
-  if ($_POST['action'] == 'Export to CSV') {
-    $tableSort = 'oc_fn asc';
-    $data = array();
-    while ($row = mysqli_fetch_array($res)) {
-      if (strpos($row['foto'], 'afmelden') != false) {
-        $photoconsent = "Yes";
-      } else {
-        $photoconsent = "";
-      }
-      array_push($data, array(
-        "OC Name" => $row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln'],
-        "IC Name" => $row['ic_name'],
-        "Factie" => ucfirst($row['faction']),
-        "Soort inschrijf" => $row['type'],
-        "Foto Opt-Out" => $photoconsent
-      ));
-    }
-    function filterData(&$str)
-    {
-      $str = preg_replace("/\t/", "\\t", $str);
-      $str = preg_replace("/\r?\n/", "\\n", $str);
-      if (strstr($str, '"'))
-        $str = '"' . str_replace('"', '""', $str) . '"';
-    }
-    // Excel file name for download 
-    $fileName = "registrant-export-" . date('Y-m-d H.i.s', time()) . ".csv";
-
-    // Headers for download 
-    header("Content-Disposition: attachment; filename=\"$fileName\"");
-    header("Content-Type:  text/csv; charset=-8");
-
-    $flag = false;
-    echo chr(0xEF) . chr(0xBB) . chr(0xBF);
-    $file = fopen('php://output', 'w+');
-    $bom = chr(0xEF) . chr(0xBB) . chr(0xBF);
-    fputs($file, $bom);
-    foreach ($data as $row) {
-      if (!$flag) {
-        // display column names as first row 
-        fputs($file, implode(",", array_keys($row)) . "\n");
-        $flag = true;
-      }
-      // filter data 
-      array_walk($row, 'filterData');
-      fputs($file, implode(",", array_values($row)) . "\n");
-    }
-    fclose($file);
-    exit;
-  }
+// 2. CSV Export Logic (Memory Efficient)
+if (isset($_POST['action']) && $_POST['action'] === 'Export to CSV') {
+  exportParticipantsToCSV($res, 'oc_fn');
 }
+
 ?>
+<!-- 3. The rest of the page-->
 <!DOCTYPE html>
 <html>
 
 <head>
+  <script src="../../_includes/js/print.js" defer></script>
   <script>
     function copyTo() {
       // Get the text field
@@ -84,14 +40,15 @@ if (isset($_POST['action'])) {
 <body>
   <?php
   $event_title = $row2['title'];
-  echo "<div id='printButton'>";
   ?>
-  &nbsp;
-  <form method="post">
-    <input type="submit" name="action" class="button" value="Export to CSV" />
-  </form>
-  <button class="button" id="printPageButton" style="width: 100px;" onClick="window.print();">Print</button>
-  <font color='red'>IMPORTANT: Before clicking print, change sorting to OC Naam (oplopend)!</font>
+  <div id='printButton'>
+    &nbsp;
+    <a href="<?= build_url(null, ['sort' => 'oc_fn asc', 'print' => 'true']) ?>"
+      class="button"
+      style="width: 100px; text-decoration: none; display: inline-block;">
+      Print
+    </a>
+  </div>
   </div>
   <font size="5">Participants for
     <select name="eventid" id="eventid"
