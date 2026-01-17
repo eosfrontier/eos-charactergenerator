@@ -5,8 +5,7 @@ error_reporting(E_ALL);
 include_once("../../_includes/config.php");
 $APP = array();
 
-#$APP["loginpage"] = "/return-to-chargen";
-$APP["loginpage"] = "/component/users/?view=login";
+$APP["loginpage"] = "/return-to-special-registrants-list";
 
 include_once('../../db.php');
 include_once('../../_includes/functions.global.php');
