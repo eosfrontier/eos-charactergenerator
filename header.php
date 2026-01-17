@@ -1,6 +1,4 @@
 <?php
-if (!isset($APP))
-  die('No direct access allowed');
 
 if (!isset($jid) || $jid == false || $jid == null || $jid == "") {
 
