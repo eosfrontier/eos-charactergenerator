@@ -1,4 +1,6 @@
 <?php
+
+
 if (!isset($APP))
   die('No direct access allowed');
 
@@ -9,7 +11,7 @@ if (!isset($jid) || $jid == false || $jid == null || $jid == "") {
     exit();
   } else {
     if ($APP["loginpage"] == "joomla") {
-    loginWithRedirect(basename($_SERVER['REQUEST_URI']));
+    loginWithRedirect(ltrim($_SERVER['REQUEST_URI'], '/'));
   } else {
         header("location: " . $APP["loginpage"]);
     exit();
