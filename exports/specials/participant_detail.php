@@ -1,14 +1,13 @@
 <?php
-// globals
-// config variable.
+include_once("../../_includes/config.php");
+include_once('../../_includes/functions.global.php');
+
 $APP = array();
 
 #$APP["loginpage"] = "/component/users/?view=login";
 
-include_once('../db.php');
-include_once("../_includes/functions.global.php");
-include_once("../_includes/joomla.php");
-include_once('./current-players.php');
+include_once('../../db.php');
+include_once('../../_includes/joomla.php');
 
 
 
@@ -35,13 +34,13 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       navigator.clipboard.writeText(copyText.value);
     }
   </script>
- <link rel="stylesheet" href="css/participants.css">
+ <link rel="stylesheet" href="../css/participants.css">
 </head>
 
 <body>
   <?php
   $participant_id = $_GET['participant_id'];
-  $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";
+  $sql2 = "SELECT title FROM jml_eb_events where id = $SPECIALEVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);
   $sql = "SELECT r.id, r.first_name as oc_fn, r.register_date, r.email as email, tussenvoegsel.field_value as oc_tv, r.phone as phone,
