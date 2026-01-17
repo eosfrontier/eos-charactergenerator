@@ -62,7 +62,7 @@ if (mysqli_num_rows($res2) > 0) {
         </div>
     </div>
   </div>
-  <?php include APP_ROOT . '/footer.php'; ?>
+  <?php include '../../footer.php'; ?>
 </body>
 
 </html>

@@ -37,7 +37,7 @@ if (!in_array("31", $jgroups, true) && !in_array("30", $jgroups, true)) {
     <div class="panel-body" align="center">
       <h1>SL/NPC Photo Uploader</h1>
       <?php
-      $filepath = $APP["root"] . '/img/passphoto/npc/' . $jid . '.jpg';
+      $filepath = APP_ROOT . '/img/passphoto/npc/' . $jid . '.jpg';
       $url = '../../img/passphoto/npc/' . $jid . '.jpg';
       if (file_exists($filepath)) {
         echo '<h2>Existing Profile Image</h2>';
@@ -58,7 +58,7 @@ if (!in_array("31", $jgroups, true) && !in_array("30", $jgroups, true)) {
       </div>
     </div>
   </div>
-  <?php include $APP["root"] . '/footer.php'; ?>
+  <?php include APP_ROOT . '/footer.php'; ?>
 </body>
 
 </html>
