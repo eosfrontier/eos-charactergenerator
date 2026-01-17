@@ -12,10 +12,18 @@ $APP["includes"] = array();
 
 // Dynamically retrieves the location of the application. for example: http://localhost/chargen/ == '/chargen'. If the application is in the ROOT, you can leave this blank.
 // Get the directory of the current script (e.g., "/eoschargen" or "/")
-$dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
-// If we are at the root, $dir will be "/" or ".". 
-// We clean it so root becomes an empty string or just a single slash.
-$APP["header"] = ($dir === '/' || $dir === '.') ? '' : $dir;
+// Get the path part of the URL (e.g., /eos-charactergenerator/exports/participants.php)
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+// Split the path into segments
+$segments = explode('/', trim($requestUri, '/'));
+
+// Grab the first segment (the project folder name)
+$projectFolderName = isset($segments[0]) ? $segments[0] : '';
+
+// Rebuild the header path
+// This will consistently return "/eos-charactergenerator"
+$APP["header"] = '/' . $projectFolderName;
 // define the login page to redirect to if there is no $jid set/inherited.
 # $APP["loginpage"] = "/return-to-chargen"; Commented because we're using the declaration from joomla.php
 
