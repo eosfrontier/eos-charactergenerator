@@ -38,23 +38,25 @@ if (!in_array("31", $jgroups, true) && !in_array("30", $jgroups, true)) {
     <div class="panel-body" align="center">
       <h1>SL/NPC Photo Uploader</h1>
       <?php
-      $filepath = $APP["root"] . '/img/passphoto/npc/'.$jid.'.jpg';
-      $url = '../../img/passphoto/npc/'.$jid.'.jpg';
+      $filepath = $APP["root"] . '/img/passphoto/npc/' . $jid . '.jpg';
+      $url = '../../img/passphoto/npc/' . $jid . '.jpg';
       if (file_exists($filepath)) {
-      echo '<h2>Existing Profile Image</h2>';
-      echo '<img src="'.$url.'">';
+        echo '<h2>Existing Profile Image</h2>';
+        echo '<img src="' . $url . '">';
       }
       ?>
-      <h2>Select<?php if (file_exists($filepath)) {echo " New";} ?> Profile Image</h2>
-        <input type="file" name="upload_image" id="upload_image" />
-        <br />
-        <div id="uploaded_image"></div>
-        <div class="panel-body">
-          <h3>Please submit a photo of your head and shoulders, taken against a solid color (preferably white) background. <br />
-            Please use the below photos as an example of what you should submit. <br />
-            This will be used to represent any NPC you might play, so ideally the photo should be of you dressed as generically as possible.</h3>
-          <img src="../../img/Example.png">
-        </div>
+      <h2>Select<?php if (file_exists($filepath)) {
+                  echo " New";
+                } ?> Profile Image</h2>
+      <input type="file" name="upload_image" id="upload_image" />
+      <br />
+      <div id="uploaded_image"></div>
+      <div class="panel-body">
+        <h3>Please submit a photo of your head and shoulders, taken against a solid color (preferably white) background. <br />
+          Please use the below photos as an example of what you should submit. <br />
+          This will be used to represent any NPC you might play, so ideally the photo should be of you dressed as generically as possible.</h3>
+        <img src="../../img/Example.png">
+      </div>
     </div>
   </div>
   <?php include $APP["root"] . '/footer.php'; ?>

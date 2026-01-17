@@ -42,5 +42,4 @@ if (isset($_POST["image"])) {
 		. '<form action="cancel.php" method="post"><input type="hidden" value="' . $imageName . '" name="image_name">'
 		. '<input type="hidden" value="' . $charid . '" name="charid">'
 		. '<input class="button" type="submit" value="Cancel"></form>';
-
 }
