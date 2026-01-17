@@ -15,6 +15,7 @@ if (!isset($jid) || $jid == false || $jid == null || $jid == "") {
     exit();
   }
 }
+}
 
 if (!isset($APP["allowed_groups"]) || (isset($APP["allowed_groups"]) && !empty(array_intersect($jgroups, $APP["allowed_groups"])))) {
   $sheetArr = getCharacterSheets();
