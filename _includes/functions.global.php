@@ -1,6 +1,5 @@
 <?php
 
-
 $stmt = db::$conn->prepare(
   "SELECT e.id from jml_eb_events e
 JOIN jml_eb_event_categories c ON (c.event_id = e.id)
