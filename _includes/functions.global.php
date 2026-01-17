@@ -496,3 +496,10 @@ function exportParticipantsToCSV($resultSet, $prefix = 'export') {
     fclose($output);
     exit; // Stop execution so no HTML is appended to the CSV
 }
+function loginWithRedirect($redirectUrl)
+{
+    $redirectUrl = '&return=' . urlencode(base64_encode($redirectUrl));
+    $joomlaLoginUrl = 'index.php?option=com_users&view=login';
+    header("location: " . $joomlaLoginUrl . $redirectUrl);
+    exit();
+}

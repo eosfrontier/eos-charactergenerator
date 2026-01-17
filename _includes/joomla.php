@@ -1,12 +1,5 @@
 <?php
 
-function loginWithRedirect($redirectUrl)
-{
-  $redirectUrl = '&return=' . urlencode(base64_encode($redirectUrl));
-  $joomlaLoginUrl = 'index.php?option=com_users&view=login';
-  header("location: " . $joomlaLoginUrl . $redirectUrl);
-  exit();
-}
 
 if ($dev) {
     $jid = 747;
@@ -48,4 +41,3 @@ $array = array(
 );
 $jgroups = $array["groups"];
 }
-
