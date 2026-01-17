@@ -4,19 +4,20 @@
 // config variable.
 $APP = array();
 
-include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
-require_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/_includes/joomla.php');
+include_once __DIR__ . '/../db.php';
+require_once __DIR__ . '/./joomla.php';
 
 
 // opens an array to be filled later with the CSS and JS, which will eventually be included by PHP.
 $APP["includes"] = array();
 
-// location of the application. for example: http://localhost/chargen/ == '/chargen'. If the application is in the ROOT, you can leave this blank.
-$APP["header"] = "/eoschargen";
+// Dynamically retrieves the location of the application. for example: http://localhost/chargen/ == '/chargen'. If the application is in the ROOT, you can leave this blank.
+// Get the directory of the current script (e.g., "/eoschargen" or "/")
+$dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
 
-// define the root folder by adding the header (location) to the server root, defined by PHP.
-$APP["root"] = $_SERVER["DOCUMENT_ROOT"] . $APP["header"];
-
+// If we are at the root, $dir will be "/" or ".". 
+// We clean it so root becomes an empty string or just a single slash.
+$APP["header"] = ($dir === '/' || $dir === '.') ? '' : $dir;
 // define the login page to redirect to if there is no $jid set/inherited.
 # $APP["loginpage"] = "/return-to-chargen"; Commented because we're using the declaration from joomla.php
 
