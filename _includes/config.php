@@ -3,9 +3,6 @@
 // config variable.
 $APP = array();
 
-include_once __DIR__ . '/../db.php';
-require_once __DIR__ . '/./joomla.php';
-
 
 // opens an array to be filled later with the CSS and JS, which will eventually be included by PHP.
 $APP["includes"] = array();
