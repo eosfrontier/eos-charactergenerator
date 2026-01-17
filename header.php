@@ -1,15 +1,17 @@
 <?php
+if (!isset($APP))
+  die('No direct access allowed');
 
 if (!isset($jid) || $jid == false || $jid == null || $jid == "") {
 
   if (!isset($APP["loginpage"]) || $APP["loginpage"] == "" || $APP["loginpage"] == "/" || $APP["loginpage"] == "#") {
     die('You are not logged in, and no valid login page has been set. Please contact Eos IT for more information. [ ERR: 101 ]');
     exit();
-  } else if ($APP["loginpage"] == "joomla") {
+  } else {
+    if ($APP["loginpage"] == "joomla") {
     loginWithRedirect(basename($_SERVER['REQUEST_URI']));
   } else {
-
-    header("location: " . $APP["loginpage"]);
+        header("location: " . $APP["loginpage"]);
     exit();
   }
 }
