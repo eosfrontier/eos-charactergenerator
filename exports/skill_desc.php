@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/../_includes/includes.php';
-require_once './current-players.php';
 ?>
 <html>
 
