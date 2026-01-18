@@ -1,7 +1,5 @@
 <?php
-include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
-include($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/_includes/functions.global.php');
-?>
+require_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/includes.php');
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
