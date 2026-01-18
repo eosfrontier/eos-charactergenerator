@@ -1,6 +1,5 @@
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/includes.php');
-
+require_once __DIR__ . "/../_includes/includes.php";
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
