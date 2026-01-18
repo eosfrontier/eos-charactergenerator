@@ -1,5 +1,4 @@
 <?php
-include_once('current-players.php');
 include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
 include($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/_includes/functions.global.php');
 ?>
