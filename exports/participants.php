@@ -56,7 +56,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'Export to CSV') {
         $selected = ($row['id'] == $selected_event) ? 'selected' : '';
 
         // 2. Format the title
-        $title = $row['title'] . ($row['id'] == $SPECIALEVENTID ? " (Upcoming Event)" : "");
+        $title = $row['title'] . ($row['id'] == $EVENTID ? " (Upcoming Event)" : "");
       ?>
         <option value="<?= $row['id'] ?>" <?= $selected ?>><?= $title ?></option>
       <?php endwhile; ?>
