@@ -426,7 +426,7 @@ function build_url($page = null, $overrides = [], $allowedKeys = ['email', 'sort
 {
   // 1. If no page is provided, use current file (e.g., 'index.php')
   if ($page === null) {
-    $page = basename($_SERVER['SCRIPT_NAME']);
+    $page = basename($_SERVER['SCRIPT_NAME']) . '?';
   }
 
   // 2. Filter existing GET params
@@ -442,7 +442,7 @@ function build_url($page = null, $overrides = [], $allowedKeys = ['email', 'sort
   $queryString = http_build_query($finalParams);
 
   // 6. Return just the filename + query (e.g., "index.php?sort=asc")
-  return $page . ($queryString ? '?' . $queryString : '');
+  return $page . ($queryString ? $queryString : '');
 }
 // PHP < 8.0 doesn't have str_contains
 if (!function_exists('str_contains')) {
