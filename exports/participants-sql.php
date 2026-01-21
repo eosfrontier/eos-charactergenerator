@@ -1,6 +1,7 @@
 <?php
 $tableSort = $_GET['sort'] ?? 'register_date desc';
 $selected_event = $_GET['selected_event'] ?? $EVENTID;
+$EVENTID = $selected_event;
 $email = $_GET['email'] ?? '%%';
 
 #Get List of all events
