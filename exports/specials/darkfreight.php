@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . "/../_includes/includes.php";
+include_once __DIR__ . "/../../_includes/includes.php";
 $UPLINK->set_charset("utf8mb4");
 
 // 1. Permissions & Redirects
