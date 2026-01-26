@@ -5,8 +5,8 @@ if ($dev) {
     $jid = 747;
     $myobj = new \stdClass();
     $myobj->id = $jid;
-    $myobj->groups = ["32", "66"];
-    $jgroups = array("32", "66");
+    $myobj->groups = ["32", "66", "64"];
+    $jgroups = array("32", "66", "64");
 } else {
     define('_JEXEC', 1);
 define('DS', '/');

@@ -3,8 +3,8 @@ include_once __DIR__ . "/../../_includes/includes.php";
 $UPLINK->set_charset("utf8mb4");
 
 // 1. Permissions & Redirects
-if (!in_array("66", $jgroups, true)) {
-  header('Location: ../', true, 303);
+if (!in_array("66", $jgroups, true) || in_array("64", $jgroups,true)) {
+  header('Location: /', true, 303);
   exit;
 }
 
