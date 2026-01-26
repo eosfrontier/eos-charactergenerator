@@ -12,28 +12,20 @@ $sql = "SELECT faction FROM ecc_characters WHERE accountID = $jid AND sheet_stat
 $res = $UPLINK->query($sql);
 $char = mysqli_fetch_array($res);
 $faction = $char['faction'];
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <style>
-        .pdf-container {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-    </style>
-</head>
-<body>
+$pdf_file = "briefings/$faction.pdf";
 
-<div class="pdf-container">
-    <iframe 
-        src="https://mozilla.github.io/pdf.js/web/viewer.html?file=https://www.eosfrontier.space/eoschargen/exports/specials/briefings/<?= $faction ?>.pdf" 
-        width="100%" 
-        height="800px">
-    </iframe>
-</div>
-
-</body>
-</html>
+// Check if file exists to avoid errors
+if (file_exists($pdf_file)) {
+    echo '<div style="width:100%; height:100vh;">
+            <iframe 
+                src="' . $pdf_file . '" 
+                width="100%" 
+                height="100%" 
+                style="border: none;">
+                <p>Your browser does not support iframes. 
+                <a href="' . $pdf_file . '">Click here to view the PDF.</a></p>
+            </iframe>
+          </div>';
+} else {
+    echo "File not found.";
+}
