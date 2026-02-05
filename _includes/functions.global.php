@@ -1,4 +1,24 @@
 <?php
+
+$stmt = db::$conn->prepare(
+  "SELECT e.id from jml_eb_events e
+JOIN jml_eb_event_categories c ON (c.event_id = e.id)
+WHERE SUBSTRING_INDEX(event_end_date,' ',1) >= CURDATE() AND c.category_id = 1 ORDER BY SUBSTRING_INDEX(event_date,' ',1) ASC LIMIT 1;"
+);
+$res  = $stmt->execute();
+$res  = $stmt->fetchAll( PDO::FETCH_ASSOC );
+$EVENTID = ( $res['0'] )['id'];
+
+
+$stmt2 = db::$conn->prepare(
+  "SELECT e.id from jml_eb_events e
+JOIN jml_eb_event_categories c ON (c.event_id = e.id)
+WHERE SUBSTRING_INDEX(event_end_date,' ',1) >= CURDATE() AND c.category_id = 2 ORDER BY SUBSTRING_INDEX(event_date,' ',1) ASC LIMIT 1;"
+);
+$res2  = $stmt2->execute();
+$res2  = $stmt2->fetchAll( PDO::FETCH_ASSOC );
+$SPECIALEVENTID = ( $res2['0'] )['id'];
+
 mysqli_set_charset($UPLINK, 'utf8');
 
 // show errorpage function

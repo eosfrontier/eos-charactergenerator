@@ -4,7 +4,7 @@ function get_player_cap_events() {
   $stmt = db::$conn->prepare("SELECT id from jml_eb_events 
   WHERE title LIKE 'Frontier %' AND event_end_date < CURDATE()
   ORDER BY event_date DESC
-  LIMIT 6");
+  LIMIT 3");
   $stmt->execute(); // execute the prepared query
   $line = implode(',', $stmt->fetchAll(PDO::FETCH_COLUMN));
   return $line;
@@ -15,7 +15,7 @@ function player_cap_count_from() {
   $sql = "SELECT min(res.id) as id FROM (SELECT id from jml_eb_events 
   WHERE title LIKE 'Frontier %' AND event_end_date < CURDATE()
   ORDER BY event_date DESC
-  LIMIT 6) res";
+  LIMIT 3) res";
   $res = $UPLINK->query($sql);
   while ($row=mysqli_fetch_row($res)){
   $sql2 = "SELECT title from jml_eb_events WHERE id = $row[0];";
