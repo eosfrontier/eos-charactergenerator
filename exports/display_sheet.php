@@ -1,8 +1,7 @@
 <?php
 // globals
-require_once "../_includes/config.php";
-require_once "../_includes/functions.global.php";
-require_once './current-players.php';
+require_once "../_includes/includes.php";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

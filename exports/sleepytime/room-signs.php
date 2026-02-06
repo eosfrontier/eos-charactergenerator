@@ -1,7 +1,6 @@
 <?php
         header("Content-Type: text/html; charset=ISO-8859-1");
-        include_once ($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
-        include("../../_includes/functions.global.php");
+        require_once __DIR__ . "/../../_includes/includes.php";
         require './buildtable.php';
         ?>
 <!doctype html>
