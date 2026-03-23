@@ -103,7 +103,7 @@ $twenty_sponsor_tickets_used = "SELECT COUNT(r.id) * 20.00 as count from jml_eb_
           WHERE v3.field_value = 'Yes' AND (r.event_id > 23 AND r.event_id < 29) AND $notCancelled";
 $thirty_euro_sponsor_tickets_used = "SELECT COUNT(r.id) * 30.00 as count from jml_eb_registrants r
           join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 103)
-          WHERE v3.field_value = 'Yes' AND r.event_id > 29 AND $notCancelled";
+          WHERE v3.field_value = 'Yes' AND r.event_id > 28 AND $notCancelled";
 ###Now we deduct the number of used tickets determined using the last two queries from the total amount spent
 $sql_sponsor_tickets_remain = "SELECT (($total_sponsor_tickets_purchased) - ($fifteen_sponsor_tickets_used) - ($twenty_sponsor_tickets_used) - ($thirty_euro_sponsor_tickets_used))/30 as tickets_remaining";
 $res_sponsor_tickets_remain = $UPLINK->query($sql_sponsor_tickets_remain);

@@ -19,6 +19,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'Export to CSV') {
 <!-- 3. The rest of the page-->
 <!DOCTYPE html>
 <html>
+
 <head>
   <script src="../_includes/js/print.js" defer></script>
   <script>
@@ -38,14 +39,14 @@ if (isset($_POST['action']) && $_POST['action'] === 'Export to CSV') {
 </head>
 
 <body>
-  <?php $event_title = $row2['title'];?>
+  <?php $event_title = $row2['title']; ?>
   <div id='printButton'>
-  &nbsp;
-  <a href="<?= build_url(null, ['sort' => 'oc_fn asc', 'print' => 'true']) ?>"
-    class="button"
-    style="width: 100px; text-decoration: none; display: inline-block;">
-    Print
-  </a>
+    &nbsp;
+    <a href="<?= build_url(null, ['sort' => 'oc_fn asc', 'print' => 'true']) ?>"
+      class="button"
+      style="width: 100px; text-decoration: none; display: inline-block;">
+      Print
+    </a>
   </div>
   <font size="5">Participants for
     <select name="eventid" id="eventid"
