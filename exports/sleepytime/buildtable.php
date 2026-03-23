@@ -152,7 +152,7 @@ SELECT r.id, (SELECT character_name from ecc_characters WHERE ecc_characters.cha
     left join joomla.jml_eb_field_values food_loc on (food_loc.registrant_id = r.id and food_loc.field_id = 58)
     where med_room.field_value LIKE 'tweede gebouw%' AND r.event_id = $EVENTID
     AND $notCancelled
-	 ORDER BY building, bastion_room, tweede_room + 0
+	ORDER BY building, bastion_room, tweede_room + 0, name
 SQL;
 $res_all_sleepers = $UPLINK->query($all_sleepers);
 $sleepers = array_merge($sleepers, buildSleeperRow($res_all_sleepers));
