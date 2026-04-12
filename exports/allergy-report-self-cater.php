@@ -15,7 +15,7 @@ include_once('current-players.php');
 <html>
 
 <head>
-  <link rel="stylesheet" href="css/allergy-report.css">
+  <link rel="stylesheet" href="../_includes/css/allergy-report.css">
 </head>
 
 <body>
