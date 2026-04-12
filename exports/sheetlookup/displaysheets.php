@@ -1,9 +1,11 @@
 <?php
 // globals
-require_once $_SERVER["DOCUMENT_ROOT"] . "/eoschargen/_includes/config.php";
-require_once APP_ROOT . "/_includes/functions.global.php";
-require_once APP_ROOT . '/exports/current-players.php';
-require_once APP_ROOT . '/_includes/joomla.php';
+require_once "../../_includes/includes.php";
+
+// require_once $_SERVER["DOCUMENT_ROOT"] . "/eoschargen/_includes/config.php";
+// require_once APP_ROOT . "/_includes/functions.global.php";
+// require_once APP_ROOT . '/exports/current-players.php';
+// require_once APP_ROOT . '/_includes/joomla.php';
 
 (string) $_FACTION = (isset($_GET['faction']) && $_GET['faction'] != "" ? $_GET['faction'] : '%');
 (string) $_BUILDING = (isset($_GET['building']) && $_GET['building'] != "" ? $_GET['building'] : 'Bastion');
