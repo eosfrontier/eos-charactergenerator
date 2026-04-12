@@ -1,6 +1,6 @@
 <?php
 // globals
-require_once '_includes/includes.php';
+require_once './_includes/includes.php';
 include_once('./header.php');
 
 //if there is no active session, start one
