@@ -4,17 +4,12 @@
 $APP = array();
 
 #$APP["loginpage"] = "/component/users/?view=login";
-
-include_once('../db.php');
-include_once("../_includes/functions.global.php");
-include_once("../_includes/joomla.php");
-include_once('./current-players.php');
-
-
+include_once __DIR__ . "/../_includes/includes.php";
 
 if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
   header('Status: 303 Moved Temporarily', false, 303);
   header('Location: ../');
+  exit;
 }
 
 ?>
@@ -40,7 +35,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
 
 <body>
   <?php
-  $participant_id = $_GET['participant_id'];
+  $participant_id = (int) $_GET["participant_id"];
   $sql2 = "SELECT title FROM jml_eb_events where id = $EVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);

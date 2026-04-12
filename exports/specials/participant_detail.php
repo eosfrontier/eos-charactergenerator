@@ -14,6 +14,7 @@ include_once('../../_includes/joomla.php');
 if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
   header('Status: 303 Moved Temporarily', false, 303);
   header('Location: ../');
+  exit;
 }
 
 ?>
@@ -39,7 +40,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
 
 <body>
   <?php
-  $participant_id = $_GET['participant_id'];
+  $participant_id = (int) $_GET["participant_id"];
   $sql2 = "SELECT title FROM jml_eb_events where id = $SPECIALEVENTID;";
   $res2 = $UPLINK->query($sql2);
   $row2 = mysqli_fetch_array($res2);

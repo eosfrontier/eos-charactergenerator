@@ -17,7 +17,9 @@ WHERE SUBSTRING_INDEX(event_end_date,' ',1) >= CURDATE() AND c.category_id = 2 O
 );
 $res2  = $stmt2->execute();
 $res2  = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-$SPECIALEVENTID = ($res2['0'])['id'];
+if ($res2 && mysqli_num_rows($res2) > 0) {
+  $SPECIALEVENTID = ($res2['0'])['id'];
+}
 
 mysqli_set_charset($UPLINK, 'utf8');
 
