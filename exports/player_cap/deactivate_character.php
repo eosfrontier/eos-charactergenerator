@@ -38,7 +38,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
 <html>
 
 <head>
-  <link rel="stylesheet" href="../css/participants.css">
+  <link rel="stylesheet" href="../../_includes/css/participants.css">
 </head>
 
 <body>

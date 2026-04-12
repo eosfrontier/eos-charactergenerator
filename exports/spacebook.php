@@ -20,7 +20,7 @@ require_once __DIR__ . "/../_includes/includes.php";
       margin-top: 2px;
     }
   </style>
-   <link rel="stylesheet" href="css/participants.css">
+   <link rel="stylesheet" href="../_includes/css/participants.css">
 
 </head>
 

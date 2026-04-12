@@ -30,7 +30,7 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
       navigator.clipboard.writeText(copyText.value);
     }
   </script>
- <link rel="stylesheet" href="css/participants.css">
+ <link rel="stylesheet" href="../_includes/css/participants.css">
 </head>
 
 <body>
