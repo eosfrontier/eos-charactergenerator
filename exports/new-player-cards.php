@@ -1,7 +1,6 @@
 <?php
 // config variable.
-include_once($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/db.php');
-include($_SERVER["DOCUMENT_ROOT"] . '/eoschargen/_includes/functions.global.php');
+require_once __DIR__ . "/../_includes/includes.php";
 
 $UPLINK->set_charset("utf8mb4");
 ini_set('default_charset', 'UTF-8');
