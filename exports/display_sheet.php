@@ -1,7 +1,7 @@
 <?php
 // globals
 require_once "../_includes/includes.php";
-if there is no active session, start one
+//if there is no active session, start one
 if (!isset($_SESSION)) {
   session_start();
 }
