@@ -69,7 +69,7 @@ join joomla.jml_eb_field_values charname on (charname.registrant_id = r.id and c
 join joomla.ecc_characters faction ON (faction.characterID = substring_index(charname.field_value,' - ',-1))
 left join joomla.jml_eb_field_values tussenvoegsel on (tussenvoegsel.registrant_id = r.id and tussenvoegsel.field_id = 16)
 left join joomla.jml_eb_field_values soort_inschrijving on (soort_inschrijving.registrant_id = r.id and soort_inschrijving.field_id = 14)
-where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event and $notCancelled GROUP by faction";
+where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event and $notCancelled GROUP by faction ORDER by faction.faction ASC";
 $res5 = $UPLINK->query($sql5);
 
 #Get amount of € pending payments for current event
