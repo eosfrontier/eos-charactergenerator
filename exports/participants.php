@@ -113,7 +113,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'Export to CSV') {
         <thead>
           <tr>
             <th width="50%">Faction</th>
-            <th width="50%">Aantal Deelnemers op evenement</th>
+            <th width="50%">Aantal Deelnemers op evenement</br></th>
           </tr>
         </thead>
         <tbody>
