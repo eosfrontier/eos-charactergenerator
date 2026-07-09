@@ -5,7 +5,7 @@ $APP = array();
 
 // define the login page to redirect to if there is no $jid set/inherited.
 #$APP["loginpage"] = "/component/users/?view=login";
-
+include_once __DIR__ . "/../_includes/includes.php";
 include_once('../db.php');
 include_once("../_includes/functions.global.php");
 include_once('current-players.php');
