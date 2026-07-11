@@ -1,8 +1,8 @@
 <?php
-
 /**
  * Universal Joomla User Bridge Variable Provisioner
- * Compatible with Joomla 3.x, 4.x, and 5.x (With Redirect Loop Mitigation)
+ * Cross-Compatible: Joomla 3.x, 4.x, and 5.x
+ * Bypasses the Joomla 5 System Plugin Redirect Loop via Direct DI Container Bootstrapping
  */
 
 $dev = $dev ?? false;
@@ -19,40 +19,50 @@ if ($dev) {
     if (!defined('_JEXEC')) {
         define('_JEXEC', 1);
     }
-
-    // ========================================================================
-    // MITIGATION: Force an AJAX header context.
-    // This tells the Joomla 5 Language Filter and Admin Tools plugins to 
-    // bypass UI/Canonical URL routing checks, eliminating the redirect loop.
-    // ========================================================================
-    $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
-
+    
     define('JPATH_BASE', $_SERVER["DOCUMENT_ROOT"]);
-
+    
     require_once JPATH_BASE . '/includes/defines.php';
     require_once JPATH_BASE . '/includes/framework.php';
-
-    if (file_exists(JPATH_BASE . '/includes/app.php')) {
-        // --- Joomla 4 / 5 Runtime Context ---
-        require_once JPATH_BASE . '/includes/app.php';
-        $app  = \Joomla\CMS\Factory::getApplication('site');
+    
+    // Detect if we are running modern Joomla (4/5) vs Legacy Joomla (3)
+    if (class_exists('\\Joomla\\CMS\\Factory') && method_exists('\\Joomla\\CMS\\Factory', 'getContainer')) {
+        // --- Joomla 4 / 5 Runtime (Isolated Environment) ---
+        // Notice we DO NOT load 'includes/app.php'. Bypassing it prevents system plugins 
+        // from hooking into the request lifecycle and triggering the redirect loop.
+        
+        $container = \Joomla\CMS\Factory::getContainer();
+        
+        // Map required core session service aliases inside the isolated container
+        $container->alias('session.web', 'session.web.site')
+            ->alias('session', 'session.web.site')
+            ->alias('JSession', 'session.web.site')
+            ->alias(\Joomla\CMS\Session\Session::class, 'session.web.site')
+            ->alias(\Joomla\Session\Session::class, 'session.web.site')
+            ->alias(\Joomla\Session\SessionInterface::class, 'session.web.site');
+            
+        // Instantiate the Site Application directly from the container services
+        $app = $container->get(\Joomla\CMS\Application\SiteApplication::class);
+        \Joomla\CMS\Factory::$application = $app;
+        
+        // Safely pull the user data out of the active browser cookie session
         $user = \Joomla\CMS\Factory::getUser();
     } else {
-        // --- Legacy Joomla 3 Runtime Context ---
+        // --- Legacy Joomla 3 Runtime ---
         $app = JFactory::getApplication('site');
-        $app->initialise();
+        $app->initialise(); 
         $user = JFactory::getUser();
     }
-
-    // Populate variables for downstream application dependencies
+    
+    // Populate exact variables expected by your downstream applications
     $jid     = $user->id;
     $jname   = $user->name;
     $jguest  = $user->guest;
-
+    
     $myobj         = new \stdClass();
     $myobj->id     = $user->get('id');
-    $myobj->groups = $user->get('groups');
-
+    $myobj->groups = $user->get('groups'); 
+    
     $jgroups = array();
     if (is_array($myobj->groups)) {
         foreach ($myobj->groups as $group) {
