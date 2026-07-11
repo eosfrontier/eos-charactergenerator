@@ -2,12 +2,14 @@
 mysqli_set_charset($UPLINK, 'utf8');
 function get_player_cap_events()
 {
-  $stmt = db::$conn->prepare("SELECT id from jml_eb_events 
-  WHERE title LIKE 'Frontier %' AND event_end_date < CURDATE()
+  $stmt2 = db::$conn->prepare("SELECT id from jml_eb_events 
+  WHERE title LIKE 'Frontier %' AND id <= (SELECT e.id from jml_eb_events e
+JOIN jml_eb_event_categories c ON (c.event_id = e.id)
+WHERE SUBSTRING_INDEX(event_end_date,' ',1) >= CURDATE() AND c.category_id = 1 ORDER BY SUBSTRING_INDEX(event_date,' ',1) ASC LIMIT 1)
   ORDER BY event_date DESC
-  LIMIT 3");
-  $stmt->execute(); // execute the prepared query
-  $line = implode(',', $stmt->fetchAll(PDO::FETCH_COLUMN));
+  LIMIT 4");
+  $stmt2->execute(); // execute the prepared query
+  $line = implode(',', $stmt2->fetchAll(PDO::FETCH_COLUMN));
   return $line;
 }
 

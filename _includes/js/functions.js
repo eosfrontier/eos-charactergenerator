@@ -159,18 +159,47 @@ function SH_animateFormDiv(printresult) {
         , 750);
 }
 
-function switchFactionBlurb(factionName) {
+function handleFactionChange(factionName) {
+  if (!factionName) return;
+  
+  var isAllowed = true;
+  var alertHtml = '';
 
-	var target = $('.factionblurb');
-	if (target.html() != "" && factionName && factionName != "") {
-		target.hide();
-
-		$("#fct_" + factionName).fadeIn();
-		$("#createButton").fadeIn();
-
-		return true;
-	}
+  if (window.factionAllowedMap && window.factionAllowedMap[factionName] !== undefined) {
+      isAllowed = window.factionAllowedMap[factionName].allowed;
+      alertHtml = window.factionAllowedMap[factionName].alert;
+  }
+  
+  switchFactionBlurb(factionName, isAllowed, alertHtml);
 }
+
+function switchFactionBlurb(factionName, allowed, alertHtml) {
+    var allBlurbs = $('.factionblurb');
+    var alertBox = $('#serverAlertPlaceholder');
+    
+    if (allBlurbs.length && factionName && factionName !== "") {
+        allBlurbs.hide();
+        alertBox.hide().html(''); // Clear previous alert
+
+        $("#fct_" + factionName).fadeIn();
+        
+        if (allowed === true) {
+            $("#createButton").fadeIn();
+        } else {
+            $("#createButton").fadeOut();
+            
+            // If the server provided an alert block, inject it smoothly
+            if (alertHtml && alertHtml !== '') {
+                alertBox.html(alertHtml).fadeIn();
+            } else {
+                // Generic fallback if the function didn't yield anything
+                // alert("This faction is currently at maximum capacity.");
+            }
+        }
+        return true;
+    }
+}
+
 
 
 
