@@ -388,7 +388,10 @@ function playerStopAlert($faction)
 {
   $alert = '<div class="alert">'
     . '<span class="closebtn" onclick="this.parentElement.style.display=\'none\';">&times;</span>'
-    . "<h3>⚠️WARNING⚠️</h3>There is a currently a new-player stop on the $faction Faction. <br>If you would like to play a new character on an upcoming event, we recommend you choose a different faction. <br><br>While you are welcome to create a $faction Character in the Character Generator, it will not be approved for play on an event until such a time as the new-player stop has been removed. As of this moment, there is no estimate on when that will happen. <br>If you have any questions, you may e-mail <a id='alert-link' href='mailto:spelleider@eosfrontier.space'  target='_blank'>spelleider@eosfrontier.space</a>."
+    . "<h3>⚠️ Faction Enrollment Full</h3>"
+    . "<p>The <strong>$faction</strong> faction has reached its maximum capacity of 35 active characters.</p>"
+    . "<p>New character enrollment is currently closed for this faction. To participate in upcoming events, please select a different faction. </br>Enrollment for <strong>$faction</strong> will automatically reopen if the active character count drops below 35.</p>"
+    . '<p>If you have any questions, please contact us at <a id="alert-link" href="mailto:spelleider@eosfrontier.space" target="_blank">spelleider@eosfrontier.space</a>.</p>'
     . '</div>';
   return $alert;
 }
