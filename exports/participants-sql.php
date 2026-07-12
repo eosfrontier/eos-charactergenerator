@@ -73,7 +73,7 @@ where soort_inschrijving.field_value = 'Speler' AND r.event_id = $selected_event
 $res5 = $UPLINK->query($sql5);
 
 #Get amount of € pending payments for current event
-$sql_pending = 'SELECT (SUM(payment_amount) - SUM(discount_amount)) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id = ' . $selected_event . ';';
+$sql_pending = 'SELECT SUM(amount) as amount FROM jml_eb_registrants WHERE payment_method="os_offline" AND published=0 AND event_id = ' . $selected_event . ';';
 $res_pending = $UPLINK->query($sql_pending);
 $pending = mysqli_fetch_array($res_pending);
 
@@ -91,21 +91,34 @@ $res_sponsor = $UPLINK->query($sql_sponsor);
 $sponsor = mysqli_fetch_array($res_sponsor);
 
 ##Tally up the sponsor tickets purchased
-$total_sponsor_tickets_purchased = "SELECT SUM(total_amount) from jml_eb_registrants r
-          WHERE r.event_id = 24 AND $notCancelled";
-###Sponsor tickets on F17 only cost €15, and were only good for €15 discounts, so we deduct 15 times the number of tickets used
-$fifteen_sponsor_tickets_used = "SELECT COUNT(r.id) * 15.00 as count from jml_eb_registrants r
-          join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 103)
-          WHERE v3.field_value = 'Yes' AND r.event_id = 23 AND $notCancelled";
-###Sponsor tickets on F18, F19, F20 and F21 were worth €20, so we deduct €20 times the number of tickets used
-$twenty_sponsor_tickets_used = "SELECT COUNT(r.id) * 20.00 as count from jml_eb_registrants r
-          join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 103)
-          WHERE v3.field_value = 'Yes' AND (r.event_id > 23 AND r.event_id < 29) AND $notCancelled";
-$thirty_euro_sponsor_tickets_used = "SELECT COUNT(r.id) * 30.00 as count from jml_eb_registrants r
-          join jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 103)
-          WHERE v3.field_value = 'Yes' AND r.event_id > 28 AND $notCancelled";
-###Now we deduct the number of used tickets determined using the last two queries from the total amount spent
-$sql_sponsor_tickets_remain = "SELECT (($total_sponsor_tickets_purchased) - ($fifteen_sponsor_tickets_used) - ($twenty_sponsor_tickets_used) - ($thirty_euro_sponsor_tickets_used))/30 as tickets_remaining";
+$sql_sponsor_tickets_remain = "
+SELECT 
+    (
+        -- Total amount purchased (Event 24)
+        COALESCE(SUM(CASE WHEN r.event_id = 24 THEN r.total_amount END), 0) +
+        
+        -- PLUS: The new dynamic field calculation (field 141 * 30)
+        COALESCE(SUM(CASE WHEN v141.field_value IS NOT NULL THEN CAST(v141.field_value AS DECIMAL(10,2)) * 30.00 END), 0) -
+        
+        -- MINUS: Used ticket deductions
+        COALESCE(SUM(CASE WHEN r.event_id = 23 AND v3.field_value = 'Yes' THEN 15.00 END), 0) -
+        COALESCE(SUM(CASE WHEN r.event_id > 23 AND r.event_id < 29 AND v3.field_value = 'Yes' THEN 20.00 END), 0) -
+        COALESCE(SUM(CASE WHEN r.event_id > 28 AND v3.field_value = 'Yes' THEN 30.00 END), 0)
+    ) / 30.00 AS tickets_remaining
+FROM jml_eb_registrants r
+-- Join for tracking ticket usage
+LEFT JOIN jml_eb_field_values v3 ON (v3.registrant_id = r.id AND v3.field_id = 103)
+-- Join for tracking the new field additions
+LEFT JOIN jml_eb_field_values v141 ON (v141.registrant_id = r.id AND v141.field_id = 141)
+WHERE (
+    (r.published = 1 AND r.payment_method IN ('os_ideal', 'os_paypal', 'os_bancontact', ''))
+    OR 
+    (r.published IN (0, 1) AND r.payment_method = 'os_offline')
+)
+-- Data filter: only grab rows that are actively participating in our equations
+AND (r.event_id = 24 OR v3.field_value = 'Yes' OR v141.field_value IS NOT NULL);
+";
+
 $res_sponsor_tickets_remain = $UPLINK->query($sql_sponsor_tickets_remain);
 $remaining_tickets = mysqli_fetch_array($res_sponsor_tickets_remain);
 $sql_donations = "SELECT sum(v3.field_value) AS total_donations from jml_eb_registrants r
