@@ -19,6 +19,13 @@ if (isset($_POST['newchar']) && $_POST['newchar'] != "") {
   <div class="content">
     <br />
     <?php
+	if (!isset($APP["allowed_groups"]) || (isset($APP["allowed_groups"]) && !empty(array_intersect($jgroups, $APP["allowed_groups"])))) {
+	  $sheetArr = getCharacterSheets();
+	} else {
+	  echo 'Access denied. Please contact a member of the organization to be granted CharGen access by filling out the <a href="/access-request-form">access request form</a>.';
+	  exit();
+	}
+
     $printresult = "";
     //Trigger the new character screen
     if (isset($_GET['newChar'])) {
