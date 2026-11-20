@@ -398,6 +398,14 @@ function playerStopAlert($faction)
 
 function formatPhoneNumber($phone, $country = '')
 {
+  $phone = trim((string)($phone ?? ''));
+  $country = (string)($country ?? '');
+  if ($phone === '') {
+    return '';
+  }
+
+  $formattedPhone = $phone;
+
   if (substr($phone, 0, 1) === "+") {
     $formattedPhone = $phone;
   } else {
@@ -405,10 +413,11 @@ function formatPhoneNumber($phone, $country = '')
       $prefix = "0032";
       if (substr($phone, 0, strlen($prefix)) === $prefix) {
         $formattedPhone = "+32" . substr($phone, strlen($prefix));
-      }
-      $prefix = "00";
-      if (substr($phone, 0, strlen($prefix)) === $prefix) {
-        $formattedPhone = "+32(0)" . substr($phone, strlen($prefix));
+      } else {
+        $prefix = "00";
+        if (substr($phone, 0, strlen($prefix)) === $prefix) {
+          $formattedPhone = "+32(0)" . substr($phone, strlen($prefix));
+        }
       }
     } else if ($country === 'Netherlands') {
       $prefix = "0031";
@@ -420,8 +429,6 @@ function formatPhoneNumber($phone, $country = '')
         $formattedPhone = "+31(0)" . substr($phone, strlen($prefix2));
       } elseif (substr($phone, 0, strlen($prefix3)) === "0") {
         $formattedPhone = "+31(0)" . substr($phone, strlen($prefix3));
-      } else {
-        $formattedPhone = $phone;
       }
     }
   }

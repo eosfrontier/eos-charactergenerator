@@ -420,7 +420,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'Export to CSV') {
                   $key = $col['key'];
                 ?>
                   <?php if ($colId === 'oc_name'): ?>
-                    <td data-col="oc_name" data-label="<?= htmlspecialchars($col['label']) ?>"><a class="playername" href="participant_detail.php?participant_id=<?= urlencode((string)$row['id']) ?>"><?= htmlspecialchars($row['oc_full_name']) ?></a></td>
+                    <td data-col="oc_name" data-label="<?= htmlspecialchars($col['label']) ?>"><a class="playername" href="participant_detail.php?participant_id=<?= urlencode((string)$row['id']) ?>" data-participant-id="<?= (int)$row['id'] ?>" data-participant-name="<?= htmlspecialchars($row['oc_full_name']) ?>"><?= htmlspecialchars($row['oc_full_name']) ?></a></td>
                   <?php elseif ($key === 'signature' || $key === 'photo_status'): ?>
                     <td data-col="<?= htmlspecialchars((string)$colId) ?>" data-label="<?= htmlspecialchars($col['label']) ?>" class="<?= $col['class'] ?>" style="height:40px;"><?= $row[$key] ?></td>
                   <?php else:
@@ -594,6 +594,258 @@ if (isset($_POST['action']) && $_POST['action'] === 'Export to CSV') {
       }
 
       applyFilters();
+    })();
+  </script>
+
+  <!-- Participant Detail Modal -->
+  <div id="participantModal"
+       class="modal-backdrop"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="participantModalTitle"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="participantModalTitle" class="modal-title">Participant Details</h2>
+          <p id="participantModalSubtitle" class="modal-subtitle"></p>
+        </div>
+        <button type="button"
+                id="participantModalClose"
+                class="modal-close-btn"
+                title="Close (Esc)"
+                aria-label="Close participant details">&times;</button>
+      </div>
+      <div id="participantModalBody" class="modal-body" tabindex="-1"></div>
+      <div class="modal-footer">
+        <div class="modal-nav-group">
+          <button type="button" id="modalPrevBtn" class="modal-btn modal-btn-ghost" title="Previous visible participant">&#8249; Prev</button>
+          <span id="modalPosition" class="modal-position"></span>
+          <button type="button" id="modalNextBtn" class="modal-btn modal-btn-ghost" title="Next visible participant">Next &#8250;</button>
+        </div>
+        <div class="modal-action-group">
+          <a id="modalOpenFullLink" class="modal-btn modal-btn-ghost" href="#" target="_blank" rel="noopener" title="Open in a new tab">Open page &#8599;</a>
+          <button type="button" id="modalPrintBtn" class="modal-btn modal-btn-primary">Print</button>
+          <button type="button" id="modalCloseBtn" class="modal-btn modal-btn-secondary">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const tbody = document.querySelector('table.main tbody');
+      const modal = document.getElementById('participantModal');
+      const modalTitle = document.getElementById('participantModalTitle');
+      const modalSubtitle = document.getElementById('participantModalSubtitle');
+      const modalBody = document.getElementById('participantModalBody');
+      const closeIconBtn = document.getElementById('participantModalClose');
+      const closeBtn = document.getElementById('modalCloseBtn');
+      const printBtn = document.getElementById('modalPrintBtn');
+      const openFullLink = document.getElementById('modalOpenFullLink');
+      const prevBtn = document.getElementById('modalPrevBtn');
+      const nextBtn = document.getElementById('modalNextBtn');
+      const posLabel = document.getElementById('modalPosition');
+
+      if (!tbody || !modal || !modalBody) return;
+
+      let activeController = null;
+      let lastTriggerEl = null;
+      let currentId = null;
+
+      function getVisiblePlayerLinks() {
+        return Array.from(tbody.querySelectorAll('tr'))
+          .filter(tr => tr.style.display !== 'none')
+          .map(tr => tr.querySelector('a.playername'))
+          .filter(Boolean);
+      }
+
+      function updateNavControls() {
+        const links = getVisiblePlayerLinks();
+        const idx = links.findIndex(a => a.dataset.participantId === String(currentId));
+        if (idx === -1 || links.length <= 1) {
+          prevBtn.disabled = true;
+          nextBtn.disabled = true;
+          posLabel.textContent = idx === -1 ? '' : '1 / 1';
+          return;
+        }
+        prevBtn.disabled = (idx <= 0);
+        nextBtn.disabled = (idx >= links.length - 1);
+        posLabel.textContent = (idx + 1) + ' / ' + links.length;
+      }
+
+      function showLoading() {
+        modalBody.innerHTML =
+          '<div class="modal-loading" role="status" aria-live="polite">' +
+            '<span class="modal-spinner" aria-hidden="true"></span>' +
+            '<span>Loading participant details&hellip;</span>' +
+          '</div>';
+      }
+
+      function showError(message, id, name) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'detail-alert detail-alert-error';
+
+        const msg = document.createElement('p');
+        msg.textContent = message;
+        wrapper.appendChild(msg);
+
+        const retryBtn = document.createElement('button');
+        retryBtn.type = 'button';
+        retryBtn.className = 'modal-btn modal-btn-secondary';
+        retryBtn.style.marginTop = '10px';
+        retryBtn.textContent = 'Retry';
+        retryBtn.addEventListener('click', function() {
+          loadParticipant(id, name);
+        });
+        wrapper.appendChild(retryBtn);
+
+        modalBody.innerHTML = '';
+        modalBody.appendChild(wrapper);
+      }
+
+      function loadParticipant(id, fallbackName) {
+        currentId = String(id);
+        modalTitle.textContent = fallbackName || 'Participant Details';
+        modalSubtitle.textContent = '';
+        openFullLink.href = 'participant_detail.php?participant_id=' + encodeURIComponent(id);
+        updateNavControls();
+        showLoading();
+
+        if (activeController) {
+          activeController.abort();
+        }
+        activeController = new AbortController();
+
+        const url = 'participant_detail.php?participant_id=' + encodeURIComponent(id) + '&modal=1';
+        fetch(url, {
+          credentials: 'same-origin',
+          cache: 'no-store',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          signal: activeController.signal
+        })
+          .then(function(response) {
+            return response.text().then(function(html) {
+              return { ok: response.ok, status: response.status, html: html };
+            });
+          })
+          .then(function(result) {
+            if (currentId !== String(id)) return;
+            modalBody.innerHTML = result.html;
+            modalBody.scrollTop = 0;
+
+            const detailsEl = modalBody.querySelector('.detail-sections');
+            if (detailsEl) {
+              const name = detailsEl.dataset.participantName;
+              const eventTitle = detailsEl.dataset.eventTitle;
+              if (name) modalTitle.textContent = name;
+              if (eventTitle) modalSubtitle.textContent = eventTitle;
+            } else if (!result.ok && !modalBody.querySelector('.detail-alert')) {
+              showError('Could not load participant details (HTTP ' + result.status + ').', id, fallbackName);
+            }
+          })
+          .catch(function(err) {
+            if (err && err.name === 'AbortError') return;
+            showError('Failed to load participant details. Please check your connection and try again.', id, fallbackName);
+          });
+      }
+
+      function openModal(link) {
+        const id = link.dataset.participantId;
+        if (!id) return;
+        lastTriggerEl = link;
+
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+
+        loadParticipant(id, link.dataset.participantName || link.textContent.trim());
+        closeIconBtn.focus();
+      }
+
+      function closeModal() {
+        if (!modal.classList.contains('is-open')) return;
+        if (activeController) {
+          activeController.abort();
+          activeController = null;
+        }
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        currentId = null;
+
+        if (lastTriggerEl && typeof lastTriggerEl.focus === 'function') {
+          lastTriggerEl.focus();
+        }
+        lastTriggerEl = null;
+      }
+
+      function stepParticipant(delta) {
+        const links = getVisiblePlayerLinks();
+        const idx = links.findIndex(a => a.dataset.participantId === String(currentId));
+        if (idx === -1) return;
+        const target = links[idx + delta];
+        if (!target) return;
+        lastTriggerEl = target;
+        loadParticipant(target.dataset.participantId, target.dataset.participantName || target.textContent.trim());
+      }
+
+      tbody.addEventListener('click', function(e) {
+        const link = e.target.closest('a.playername');
+        if (!link) return;
+        // Preserve Ctrl/Cmd/Shift/Alt/middle click to allow opening in a new tab
+        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+          return;
+        }
+        e.preventDefault();
+        openModal(link);
+      });
+
+      closeIconBtn.addEventListener('click', closeModal);
+      closeBtn.addEventListener('click', closeModal);
+      prevBtn.addEventListener('click', function() { stepParticipant(-1); });
+      nextBtn.addEventListener('click', function() { stepParticipant(1); });
+
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (!modal.classList.contains('is-open')) return;
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeModal();
+        } else if (e.key === 'ArrowLeft' && !prevBtn.disabled && document.activeElement.tagName !== 'INPUT') {
+          e.preventDefault();
+          stepParticipant(-1);
+        } else if (e.key === 'ArrowRight' && !nextBtn.disabled && document.activeElement.tagName !== 'INPUT') {
+          e.preventDefault();
+          stepParticipant(1);
+        }
+      });
+
+      function cleanupModalPrint() {
+        document.body.classList.remove('print-modal-only');
+      }
+      window.addEventListener('afterprint', cleanupModalPrint);
+      if (window.matchMedia) {
+        const printMql = window.matchMedia('print');
+        const handlePrintChange = function(e) {
+          if (!e.matches) cleanupModalPrint();
+        };
+        if (printMql.addEventListener) {
+          printMql.addEventListener('change', handlePrintChange);
+        } else if (printMql.addListener) {
+          printMql.addListener(handlePrintChange);
+        }
+      }
+
+      printBtn.addEventListener('click', function() {
+        document.body.classList.add('print-modal-only');
+        window.print();
+      });
     })();
   </script>
 </body>
