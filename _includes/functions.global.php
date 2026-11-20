@@ -436,7 +436,7 @@ function formatPhoneNumber($phone, $country = '')
  * @param array $allowedKeys The $_GET keys we are allowed to carry over
  * @return string
  */
-function build_url($page = null, $overrides = [], $allowedKeys = ['email', 'sort', 'selected_event'])
+function build_url($page = null, $overrides = [], $allowedKeys = ['email', 'sort', 'selected_event', 'f_oc_name', 'f_ic_name', 'f_type', 'f_faction', 'f_room', 'f_photo_status'])
 {
   // 1. If no page is provided, use current file (e.g., 'index.php')
   if ($page === null) {

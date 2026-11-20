@@ -17,6 +17,8 @@ if (!in_array("32", $jgroups, true) && !in_array("30", $jgroups, true)) {
 <html>
 
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
     function copyTo() {
       // Get the text field
