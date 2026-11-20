@@ -1,5 +1,26 @@
 <?php
 $tableSort = $_GET['sort'] ?? 'register_date desc';
+$allowedSorts = [
+  'register_date desc',
+  'register_date asc',
+  'oc_fn asc',
+  'oc_fn desc',
+  'ic_name asc',
+  'ic_name desc',
+  'type asc',
+  'type desc',
+  'type desc, faction asc, oc_fn asc',
+  'type desc, faction desc, oc_fn asc',
+  'faction asc',
+  'faction desc',
+  'room asc',
+  'room desc',
+  'foto asc',
+  'foto desc'
+];
+if (!in_array($tableSort, $allowedSorts, true)) {
+  $tableSort = 'register_date desc';
+}
 $selected_event = $_GET['selected_event'] ?? $EVENTID;
 $email = $_GET['email'] ?? '%%';
 

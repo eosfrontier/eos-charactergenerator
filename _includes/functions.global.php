@@ -17,7 +17,7 @@ WHERE SUBSTRING_INDEX(event_end_date,' ',1) >= CURDATE() AND c.category_id = 2 O
 );
 $res2  = $stmt2->execute();
 $res2  = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-if ($res2 && mysqli_num_rows($res2) > 0) {
+if ($res2 && count($res2) > 0) {
   $SPECIALEVENTID = ($res2['0'])['id'];
 } else {
   $stmt2 = db::$conn->prepare(
@@ -436,7 +436,7 @@ function formatPhoneNumber($phone, $country = '')
  * @param array $allowedKeys The $_GET keys we are allowed to carry over
  * @return string
  */
-function build_url($page = null, $overrides = [], $allowedKeys = ['email', 'sort'])
+function build_url($page = null, $overrides = [], $allowedKeys = ['email', 'sort', 'selected_event'])
 {
   // 1. If no page is provided, use current file (e.g., 'index.php')
   if ($page === null) {

@@ -85,14 +85,14 @@ if (isset($_POST['action']) && $_POST['action'] === 'Export to CSV') {
           <?php if (in_array("32", $jgroups, true)):
             // Collect summary items into an array for a cleaner loop
             $summaries = [
-              ["Pending Payments ($event_title)", "€" . number_format($pending['amount'], 2)],
-              ["Number of Sponsor Tickets used on $event_title:", $sponsor['count']],
-              ["Number of Sponsor Tickets remaining:", intval($remaining_tickets['tickets_remaining'])],
-              ["Donations made this event:", "€" . number_format($donations['total_donations'], 2)]
+              ["Pending Payments ($event_title)", "€" . number_format($pending['amount'] ?? 0, 2)],
+              ["Number of Sponsor Tickets used on $event_title:", $sponsor['count'] ?? 0],
+              ["Number of Sponsor Tickets remaining:", intval($remaining_tickets['tickets_remaining'] ?? 0)],
+              ["Donations made this event:", "€" . number_format($donations['total_donations'] ?? 0, 2)]
             ];
 
-            if (round($pending_old['amount'], 2) > 0 && $selected_event == $EVENTID) {
-              $summaries[] = ["Pending Payments (previous events)", "€" . number_format($pending_old['amount'], 2)];
+            if (round($pending_old['amount'] ?? 0, 2) > 0 && $selected_event == $EVENTID) {
+              $summaries[] = ["Pending Payments (previous events)", "€" . number_format($pending_old['amount'] ?? 0, 2)];
             }
           ?>
             <tr>
@@ -192,57 +192,138 @@ if (isset($_POST['action']) && $_POST['action'] === 'Export to CSV') {
       ?>
       <button class="button" onclick="copyTo()">Copy Participant E-mails</button><br><br>
     </div>
-    <div id="SortBy">
-      Sorteer op:
-      <?php
-      $sortOptions = [
-        'oc_fn asc'                          => 'OC Naam (Oplopend)',
-        'oc_fn desc'                         => 'OC Naam (Aflopend)',
-        'ic_name asc'                        => 'IC Naam (Oplopend)',
-        'ic_name desc'                       => 'IC Naam (Aflopend)',
-        'type asc'                           => 'Soort Inschrijf (Oplopend)',
-        'type desc'                          => 'Soort Inschrijf (Aflopend)',
-        'room asc'                           => 'Room (Oplopend)',
-        'room desc'                          => 'Room (Aflopend)',
-        'register_date asc'                  => 'Inschrijf Datum (Oplopend)',
-        'register_date desc'                 => 'Inschrijf Datum (Aflopend)',
-        'type desc, faction asc, oc_fn asc'  => 'Factie (Oplopend)',
-        'type desc, faction desc, oc_fn asc' => 'Factie (Aflopend)'
-      ];
-      ?>
-      <select id="sort_table"
-        style="padding: 5px; border-radius: 2px; margin-bottom: 1rem;"
-        onchange="location.href = '<?= build_url(null, ['selected_event' => $selected_event, 'sort' => null]) ?>&sort=' + this.value;">
-        <?php foreach ($sortOptions as $value => $label): ?>
-          <option value="<?= $value ?>" <?= ($tableSort === $value) ? 'selected' : '' ?>>
-            <?= $label ?>
-          </option>
-        <?php endforeach; ?>
-      </select>
-    </div>
-    </div>
-
     <?php
-    // 1. Define the blueprint: [Key, Class, Width]
-    $tableBlueprint = [
-      'IC Name'          => ['key' => 'ic_name',       'class' => '',                 'width' => '20%'],
-      'Soort Inschrijf'  => ['key' => 'type',          'class' => '',                 'width' => '15%'],
-      'Factie'           => ['key' => 'faction_clean', 'class' => '',                 'width' => '15%'],
-      'Inschrijf Datum'  => ['key' => 'register_date', 'class' => 'inschrijf_datum', 'width' => '10%'],
-      'Room'             => ['key' => 'room',          'class' => '',                 'width' => 'auto'],
-      'Handtekening'     => ['key' => 'signature',     'class' => '',                 'width' => '25%'],
-      'Foto Opt-Out'     => ['key' => 'photo_status',  'class' => '',                 'width' => '10%']
+    // Define table columns: [Label, Data Key, Width, Class, Sort Asc, Sort Desc, Match Patterns]
+    $tableColumns = [
+      'oc_name' => [
+        'label'     => 'OC Name',
+        'key'       => 'oc_full_name',
+        'width'     => '20%',
+        'class'     => '',
+        'sort_asc'  => 'oc_fn asc',
+        'sort_desc' => 'oc_fn desc',
+        'match'     => ['oc_fn asc', 'oc_fn desc', 'oc_fn']
+      ],
+      'ic_name' => [
+        'label'     => 'IC Name',
+        'key'       => 'ic_name',
+        'width'     => '20%',
+        'class'     => '',
+        'sort_asc'  => 'ic_name asc',
+        'sort_desc' => 'ic_name desc',
+        'match'     => ['ic_name asc', 'ic_name desc', 'ic_name']
+      ],
+      'type' => [
+        'label'     => 'Soort Inschrijf',
+        'key'       => 'type',
+        'width'     => '15%',
+        'class'     => '',
+        'sort_asc'  => 'type asc',
+        'sort_desc' => 'type desc',
+        'match'     => ['type asc', 'type desc', 'type']
+      ],
+      'faction' => [
+        'label'     => 'Factie',
+        'key'       => 'faction_clean',
+        'width'     => '15%',
+        'class'     => '',
+        'sort_asc'  => 'type desc, faction asc, oc_fn asc',
+        'sort_desc' => 'type desc, faction desc, oc_fn asc',
+        'match'     => [
+          'type desc, faction asc, oc_fn asc',
+          'type desc, faction desc, oc_fn asc',
+          'faction asc',
+          'faction desc',
+          'faction'
+        ]
+      ],
+      'register_date' => [
+        'label'     => 'Inschrijf Datum',
+        'key'       => 'register_date',
+        'width'     => '10%',
+        'class'     => 'inschrijf_datum',
+        'sort_asc'  => 'register_date asc',
+        'sort_desc' => 'register_date desc',
+        'match'     => ['register_date asc', 'register_date desc', 'register_date']
+      ],
+      'room' => [
+        'label'     => 'Room',
+        'key'       => 'room',
+        'width'     => 'auto',
+        'class'     => '',
+        'sort_asc'  => 'room asc',
+        'sort_desc' => 'room desc',
+        'match'     => ['room asc', 'room desc', 'room']
+      ],
+      'signature' => [
+        'label'     => 'Handtekening',
+        'key'       => 'signature',
+        'width'     => '25%',
+        'class'     => '',
+        'sort_asc'  => null,
+        'sort_desc' => null
+      ],
+      'photo_status' => [
+        'label'     => 'Foto Opt-Out',
+        'key'       => 'photo_status',
+        'width'     => '10%',
+        'class'     => '',
+        'sort_asc'  => 'foto asc',
+        'sort_desc' => 'foto desc',
+        'match'     => ['foto asc', 'foto desc', 'foto']
+      ]
     ];
     ?>
 
     <table class="main">
       <thead>
         <tr>
-          <th width="20%">OC Name</th>
+          <?php foreach ($tableColumns as $colId => $col):
+            $isSortable = !empty($col['sort_asc']);
+            $isActive = false;
+            $currentDir = '';
+            $nextSort = $col['sort_asc'] ?? '';
+            $sortIcon = '';
 
-          <?php foreach ($tableBlueprint as $label => $config): ?>
-            <th width="<?= $config['width'] ?>" class="<?= $config['class'] ?>">
-              <?= $label ?>
+            if ($isSortable) {
+              if ($tableSort === $col['sort_asc']) {
+                $isActive = true;
+                $currentDir = 'asc';
+                $nextSort = $col['sort_desc'];
+                $sortIcon = '&#9650;'; // ▲
+              } elseif ($tableSort === $col['sort_desc']) {
+                $isActive = true;
+                $currentDir = 'desc';
+                $nextSort = $col['sort_asc'];
+                $sortIcon = '&#9660;'; // ▼
+              } elseif (!empty($col['match']) && in_array($tableSort, $col['match'], true)) {
+                $isActive = true;
+                $currentDir = (stripos($tableSort, 'desc') !== false) ? 'desc' : 'asc';
+                $nextSort = ($currentDir === 'asc') ? $col['sort_desc'] : $col['sort_asc'];
+                $sortIcon = ($currentDir === 'asc') ? '&#9650;' : '&#9660;';
+              } else {
+                $nextSort = $col['sort_asc'];
+                $sortIcon = '';
+              }
+            }
+          ?>
+            <th width="<?= $col['width'] ?>" class="<?= $col['class'] ?><?= $isSortable ? ' sortable' : '' ?>">
+              <?php if ($isSortable): ?>
+                <a href="<?= htmlspecialchars(build_url(null, ['selected_event' => $selected_event, 'sort' => $nextSort])) ?>"
+                   class="sort-link<?= $isActive ? ' active ' . $currentDir : '' ?>"
+                   title="Sort by <?= htmlspecialchars($col['label']) ?> (<?= $isActive && $currentDir === 'asc' ? 'descending' : 'ascending' ?>)">
+                  <span><?= htmlspecialchars($col['label']) ?></span>
+                  <span class="sort-indicator">
+                    <?php if ($sortIcon !== ''): ?>
+                      <?= $sortIcon ?>
+                    <?php else: ?>
+                      <span class="sort-idle">&#8645;</span>
+                    <?php endif; ?>
+                  </span>
+                </a>
+              <?php else: ?>
+                <?= htmlspecialchars($col['label']) ?>
+              <?php endif; ?>
             </th>
           <?php endforeach; ?>
         </tr>
@@ -250,31 +331,33 @@ if (isset($_POST['action']) && $_POST['action'] === 'Export to CSV') {
       <tbody>
         <?php while ($row = mysqli_fetch_array($res)):
           // Data Preparation
-          $row['oc_full_name']  = trim($row['oc_fn'] . " " . $row['oc_tv'] . " " . $row['oc_ln']);
+          $row['oc_full_name']  = trim($row['oc_fn'] . " " . ($row['oc_tv'] ?? '') . " " . $row['oc_ln']);
           $row['faction_clean'] = ucwords($row['faction'] ?? '');
           $row['signature']     = '&nbsp;';
           $row['photo_status']  = str_contains($row['foto'] ?? '', 'afmelden') ? 'Yes' : '&nbsp;';
         ?>
           <tr>
-            <td>
-              <a class="playername" href="participant_detail.php?participant_id=<?= $row['id'] ?>">
-                <?= htmlspecialchars($row['oc_full_name']) ?>
-              </a>
-            </td>
-
-            <?php foreach ($tableBlueprint as $config):
-              $key = $config['key'];
-              $cellValue = $row[$key];
+            <?php foreach ($tableColumns as $colId => $col):
+              $key = $col['key'];
             ?>
-              <td class="<?= $config['class'] ?>"
-                style="<?= ($key === 'signature' || $key === 'photo_status') ? 'height:40px;' : '' ?>">
-
-                <?php if ($key === 'signature' || $key === 'photo_status'): ?>
-                  <?= $cellValue ?>
-                <?php else: ?>
-                  <?= htmlspecialchars($cellValue ?? '') ?>
-                <?php endif; ?>
-              </td>
+              <?php if ($colId === 'oc_name'): ?>
+                <td>
+                  <a class="playername" href="participant_detail.php?participant_id=<?= $row['id'] ?>">
+                    <?= htmlspecialchars($row['oc_full_name']) ?>
+                  </a>
+                </td>
+              <?php else:
+                $cellValue = $row[$key] ?? '';
+              ?>
+                <td class="<?= $col['class'] ?>"
+                  style="<?= ($key === 'signature' || $key === 'photo_status') ? 'height:40px;' : '' ?>">
+                  <?php if ($key === 'signature' || $key === 'photo_status'): ?>
+                    <?= $cellValue ?>
+                  <?php else: ?>
+                    <?= htmlspecialchars($cellValue) ?>
+                  <?php endif; ?>
+                </td>
+              <?php endif; ?>
             <?php endforeach; ?>
           </tr>
         <?php endwhile; ?>

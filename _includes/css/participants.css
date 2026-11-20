@@ -57,6 +57,44 @@ table a:visited {
   color: #dc0bff;
 }
 
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+table.main th a.sort-link,
+table.main th a.sort-link:link,
+table.main th a.sort-link:visited {
+  color: #ffffff !important;
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+table.main th a.sort-link:hover {
+  color: #a0c4ff !important;
+}
+
+table.main th a.sort-link .sort-indicator {
+  margin-left: 6px;
+  font-size: 13px;
+  color: #64b5f6;
+  white-space: nowrap;
+}
+
+table.main th a.sort-link .sort-idle {
+  opacity: 0.35;
+  font-size: 12px;
+  color: #ffffff;
+}
+
+table.main th a.sort-link:hover .sort-idle {
+  opacity: 0.8;
+  color: #a0c4ff;
+}
+
 td,
 th {
   border: 1px solid #dddddd;
@@ -256,6 +294,17 @@ a.deactivateButton {
   th {
     color: white;
     background-color: #000;
+  }
+
+  table.main th a.sort-link,
+  table.main th a.sort-link:link,
+  table.main th a.sort-link:visited {
+    color: #ffffff !important;
+    text-decoration: none !important;
+  }
+
+  .sort-indicator {
+    display: none !important;
   }
 
   td,
